@@ -335,7 +335,7 @@ body { margin: 0; }
   .vintage-video-hero h1 { font-size: clamp(45px, 18vw, 80px); }
   .vintage-video-hero__finale p { font-size: clamp(42px, 16vw, 72px); }
   .vintage-lookbook__copy { padding: 0 20px; }
-  .vintage-lookbook h2 { font-size: clamp(50px, 18vw, 82px); }
+  .vintage-lookbook h2 { font-size: clamp(46px, 14.5vw, 68px); }
   .vintage-lookbook__details { align-items: flex-start; flex-direction: column; margin-top: 32px; }
 }
 
