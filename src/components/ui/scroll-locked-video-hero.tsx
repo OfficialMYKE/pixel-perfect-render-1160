@@ -1,49 +1,42 @@
 import { useEffect, useRef, useState } from "react";
-
-// ─────────────────────────────────────────────────────────────
-// THE CITY OPENS — locked scroll-scrub video hero
-// Wheel/touch input is captured and used purely to drive
-// video.currentTime, forward and backward. No dependencies.
-// ─────────────────────────────────────────────────────────────
+import { ArrowDown, ArrowUpRight } from "lucide-react";
+import streetwearOne from "@/assets/vintage-streetwear-01.jpg";
+import streetwearTwo from "@/assets/vintage-streetwear-02.jpg";
+import streetwearThree from "@/assets/vintage-streetwear-03.jpg";
+import streetwearFour from "@/assets/vintage-streetwear-04.jpg";
 
 export interface MetroHeroProps {
   videoSrc?: string;
   title?: string;
   scrollHint?: string;
   tagline?: string;
-  signature?: { name: string; url: string } | false;
-  /** Total input distance (px) needed to scrub the full video. Tune to taste. */
   scrubDistance?: number;
   className?: string;
-  style?: React.CSSProperties;
 }
 
 const DEFAULT_VIDEO =
   "https://cdn.21st.dev/assets/mirror/21/21a77eac28eacbb7e142016eefeaa0b4a766619e51113629a3bc6df6af066c0f.mp4";
-const DEFAULT_SIGNATURE = {
-  name: "guglielmogiannattasio.exe",
-  url: "https://www.guglielmogiannattasio.it",
-};
-const SANS = "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif";
 
-const COL_BG = "#05070d";
-const COL_TEXT = "#f2f4f8";
+const LOOKBOOK = [
+  { src: streetwearOne, alt: "Vintage varsity jacket and loose denim on a New York street" },
+  { src: streetwearTwo, alt: "Curated vintage racing jackets in a New York store" },
+  { src: streetwearThree, alt: "Vintage leather bomber styled on a New York subway platform" },
+  { src: streetwearFour, alt: "Archive graphic tees, workwear and faded denim" },
+];
 
-function clamp(v: number, min: number, max: number) {
-  return Math.min(max, Math.max(min, v));
+function clamp(value: number, min: number, max: number) {
+  return Math.min(max, Math.max(min, value));
 }
 
 export default function MetroHero({
   videoSrc = DEFAULT_VIDEO,
-  title = "THE CITY OPENS",
-  scrollHint = "SCROLL",
-  tagline = "Every door in the city is already open.",
-  signature = DEFAULT_SIGNATURE,
-  scrubDistance = 3200,
+  title = "True Vintage, Brand New",
+  scrollHint = "SCROLL TO EXPLORE",
+  tagline = "AUTHENTIC VINTAGE STORE",
+  scrubDistance = 2600,
   className,
-  style,
 }: MetroHeroProps) {
-  const sectionRef = useRef<HTMLDivElement>(null);
+  const heroRef = useRef<HTMLElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const titleRef = useRef<HTMLDivElement>(null);
   const hintRef = useRef<HTMLDivElement>(null);
@@ -53,383 +46,209 @@ export default function MetroHero({
 
   useEffect(() => {
     const video = videoRef.current;
-    const section = sectionRef.current;
-    if (!video || !section) return;
+    const hero = heroRef.current;
+    if (!video || !hero) return;
 
-    const reduceMotion =
-      typeof window !== "undefined" &&
-      window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
-
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     let duration = 0;
-    let rafId = 0;
-    let targetProgress = 0;
-    let currentProgress = 0;
-    let hasStartedScrolling = false;
-    let isSeeking = false;
-    let pendingTime: number | null = null;
+    let frameId = 0;
+    let target = reducedMotion ? 1 : 0;
+    let current = target;
     let locked = false;
     let lockedScrollY = 0;
-    let touchStartY = 0;
+    let touchY = 0;
+    let started = false;
 
-    const onLoadedData = () => {
-      duration = video.duration || 0;
-      setReady(true);
-      if (reduceMotion) {
-        video.currentTime = duration * 0.92;
+    const updateVisuals = (progress: number) => {
+      if (duration > 0 && Math.abs(video.currentTime - progress * duration) > 0.025) {
+        video.currentTime = progress * duration;
+      }
+      video.style.transform = `scale(${1 + progress * 0.045})`;
+
+      if (titleRef.current) {
+        const visibility = 1 - clamp(progress / 0.34, 0, 1);
+        titleRef.current.style.opacity = String(visibility);
+        titleRef.current.style.transform = `translate3d(0, ${(1 - visibility) * -22}px, 0) scale(${0.97 + visibility * 0.03})`;
+        titleRef.current.style.filter = `blur(${(1 - visibility) * 7}px)`;
+      }
+      if (hintRef.current) hintRef.current.style.opacity = started ? "0" : "1";
+      if (taglineRef.current) {
+        const visibility = clamp((progress - 0.76) / 0.2, 0, 1);
+        taglineRef.current.style.opacity = String(visibility);
+        taglineRef.current.style.transform = `translate3d(0, ${(1 - visibility) * 18}px, 0) scale(${0.98 + visibility * 0.02})`;
+        taglineRef.current.style.filter = `blur(${(1 - visibility) * 6}px)`;
+      }
+      if (progressBarRef.current) {
+        progressBarRef.current.style.transform = `scaleX(${progress})`;
       }
     };
-    video.addEventListener("loadeddata", onLoadedData);
 
-    // iOS Safari won't buffer video data until playback starts; since we only
-    // ever seek, force a silent play-then-pause on mount to kick off loading.
-    const kickstartLoad = () => {
-      const p = video.play();
-      if (p && typeof p.then === "function") {
-        p.then(() => video.pause()).catch(() => {});
-      } else {
-        video.pause();
-      }
-    };
-    kickstartLoad();
-
-    const onSeeked = () => {
-      isSeeking = false;
-      if (pendingTime !== null) {
-        const t = pendingTime;
-        pendingTime = null;
-        isSeeking = true;
-        video.currentTime = t;
-      }
-    };
-    video.addEventListener("seeked", onSeeked);
-
-    function seekTo(t: number) {
-      if (isSeeking) {
-        pendingTime = t;
-        return;
-      }
-      isSeeking = true;
-      video!.currentTime = t;
-    }
-
-    function engageLock() {
-      if (locked || typeof document === "undefined") return;
+    const engageLock = () => {
+      if (locked || reducedMotion) return;
       locked = true;
       lockedScrollY = window.scrollY;
-      const b = document.body.style;
-      b.position = "fixed";
-      b.top = `-${lockedScrollY}px`;
-      b.left = "0";
-      b.right = "0";
-      b.width = "100%";
-      b.height = "100%";
-      b.overscrollBehavior = "none";
-    }
+      Object.assign(document.body.style, {
+        position: "fixed",
+        top: `-${lockedScrollY}px`,
+        left: "0",
+        right: "0",
+        width: "100%",
+        overflow: "hidden",
+      });
+    };
 
-    function releaseLock() {
-      if (!locked || typeof document === "undefined") return;
+    const releaseLock = () => {
+      if (!locked) return;
       locked = false;
       const y = lockedScrollY;
-      const b = document.body.style;
-      b.position = "";
-      b.top = "";
-      b.left = "";
-      b.right = "";
-      b.width = "";
-      b.height = "";
-      b.overscrollBehavior = "";
+      Object.assign(document.body.style, {
+        position: "",
+        top: "",
+        left: "",
+        right: "",
+        width: "",
+        overflow: "",
+      });
       window.scrollTo(0, y);
-    }
-
-    engageLock();
-
-    function addDelta(deltaY: number) {
-      const next = clamp(targetProgress + deltaY / scrubDistance, 0, 1);
-      targetProgress = next;
-      if (targetProgress > 0.001) hasStartedScrolling = true;
-      return true;
-    }
-
-    const onWheel = (e: WheelEvent) => {
-      addDelta(e.deltaY);
-      e.preventDefault();
     };
 
-    const onTouchStart = (e: TouchEvent) => {
-      touchStartY = e.touches[0]?.clientY ?? 0;
-    };
-    const onTouchMove = (e: TouchEvent) => {
-      const y = e.touches[0]?.clientY ?? touchStartY;
-      const deltaY = touchStartY - y;
-      touchStartY = y;
-      addDelta(deltaY);
-      e.preventDefault();
+    const addDelta = (delta: number) => {
+      target = clamp(target + delta / scrubDistance, 0, 1);
+      if (target > 0.003) started = true;
     };
 
+    const onWheel = (event: WheelEvent) => {
+      if (!locked) {
+        if (window.scrollY <= 1 && event.deltaY < 0 && target > 0) {
+          engageLock();
+        } else {
+          return;
+        }
+      }
+      addDelta(event.deltaY);
+      event.preventDefault();
+    };
+
+    const onTouchStart = (event: TouchEvent) => {
+      touchY = event.touches[0]?.clientY ?? 0;
+    };
+
+    const onTouchMove = (event: TouchEvent) => {
+      const nextY = event.touches[0]?.clientY ?? touchY;
+      const delta = touchY - nextY;
+      touchY = nextY;
+      if (!locked) {
+        if (window.scrollY <= 1 && delta < 0 && target > 0) engageLock();
+        else return;
+      }
+      addDelta(delta * 1.2);
+      event.preventDefault();
+    };
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      const direction = event.key === "ArrowUp" || event.key === "PageUp" ? -1 :
+        event.key === "ArrowDown" || event.key === "PageDown" || event.key === " " ? 1 : 0;
+      if (!direction) return;
+      if (!locked && direction < 0 && window.scrollY <= 1) engageLock();
+      if (locked) {
+        addDelta(direction * 180);
+        event.preventDefault();
+      }
+    };
+
+    const onLoaded = () => {
+      duration = Number.isFinite(video.duration) ? video.duration : 0;
+      setReady(true);
+      updateVisuals(current);
+    };
+
+    const animate = () => {
+      current += (target - current) * 0.105;
+      if (Math.abs(target - current) < 0.0001) current = target;
+      updateVisuals(current);
+      if (locked && target >= 1 && current >= 0.995) releaseLock();
+      frameId = requestAnimationFrame(animate);
+    };
+
+    video.addEventListener("loadedmetadata", onLoaded);
     window.addEventListener("wheel", onWheel, { passive: false });
     window.addEventListener("touchstart", onTouchStart, { passive: true });
     window.addEventListener("touchmove", onTouchMove, { passive: false });
-    section.addEventListener("touchstart", onTouchStart, { passive: true, capture: true });
-    section.addEventListener("touchmove", onTouchMove, { passive: false, capture: true });
+    window.addEventListener("keydown", onKeyDown);
 
-    function frame() {
-      currentProgress += (targetProgress - currentProgress) * 0.18;
-
-      if (duration > 0) {
-        seekTo(currentProgress * duration);
-      }
-
-      if (videoRef.current) {
-        const scale = 1 + currentProgress * 0.06;
-        videoRef.current.style.transform = `scale(${scale})`;
-      }
-      if (titleRef.current) {
-        const t = 1 - clamp(currentProgress / 0.35, 0, 1);
-        titleRef.current.style.opacity = String(t);
-        titleRef.current.style.transform = `translateY(${(1 - t) * -24}px) scale(${0.96 + t * 0.04})`;
-        titleRef.current.style.filter = `blur(${(1 - t) * 10}px)`;
-      }
-      if (hintRef.current) {
-        hintRef.current.style.opacity = hasStartedScrolling ? "0" : "1";
-      }
-      if (taglineRef.current) {
-        const t = clamp((currentProgress - 0.82) / 0.18, 0, 1);
-        taglineRef.current.style.opacity = String(t);
-        taglineRef.current.style.transform = `translateY(${(1 - t) * 20}px) scale(${0.97 + t * 0.03})`;
-        taglineRef.current.style.filter = `blur(${(1 - t) * 8}px)`;
-      }
-      if (progressBarRef.current) {
-        progressBarRef.current.style.transform = `scaleX(${currentProgress})`;
-      }
-
-      rafId = requestAnimationFrame(frame);
-    }
-
-    if (!reduceMotion) {
-      rafId = requestAnimationFrame(frame);
-    }
+    if (video.readyState >= 1) onLoaded();
+    video.play().then(() => video.pause()).catch(() => undefined);
+    engageLock();
+    frameId = requestAnimationFrame(animate);
 
     return () => {
-      video.removeEventListener("loadeddata", onLoadedData);
-      video.removeEventListener("seeked", onSeeked);
+      video.removeEventListener("loadedmetadata", onLoaded);
       window.removeEventListener("wheel", onWheel);
       window.removeEventListener("touchstart", onTouchStart);
       window.removeEventListener("touchmove", onTouchMove);
-      section.removeEventListener("touchstart", onTouchStart, true);
-      section.removeEventListener("touchmove", onTouchMove, true);
-      cancelAnimationFrame(rafId);
+      window.removeEventListener("keydown", onKeyDown);
+      cancelAnimationFrame(frameId);
       releaseLock();
     };
   }, [scrubDistance]);
 
   return (
-    <div
-      ref={sectionRef}
-      className={className}
-      style={{
-        position: "relative",
-        height: "100dvh",
-        width: "100%",
-        overflow: "hidden",
-        background: COL_BG,
-        touchAction: "none",
-        ...style,
-      }}
-    >
-      <video
-        ref={videoRef}
-        src={videoSrc}
-        muted
-        playsInline
-        preload="auto"
-        style={{
-          position: "absolute",
-          inset: 0,
-          width: "100%",
-          height: "100%",
-          objectFit: "cover",
-          opacity: ready ? 1 : 0,
-          transformOrigin: "center center",
-          willChange: "transform",
-          transition: "opacity 0.6s ease",
-          touchAction: "none",
-          pointerEvents: "none",
-        }}
-      />
-
-      <div
-        style={{
-          position: "absolute",
-          inset: 0,
-          background:
-            "linear-gradient(180deg, rgba(5,7,13,0.35), rgba(5,7,13,0) 30%, rgba(5,7,13,0.15) 70%, rgba(5,7,13,0.55))",
-          pointerEvents: "none",
-        }}
-      />
-
-      <div
-        ref={titleRef}
-        style={{
-          position: "absolute",
-          inset: 0,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          padding: "0 6%",
-          textAlign: "center",
-          pointerEvents: "none",
-        }}
-      >
-        <span
-          style={{
-            fontFamily: SANS,
-            fontWeight: 800,
-            fontSize: "clamp(30px, 7vw, 96px)",
-            lineHeight: 1,
-            letterSpacing: "-0.02em",
-            color: COL_TEXT,
-            textShadow: "0 4px 30px rgba(0,0,0,0.5)",
-            display: "inline-block",
-            willChange: "transform, filter, opacity",
-          }}
-        >
-          {title}
-        </span>
-      </div>
-
-      {tagline && (
-        <div
-          ref={taglineRef}
-          style={{
-            position: "absolute",
-            inset: 0,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            padding: "0 8%",
-            textAlign: "center",
-            opacity: 0,
-            pointerEvents: "none",
-          }}
-        >
-          <span
-            style={{
-              fontFamily: SANS,
-              fontWeight: 700,
-              fontSize: "clamp(20px, 3.4vw, 40px)",
-              lineHeight: 1.2,
-              letterSpacing: "-0.01em",
-              color: COL_TEXT,
-              textShadow: "0 4px 24px rgba(0,0,0,0.5)",
-            }}
-          >
-            {tagline}
-          </span>
-        </div>
-      )}
-
-      <div
-        ref={hintRef}
-        style={{
-          position: "absolute",
-          left: "50%",
-          bottom: "clamp(20px, 6vh, 48px)",
-          transform: "translateX(-50%)",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          gap: 8,
-          color: "rgba(240,244,248,0.75)",
-          fontFamily: SANS,
-          fontSize: "clamp(10px, 1.4vw, 12px)",
-          fontWeight: 600,
-          letterSpacing: "0.3em",
-          transition: "opacity 0.4s ease",
-          pointerEvents: "none",
-        }}
-      >
-        <span>{scrollHint}</span>
-        <svg
-          width="14"
-          height="18"
-          viewBox="0 0 14 18"
-          style={{ animation: "metro-hero-bounce 1.6s ease-in-out infinite" }}
-        >
-          <style>{`
-            @keyframes metro-hero-bounce {
-              0%, 100% { transform: translateY(0); opacity: 0.5; }
-              50% { transform: translateY(5px); opacity: 1; }
-            }
-          `}</style>
-          <path
-            d="M7 1 L7 17 M2 12 L7 17 L12 12"
-            stroke="currentColor"
-            strokeWidth="1.5"
-            fill="none"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        </svg>
-      </div>
-
-      {/* Thin progress line — fills as the video advances. */}
-      <div
-        style={{
-          position: "absolute",
-          left: 0,
-          right: 0,
-          bottom: 0,
-          height: 2,
-          background: "rgba(255,255,255,0.12)",
-        }}
-      >
-        <div
-          ref={progressBarRef}
-          style={{
-            height: "100%",
-            width: "100%",
-            background: "linear-gradient(90deg, rgba(255,255,255,0.5), rgba(255,255,255,0.95))",
-            transform: "scaleX(0)",
-            transformOrigin: "left center",
-          }}
+    <main className={className}>
+      <section ref={heroRef} className="vintage-video-hero" aria-label="Vintage streetwear introduction">
+        <video
+          ref={videoRef}
+          src={videoSrc}
+          muted
+          playsInline
+          preload="auto"
+          className={`vintage-video-hero__video ${ready ? "is-ready" : ""}`}
         />
-      </div>
+        <div className="vintage-video-hero__shade" />
 
-      {signature && (
-        <span
-          style={{
-            position: "absolute",
-            right: "clamp(12px, 2.5vw, 24px)",
-            bottom: "clamp(10px, 2vw, 18px)",
-            fontFamily: SANS,
-            fontWeight: 500,
-            fontSize: "clamp(11px, 1.4vw, 13px)",
-            letterSpacing: "0.01em",
-            color: "rgba(220,224,232,0.6)",
-            zIndex: 2,
-          }}
-        >
-          by{" "}
-          <a
-            href={signature.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{
-              color: "rgba(220,224,232,0.6)",
-              textDecoration: "none",
-              transition: "color 0.2s ease",
-            }}
-            onMouseEnter={(e: React.MouseEvent<HTMLAnchorElement>) => {
-              e.currentTarget.style.color = COL_TEXT;
-            }}
-            onMouseLeave={(e: React.MouseEvent<HTMLAnchorElement>) => {
-              e.currentTarget.style.color = "rgba(220,224,232,0.6)";
-            }}
-          >
-            {signature.name}
-          </a>
-        </span>
-      )}
-    </div>
+        <div ref={titleRef} className="vintage-video-hero__title-wrap">
+          <p className="vintage-video-hero__kicker">NEW YORK — CURATED ARCHIVE</p>
+          <h1>{title}</h1>
+        </div>
+
+        <div ref={taglineRef} className="vintage-video-hero__finale">
+          <span>EST. NYC</span>
+          <p>{tagline}</p>
+          <span>ONE OF ONE</span>
+        </div>
+
+        <div ref={hintRef} className="vintage-video-hero__hint">
+          <span>{scrollHint}</span>
+          <ArrowDown aria-hidden="true" size={16} strokeWidth={1.5} />
+        </div>
+
+        <div className="vintage-video-hero__progress" aria-hidden="true">
+          <div ref={progressBarRef} />
+        </div>
+      </section>
+
+      <section className="vintage-lookbook" aria-labelledby="lookbook-title">
+        <div className="vintage-lookbook__copy">
+          <p>THE NEW YORK EDIT / 001</p>
+          <h2 id="lookbook-title">AUTHENTIC<br />VINTAGE STORE</h2>
+          <div className="vintage-lookbook__details">
+            <p>One-of-one streetwear, sourced by hand. Worn before. Ready for what’s next.</p>
+            <a href="#archive">
+              SHOP THE DROP <ArrowUpRight aria-hidden="true" size={17} />
+            </a>
+          </div>
+        </div>
+
+        <div id="archive" className="vintage-lookbook__rail" aria-label="Vintage streetwear collection">
+          <div className="vintage-lookbook__track">
+            {[...LOOKBOOK, ...LOOKBOOK].map((image, index) => (
+              <figure key={`${image.src}-${index}`}>
+                <img src={image.src} alt={index < LOOKBOOK.length ? image.alt : ""} loading="lazy" width={768} height={1024} />
+                <figcaption>{String((index % LOOKBOOK.length) + 1).padStart(2, "0")} / NYC ARCHIVE</figcaption>
+              </figure>
+            ))}
+          </div>
+        </div>
+      </section>
+    </main>
   );
 }
