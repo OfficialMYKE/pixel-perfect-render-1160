@@ -109,7 +109,7 @@ export default function MetroHero({
         return;
       }
       isSeeking = true;
-      video.currentTime = t;
+      video!.currentTime = t;
     }
 
     function engageLock() {
