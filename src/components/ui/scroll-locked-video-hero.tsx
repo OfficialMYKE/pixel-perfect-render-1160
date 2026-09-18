@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { ArrowUpRight } from "lucide-react";
 import AnnouncementBar from "@/components/ui/announcement-bar";
 import VintageNavbar from "@/components/ui/vintage-navbar";
+import Footer from "@/components/ui/footer";
 import { useLanguage } from "@/lib/i18n";
 import streetwearOne from "@/assets/vintage-streetwear-01.jpg";
 import streetwearTwo from "@/assets/vintage-streetwear-02.jpg";
@@ -27,10 +28,7 @@ function clamp(v: number, min: number, max: number) {
   return Math.min(max, Math.max(min, v));
 }
 
-export default function MetroHero({
-  videoSrc = DEFAULT_VIDEO,
-  className,
-}: MetroHeroProps) {
+export default function MetroHero({ videoSrc = DEFAULT_VIDEO, className }: MetroHeroProps) {
   const { t } = useLanguage();
   const videoRef = useRef<HTMLVideoElement>(null);
   const textARef = useRef<HTMLDivElement>(null);
@@ -271,6 +269,8 @@ export default function MetroHero({
           </div>
         </div>
       </section>
+
+      <Footer />
     </main>
   );
 }

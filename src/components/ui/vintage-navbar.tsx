@@ -154,8 +154,12 @@ export default function VintageNavbar() {
               <ShoppingBag size={18} strokeWidth={1.5} />
               <span className="vn__badge">0</span>
             </button>
-            <a href="/login" className="vn__auth-btn">{t.loginBtn}</a>
-            <a href="/signup" className="vn__auth-btn vn__auth-btn--primary">{t.signupBtn}</a>
+            <a href="/login" className="vn__auth-btn">
+              {t.loginBtn}
+            </a>
+            <a href="/signup" className="vn__auth-btn vn__auth-btn--primary">
+              {t.signupBtn}
+            </a>
             <button
               className="vn__icon vn__menu-btn"
               onClick={() => setMobileOpen(true)}

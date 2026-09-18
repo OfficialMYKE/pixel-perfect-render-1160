@@ -115,7 +115,7 @@ export const FullScreenScrollFX = forwardRef<HTMLDivElement, FullScreenFXProps>(
       apiRef,
       ariaLabel = "Full screen scroll slideshow",
     },
-    ref
+    ref,
   ) => {
     const total = sections.length;
     const [localIndex, setLocalIndex] = useState(clamp(initialIndex, 0, Math.max(0, total - 1)));
@@ -154,7 +154,9 @@ export const FullScreenScrollFX = forwardRef<HTMLDivElement, FullScreenFXProps>(
       const words = text.split(/\s+/).filter(Boolean);
       return words.map((w, i) => (
         <span className="fx-word-mask" key={i}>
-          <span className="fx-word" ref={(el) => el && tempWordBucket.current.push(el)}>{w}</span>
+          <span className="fx-word" ref={(el) => el && tempWordBucket.current.push(el)}>
+            {w}
+          </span>
           {i < words.length - 1 ? " " : null}
         </span>
       ));
@@ -178,7 +180,7 @@ export const FullScreenScrollFX = forwardRef<HTMLDivElement, FullScreenFXProps>(
       const centerTrack = (
         container: HTMLDivElement | null,
         items: HTMLDivElement[],
-        isRight: boolean
+        isRight: boolean,
       ) => {
         if (!container || items.length === 0) return;
         const first = items[0];
@@ -408,14 +410,26 @@ export const FullScreenScrollFX = forwardRef<HTMLDivElement, FullScreenFXProps>(
         gsap.fromTo(
           el,
           { opacity: 0, y: 20 },
-          { opacity: i === index ? 1 : 0.35, y: 0, duration: 0.5, delay: i * 0.06, ease: "power3.out" }
+          {
+            opacity: i === index ? 1 : 0.35,
+            y: 0,
+            duration: 0.5,
+            delay: i * 0.06,
+            ease: "power3.out",
+          },
         );
       });
       rightItemRefs.current.forEach((el, i) => {
         gsap.fromTo(
           el,
           { opacity: 0, y: 20 },
-          { opacity: i === index ? 1 : 0.35, y: 0, duration: 0.5, delay: 0.2 + i * 0.06, ease: "power3.out" }
+          {
+            opacity: i === index ? 1 : 0.35,
+            y: 0,
+            duration: 0.5,
+            delay: 0.2 + i * 0.06,
+            ease: "power3.out",
+          },
         );
       });
     };
@@ -499,7 +513,10 @@ export const FullScreenScrollFX = forwardRef<HTMLDivElement, FullScreenFXProps>(
                       tempWordBucket.current = [];
                       const isString = typeof s.title === "string";
                       return (
-                        <div key={`C-${s.id ?? sIdx}`} className={`fx-featured ${sIdx === index ? "active" : ""}`}>
+                        <div
+                          key={`C-${s.id ?? sIdx}`}
+                          className={`fx-featured ${sIdx === index ? "active" : ""}`}
+                        >
                           <h3 className="fx-featured-title">
                             {isString ? splitWords(s.title as string) : s.title}
                           </h3>
@@ -570,12 +587,29 @@ export const FullScreenScrollFX = forwardRef<HTMLDivElement, FullScreenFXProps>(
           }
 
           .fx-debug {
-            position: fixed; bottom: 10px; right: 10px; z-index: 9999;
-            background: rgba(255,255,255,0.8); color: #000; padding: 6px 8px; font: 12px/1 monospace; border-radius: 4px;
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            z-index: 9999;
+            background: rgba(255, 255, 255, 0.8);
+            color: #000;
+            padding: 6px 8px;
+            font: 12px/1 monospace;
+            border-radius: 4px;
           }
 
-          .fx-fixed-section { height: ${Math.max(1, total + 1)}00vh; position: relative; }
-          .fx-fixed { position: sticky; top: 0; height: 100vh; width: 100%; overflow: hidden; background: var(--fx-page-bg); }
+          .fx-fixed-section {
+            height: ${Math.max(1, total + 1)}00vh;
+            position: relative;
+          }
+          .fx-fixed {
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            width: 100%;
+            overflow: hidden;
+            background: var(--fx-page-bg);
+          }
 
           .fx-grid {
             display: grid;
@@ -587,40 +621,72 @@ export const FullScreenScrollFX = forwardRef<HTMLDivElement, FullScreenFXProps>(
             z-index: 2;
           }
 
-          .fx-bgs { position: absolute; inset: 0; background: var(--fx-stage-bg); z-index: 1; }
-          .fx-bg { position: absolute; inset: 0; }
+          .fx-bgs {
+            position: absolute;
+            inset: 0;
+            background: var(--fx-stage-bg);
+            z-index: 1;
+          }
+          .fx-bg {
+            position: absolute;
+            inset: 0;
+          }
           .fx-bg-img {
-            position: absolute; inset: -10% 0 -10% 0;
-            width: 100%; height: 120%; object-fit: cover;
+            position: absolute;
+            inset: -10% 0 -10% 0;
+            width: 100%;
+            height: 120%;
+            object-fit: cover;
             filter: brightness(0.75);
             opacity: 0;
             will-change: transform, opacity;
           }
-          .fx-bg-overlay { position: absolute; inset: 0; background: var(--fx-overlay); }
+          .fx-bg-overlay {
+            position: absolute;
+            inset: 0;
+            background: var(--fx-overlay);
+          }
 
           .fx-header {
-            grid-column: 1 / 13; align-self: start; padding-top: 6vh;
-            font-size: clamp(2rem, 9vw, 9rem); line-height: 0.86; text-align: center; color: var(--fx-text);
+            grid-column: 1 / 13;
+            align-self: start;
+            padding-top: 6vh;
+            font-size: clamp(2rem, 9vw, 9rem);
+            line-height: 0.86;
+            text-align: center;
+            color: var(--fx-text);
           }
-          .fx-header > * { display: block; }
+          .fx-header > * {
+            display: block;
+          }
 
           .fx-content {
             grid-column: 1 / 13;
-            position: absolute; inset: 0;
-            display: grid; grid-template-columns: 1fr 1.3fr 1fr;
+            position: absolute;
+            inset: 0;
+            display: grid;
+            grid-template-columns: 1fr 1.3fr 1fr;
             align-items: center;
             height: 100%;
             padding: 0 var(--fx-grid-px);
           }
 
-          .fx-left, .fx-right {
+          .fx-left,
+          .fx-right {
             height: 60vh;
             overflow: hidden;
-            display: grid; align-content: center;
+            display: grid;
+            align-content: center;
           }
-          .fx-left { justify-items: start; }
-          .fx-right { justify-items: end; }
-          .fx-track { will-change: transform; }
+          .fx-left {
+            justify-items: start;
+          }
+          .fx-right {
+            justify-items: end;
+          }
+          .fx-track {
+            will-change: transform;
+          }
 
           .fx-item {
             color: var(--fx-text);
@@ -629,62 +695,148 @@ export const FullScreenScrollFX = forwardRef<HTMLDivElement, FullScreenFXProps>(
             line-height: 1;
             margin: calc(var(--fx-row-gap) / 2) 0;
             opacity: 0.35;
-            transition: opacity 0.3s ease, transform 0.3s ease;
+            transition:
+              opacity 0.3s ease,
+              transform 0.3s ease;
             position: relative;
             font-size: clamp(1rem, 2.4vw, 1.8rem);
             user-select: none;
             cursor: pointer;
           }
-          .fx-left-item.active, .fx-right-item.active { opacity: 1; }
-          .fx-left-item.active { transform: translateX(10px); padding-left: 16px; }
-          .fx-right-item.active { transform: translateX(-10px); padding-right: 16px; }
+          .fx-left-item.active,
+          .fx-right-item.active {
+            opacity: 1;
+          }
+          .fx-left-item.active {
+            transform: translateX(10px);
+            padding-left: 16px;
+          }
+          .fx-right-item.active {
+            transform: translateX(-10px);
+            padding-right: 16px;
+          }
 
           .fx-left-item.active::before,
           .fx-right-item.active::after {
             content: "";
-            position: absolute; top: 50%; transform: translateY(-50%);
-            width: 6px; height: 6px; background: var(--fx-text); border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 6px;
+            height: 6px;
+            background: var(--fx-text);
+            border-radius: 50%;
           }
-          .fx-left-item.active::before { left: 0; }
-          .fx-right-item.active::after { right: 0; }
+          .fx-left-item.active::before {
+            left: 0;
+          }
+          .fx-right-item.active::after {
+            right: 0;
+          }
 
           .fx-center {
-            display: grid; place-items: center; text-align: center; height: 60vh; overflow: hidden;
+            display: grid;
+            place-items: center;
+            text-align: center;
+            height: 60vh;
+            overflow: hidden;
           }
-          .fx-featured { position: absolute; opacity: 0; visibility: hidden; }
-          .fx-featured.active { opacity: 1; visibility: visible; }
+          .fx-featured {
+            position: absolute;
+            opacity: 0;
+            visibility: hidden;
+          }
+          .fx-featured.active {
+            opacity: 1;
+            visibility: visible;
+          }
           .fx-featured-title {
-            margin: 0; color: var(--fx-text);
-            font-weight: 900; letter-spacing: -0.01em;
+            margin: 0;
+            color: var(--fx-text);
+            font-weight: 900;
+            letter-spacing: -0.01em;
             font-size: clamp(2rem, 7.5vw, 6rem);
           }
-          .fx-word-mask { display: inline-block; overflow: hidden; vertical-align: middle; }
-          .fx-word { display: inline-block; vertical-align: middle; }
+          .fx-word-mask {
+            display: inline-block;
+            overflow: hidden;
+            vertical-align: middle;
+          }
+          .fx-word {
+            display: inline-block;
+            vertical-align: middle;
+          }
 
           .fx-footer {
-            grid-column: 1 / 13; align-self: end; padding-bottom: 5vh; text-align: center;
+            grid-column: 1 / 13;
+            align-self: end;
+            padding-bottom: 5vh;
+            text-align: center;
           }
-          .fx-footer-title { color: var(--fx-text); font-size: clamp(1.6rem, 7vw, 7rem); font-weight: 900; letter-spacing: -0.01em; line-height: 0.9; }
-          .fx-progress { width: 200px; height: 2px; margin: 1rem auto 0; background: rgba(245,245,245,0.28); position: relative; }
-          .fx-progress-fill { position: absolute; inset: 0 auto 0 0; width: 0%; background: var(--fx-text); height: 100%; transition: width 0.3s ease; }
-          .fx-progress-numbers { position: absolute; inset: auto 0 100% 0; display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--fx-text); }
+          .fx-footer-title {
+            color: var(--fx-text);
+            font-size: clamp(1.6rem, 7vw, 7rem);
+            font-weight: 900;
+            letter-spacing: -0.01em;
+            line-height: 0.9;
+          }
+          .fx-progress {
+            width: 200px;
+            height: 2px;
+            margin: 1rem auto 0;
+            background: rgba(245, 245, 245, 0.28);
+            position: relative;
+          }
+          .fx-progress-fill {
+            position: absolute;
+            inset: 0 auto 0 0;
+            width: 0%;
+            background: var(--fx-text);
+            height: 100%;
+            transition: width 0.3s ease;
+          }
+          .fx-progress-numbers {
+            position: absolute;
+            inset: auto 0 100% 0;
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            color: var(--fx-text);
+          }
 
-          .fx-end { height: 100vh; display: grid; place-items: center; }
-          .fx-fin { transform: rotate(90deg); color: #111; }
+          .fx-end {
+            height: 100vh;
+            display: grid;
+            place-items: center;
+          }
+          .fx-fin {
+            transform: rotate(90deg);
+            color: #111;
+          }
 
           @media (max-width: 900px) {
             .fx-content {
-              grid-template-columns: 1fr; row-gap: 3vh;
+              grid-template-columns: 1fr;
+              row-gap: 3vh;
               place-items: center;
             }
-            .fx-left, .fx-right, .fx-center { height: auto; }
-            .fx-left, .fx-right { justify-items: center; }
-            .fx-track { transform: none !important; }
+            .fx-left,
+            .fx-right,
+            .fx-center {
+              height: auto;
+            }
+            .fx-left,
+            .fx-right {
+              justify-items: center;
+            }
+            .fx-track {
+              transform: none !important;
+            }
           }
         `}</style>
       </div>
     );
-  }
+  },
 );
 
 FullScreenScrollFX.displayName = "FullScreenScrollFX";
