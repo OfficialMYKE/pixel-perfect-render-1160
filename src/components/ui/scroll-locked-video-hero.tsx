@@ -1,5 +1,8 @@
 import { useEffect, useRef, useState } from "react";
-import { ArrowDown, ArrowUpRight } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
+import AnnouncementBar from "@/components/ui/announcement-bar";
+import VintageNavbar from "@/components/ui/vintage-navbar";
+import { useLanguage } from "@/lib/i18n";
 import streetwearOne from "@/assets/vintage-streetwear-01.jpg";
 import streetwearTwo from "@/assets/vintage-streetwear-02.jpg";
 import streetwearThree from "@/assets/vintage-streetwear-03.jpg";
@@ -7,10 +10,6 @@ import streetwearFour from "@/assets/vintage-streetwear-04.jpg";
 
 export interface MetroHeroProps {
   videoSrc?: string;
-  title?: string;
-  scrollHint?: string;
-  tagline?: string;
-  scrubDistance?: number;
   className?: string;
 }
 
@@ -24,226 +23,249 @@ const LOOKBOOK = [
   { src: streetwearFour, alt: "Archive graphic tees, workwear and faded denim" },
 ];
 
-function clamp(value: number, min: number, max: number) {
-  return Math.min(max, Math.max(min, value));
+function clamp(v: number, min: number, max: number) {
+  return Math.min(max, Math.max(min, v));
 }
 
 export default function MetroHero({
   videoSrc = DEFAULT_VIDEO,
-  title = "True Vintage, Brand New",
-  scrollHint = "SCROLL TO EXPLORE",
-  tagline = "AUTHENTIC VINTAGE STORE",
-  scrubDistance = 2600,
   className,
 }: MetroHeroProps) {
-  const heroRef = useRef<HTMLElement>(null);
+  const { t } = useLanguage();
   const videoRef = useRef<HTMLVideoElement>(null);
-  const titleRef = useRef<HTMLDivElement>(null);
-  const hintRef = useRef<HTMLDivElement>(null);
-  const taglineRef = useRef<HTMLDivElement>(null);
+  const textARef = useRef<HTMLDivElement>(null);
+  const textBRef = useRef<HTMLDivElement>(null);
   const progressBarRef = useRef<HTMLDivElement>(null);
+  const lookbookRef = useRef<HTMLElement>(null);
+  const announcementRef = useRef<HTMLDivElement>(null);
+  const heroRef = useRef<HTMLElement>(null);
   const [ready, setReady] = useState(false);
+  const [poster, setPoster] = useState<string | null>(null);
+  const transitioned = useRef(false);
 
   useEffect(() => {
     const video = videoRef.current;
-    const hero = heroRef.current;
-    if (!video || !hero) return;
+    if (!video) return;
 
-    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    let duration = 0;
-    let frameId = 0;
-    let target = reducedMotion ? 1 : 0;
-    let current = target;
-    let locked = false;
-    let lockedScrollY = 0;
-    let touchY = 0;
-    let started = false;
+    let fallbackTimer: ReturnType<typeof setTimeout>;
 
-    const updateVisuals = (progress: number) => {
-      if (duration > 0 && Math.abs(video.currentTime - progress * duration) > 0.025) {
-        video.currentTime = progress * duration;
-      }
-      video.style.transform = `scale(${1 + progress * 0.045})`;
-
-      if (titleRef.current) {
-        const visibility = 1 - clamp(progress / 0.34, 0, 1);
-        titleRef.current.style.opacity = String(visibility);
-        titleRef.current.style.transform = `translate3d(0, ${(1 - visibility) * -22}px, 0) scale(${0.97 + visibility * 0.03})`;
-        titleRef.current.style.filter = `blur(${(1 - visibility) * 7}px)`;
-      }
-      if (hintRef.current) hintRef.current.style.opacity = started ? "0" : "1";
-      if (taglineRef.current) {
-        const visibility = clamp((progress - 0.76) / 0.2, 0, 1);
-        taglineRef.current.style.opacity = String(visibility);
-        taglineRef.current.style.transform = `translate3d(0, ${(1 - visibility) * 18}px, 0) scale(${0.98 + visibility * 0.02})`;
-        taglineRef.current.style.filter = `blur(${(1 - visibility) * 6}px)`;
-      }
-      if (progressBarRef.current) {
-        progressBarRef.current.style.transform = `scaleX(${progress})`;
-      }
-    };
-
-    const engageLock = () => {
-      if (locked || reducedMotion) return;
-      locked = true;
-      lockedScrollY = window.scrollY;
-      Object.assign(document.body.style, {
-        position: "fixed",
-        top: `-${lockedScrollY}px`,
-        left: "0",
-        right: "0",
-        width: "100%",
-        overflow: "hidden",
-      });
-    };
-
-    const releaseLock = () => {
-      if (!locked) return;
-      locked = false;
-      const y = lockedScrollY;
-      Object.assign(document.body.style, {
-        position: "",
-        top: "",
-        left: "",
-        right: "",
-        width: "",
-        overflow: "",
-      });
-      window.scrollTo(0, y);
-    };
-
-    const addDelta = (delta: number) => {
-      target = clamp(target + delta / scrubDistance, 0, 1);
-      if (target > 0.003) started = true;
-    };
-
-    const onWheel = (event: WheelEvent) => {
-      if (!locked) {
-        if (window.scrollY <= 1 && event.deltaY < 0 && target > 0) {
-          engageLock();
-        } else {
-          return;
+    const extractFrame = () => {
+      try {
+        const canvas = document.createElement("canvas");
+        canvas.width = video.videoWidth || 1920;
+        canvas.height = video.videoHeight || 1080;
+        const ctx = canvas.getContext("2d");
+        if (ctx) {
+          ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+          setPoster(canvas.toDataURL("image/jpeg", 0.6));
         }
-      }
-      addDelta(event.deltaY);
-      event.preventDefault();
-    };
-
-    const onTouchStart = (event: TouchEvent) => {
-      touchY = event.touches[0]?.clientY ?? 0;
-    };
-
-    const onTouchMove = (event: TouchEvent) => {
-      const nextY = event.touches[0]?.clientY ?? touchY;
-      const delta = touchY - nextY;
-      touchY = nextY;
-      if (!locked) {
-        if (window.scrollY <= 1 && delta < 0 && target > 0) engageLock();
-        else return;
-      }
-      addDelta(delta * 1.2);
-      event.preventDefault();
-    };
-
-    const onKeyDown = (event: KeyboardEvent) => {
-      const direction = event.key === "ArrowUp" || event.key === "PageUp" ? -1 :
-        event.key === "ArrowDown" || event.key === "PageDown" || event.key === " " ? 1 : 0;
-      if (!direction) return;
-      if (!locked && direction < 0 && window.scrollY <= 1) engageLock();
-      if (locked) {
-        addDelta(direction * 180);
-        event.preventDefault();
+      } catch {
+        // canvas tainted or error — ignore
       }
     };
 
     const onLoaded = () => {
-      duration = Number.isFinite(video.duration) ? video.duration : 0;
+      clearTimeout(fallbackTimer);
+      video.currentTime = 0;
       setReady(true);
-      updateVisuals(current);
+      video.play().catch(() => undefined);
+      // Capture first frame as fallback after a short delay
+      setTimeout(extractFrame, 200);
     };
 
-    const animate = () => {
-      current += (target - current) * 0.105;
-      if (Math.abs(target - current) < 0.0001) current = target;
-      updateVisuals(current);
-      if (locked && target >= 1 && current >= 0.995) releaseLock();
-      frameId = requestAnimationFrame(animate);
+    const onError = () => {
+      clearTimeout(fallbackTimer);
+      setReady(true); // show hero with poster fallback
     };
 
-    video.addEventListener("loadedmetadata", onLoaded);
-    window.addEventListener("wheel", onWheel, { passive: false });
-    window.addEventListener("touchstart", onTouchStart, { passive: true });
-    window.addEventListener("touchmove", onTouchMove, { passive: false });
-    window.addEventListener("keydown", onKeyDown);
+    // Fallback: if video doesn't load in 8s, show hero anyway
+    fallbackTimer = setTimeout(() => {
+      setReady(true);
+    }, 8000);
 
-    if (video.readyState >= 1) onLoaded();
-    video.play().then(() => video.pause()).catch(() => undefined);
-    engageLock();
-    frameId = requestAnimationFrame(animate);
+    video.addEventListener("loadeddata", onLoaded);
+    video.addEventListener("error", onError);
+    if (video.readyState >= 2) onLoaded();
+
+    let frameId = 0;
+    let lastVideoT = -1;
+    let lastA = -1;
+    let lastB = -1;
+
+    const update = () => {
+      const dur = Number.isFinite(video.duration) ? video.duration : 0;
+      const t = video.currentTime;
+      const p = dur > 0 ? clamp(t / dur, 0, 1) : 0;
+
+      // Video zoom — only update on meaningful change
+      if (Math.abs(t - lastVideoT) > 0.05) {
+        lastVideoT = t;
+        video.style.transform = `scale(${1 + p * 0.08})`;
+      }
+
+      // Text A: visible 0→35%, fades out 30→45%
+      if (textARef.current) {
+        const a = Math.round((1 - clamp((p - 0.3) / 0.15, 0, 1)) * 100) / 100;
+        if (a !== lastA) {
+          lastA = a;
+          textARef.current.style.opacity = String(a);
+          textARef.current.style.transform = `translateY(${(1 - a) * -16}px)`;
+          textARef.current.style.filter = `blur(${(1 - a) * 3}px)`;
+        }
+      }
+
+      // Text B: fades in 50→65%, stays
+      if (textBRef.current) {
+        const b = Math.round(clamp((p - 0.5) / 0.15, 0, 1) * 100) / 100;
+        if (b !== lastB) {
+          lastB = b;
+          textBRef.current.style.opacity = String(b);
+          textBRef.current.style.transform = `translateY(${(1 - b) * 14}px)`;
+          textBRef.current.style.filter = `blur(${(1 - b) * 3}px)`;
+        }
+      }
+
+      // Progress bar
+      if (progressBarRef.current) {
+        progressBarRef.current.style.transform = `scaleX(${p})`;
+      }
+
+      // Auto-transition at 80% — before video pauses
+      if (p >= 0.8 && !transitioned.current) {
+        transitioned.current = true;
+        if (heroRef.current) {
+          heroRef.current.style.transition = "opacity 2.4s ease-in-out";
+          heroRef.current.style.opacity = "0";
+        }
+        setTimeout(() => {
+          announcementRef.current?.scrollIntoView({ behavior: "smooth" });
+        }, 1600);
+        setTimeout(() => {
+          if (heroRef.current) {
+            heroRef.current.style.height = "0";
+            heroRef.current.style.minHeight = "0";
+            heroRef.current.style.overflow = "hidden";
+          }
+        }, 3200);
+      }
+
+      frameId = requestAnimationFrame(update);
+    };
+
+    frameId = requestAnimationFrame(update);
+
+    // Scroll listener — pause video and collapse hero on scroll down
+    let scrollTriggered = false;
+    const onScroll = () => {
+      if (scrollTriggered) return;
+      if (window.scrollY > 50) {
+        scrollTriggered = true;
+        video.pause();
+        if (heroRef.current) {
+          heroRef.current.style.transition = "opacity 0.6s ease-out, height 0.6s ease-out";
+          heroRef.current.style.opacity = "0";
+          setTimeout(() => {
+            if (heroRef.current) {
+              heroRef.current.style.height = "0";
+              heroRef.current.style.minHeight = "0";
+              heroRef.current.style.overflow = "hidden";
+            }
+          }, 600);
+        }
+      }
+    };
+
+    window.addEventListener("scroll", onScroll, { passive: true });
 
     return () => {
-      video.removeEventListener("loadedmetadata", onLoaded);
-      window.removeEventListener("wheel", onWheel);
-      window.removeEventListener("touchstart", onTouchStart);
-      window.removeEventListener("touchmove", onTouchMove);
-      window.removeEventListener("keydown", onKeyDown);
+      clearTimeout(fallbackTimer);
+      video.removeEventListener("loadeddata", onLoaded);
+      video.removeEventListener("error", onError);
       cancelAnimationFrame(frameId);
-      releaseLock();
+      window.removeEventListener("scroll", onScroll);
     };
-  }, [scrubDistance]);
+  }, []);
 
   return (
     <main className={className}>
-      <section ref={heroRef} className="vintage-video-hero" aria-label="Vintage streetwear introduction">
+      <section ref={heroRef} className="vintage-hero" aria-label="Vintage streetwear introduction">
+        {/* Poster fallback — shows first frame or black while video loads */}
+        {poster && (
+          <img
+            src={poster}
+            alt=""
+            aria-hidden="true"
+            className={`vintage-hero__poster ${ready ? "is-hidden" : ""}`}
+          />
+        )}
+
         <video
           ref={videoRef}
           src={videoSrc}
           muted
           playsInline
           preload="auto"
-          className={`vintage-video-hero__video ${ready ? "is-ready" : ""}`}
+          poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1' height='1'%3E%3Crect fill='%23000'/%3E%3C/svg%3E"
+          className={`vintage-hero__video ${ready ? "is-ready" : ""}`}
         />
-        <div className="vintage-video-hero__shade" />
+        <div className="vintage-hero__shade" />
 
-        <div ref={titleRef} className="vintage-video-hero__title-wrap">
-          <p className="vintage-video-hero__kicker">NEW YORK — CURATED ARCHIVE</p>
-          <h1>{title}</h1>
+        <div ref={textARef} className="vintage-hero__text vintage-hero__text--a">
+          <p className="vintage-hero__kicker">{t.heroKicker}</p>
+          <h1>{t.heroTitle}</h1>
         </div>
 
-        <div ref={taglineRef} className="vintage-video-hero__finale">
-          <span>EST. NYC</span>
-          <p>{tagline}</p>
-          <span>ONE OF ONE</span>
+        <div ref={textBRef} className="vintage-hero__text vintage-hero__text--b">
+          <span>{t.heroEst}</span>
+          <p>{t.heroTagline}</p>
+          <span>{t.heroOneOfOne}</span>
         </div>
 
-        <div ref={hintRef} className="vintage-video-hero__hint">
-          <span>{scrollHint}</span>
-          <ArrowDown aria-hidden="true" size={16} strokeWidth={1.5} />
-        </div>
-
-        <div className="vintage-video-hero__progress" aria-hidden="true">
+        <div className="vintage-hero__progress" aria-hidden="true">
           <div ref={progressBarRef} />
         </div>
       </section>
 
-      <section className="vintage-lookbook" aria-labelledby="lookbook-title">
+      <div ref={announcementRef}>
+        <AnnouncementBar />
+      </div>
+
+      <VintageNavbar />
+
+      <section ref={lookbookRef} className="vintage-lookbook" aria-labelledby="lookbook-title">
         <div className="vintage-lookbook__copy">
-          <p>THE NEW YORK EDIT / 001</p>
-          <h2 id="lookbook-title">AUTHENTIC<br />VINTAGE STORE</h2>
+          <p>{t.lookbookEdit}</p>
+          <h2 id="lookbook-title">
+            {t.lookbookTitle1}
+            <br />
+            {t.lookbookTitle2}
+          </h2>
           <div className="vintage-lookbook__details">
-            <p>One-of-one streetwear, sourced by hand. Worn before. Ready for what’s next.</p>
+            <p>{t.lookbookDesc}</p>
             <a href="#archive">
-              SHOP THE DROP <ArrowUpRight aria-hidden="true" size={17} />
+              {t.lookbookCta} <ArrowUpRight aria-hidden="true" size={17} />
             </a>
           </div>
         </div>
 
-        <div id="archive" className="vintage-lookbook__rail" aria-label="Vintage streetwear collection">
+        <div
+          id="archive"
+          className="vintage-lookbook__rail"
+          aria-label="Vintage streetwear collection"
+        >
           <div className="vintage-lookbook__track">
             {[...LOOKBOOK, ...LOOKBOOK].map((image, index) => (
               <figure key={`${image.src}-${index}`}>
-                <img src={image.src} alt={index < LOOKBOOK.length ? image.alt : ""} loading="lazy" width={768} height={1024} />
-                <figcaption>{String((index % LOOKBOOK.length) + 1).padStart(2, "0")} / NYC ARCHIVE</figcaption>
+                <img
+                  src={image.src}
+                  alt={index < LOOKBOOK.length ? image.alt : ""}
+                  loading="lazy"
+                  width={768}
+                  height={1024}
+                />
+                <figcaption>
+                  {String((index % LOOKBOOK.length) + 1).padStart(2, "0")} / NYC ARCHIVE
+                </figcaption>
               </figure>
             ))}
           </div>
