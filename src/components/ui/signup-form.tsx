@@ -8,7 +8,7 @@ import { useLanguage } from "@/lib/i18n";
 import LegalPages from "@/components/ui/legal-pages";
 
 export default function SignupForm() {
-  const { t, lang, setLang } = useLanguage();
+  const { t } = useLanguage();
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
