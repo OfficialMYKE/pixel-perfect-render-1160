@@ -286,7 +286,7 @@ export default function LegalPages() {
         </div>
       )}
 
-      <style jsx>{`
+      <style>{`
         .sr-only {
           position: absolute;
           width: 1px;
