@@ -4,7 +4,7 @@ import { useLanguage } from "@/lib/i18n";
 
 interface SubCategory {
   label: string;
-  items: string[];
+  items: readonly string[];
 }
 
 interface NavItem {
@@ -70,7 +70,7 @@ export default function VintageNavbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [mobileExpanded, setMobileExpanded] = useState<number | null>(null);
   const navRef = useRef<HTMLDivElement>(null);
-  const timeoutRef = useRef<ReturnType<typeof setTimeout>>();
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
   const openDropdown = (index: number) => {
     clearTimeout(timeoutRef.current);

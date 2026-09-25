@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import AuthSectionTwo from "@/components/ui/auth-section-2";
+import LoginForm from "@/components/ui/login-form";
 
 export const Route = createFileRoute("/login")({
   head: () => ({
@@ -16,5 +16,5 @@ export const Route = createFileRoute("/login")({
 });
 
 function LoginPage() {
-  return <AuthSectionTwo mode="login" />;
+  return <LoginForm />;
 }

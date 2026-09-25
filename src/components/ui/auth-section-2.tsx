@@ -63,22 +63,22 @@ export default function AuthSectionTwo({ mode = "signup" }: { mode?: "login" | "
               <div className="pointer-events-none absolute inset-x-0 top-0 z-20 h-20 bg-gradient-to-b from-[#0a0a0a] to-transparent" />
               <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20 h-24 bg-gradient-to-t from-[#0a0a0a] to-transparent" />
               <ImageTile
-                src={images[0]}
+                src={images[0] ?? vintageStore}
                 active={activeIndex === 0}
                 className="row-span-2 h-[250px]"
               />
               <ImageTile
-                src={images[1]}
+                src={images[1] ?? vintage01}
                 active={activeIndex === 1}
                 className="h-[121px]"
               />
               <ImageTile
-                src={images[3]}
+                src={images[3] ?? vintage03}
                 active={activeIndex === 3}
                 className="h-[121px]"
               />
               <ImageTile
-                src={images[2]}
+                src={images[2] ?? vintage02}
                 active={activeIndex === 2}
                 className="col-span-2 h-[120px]"
               />

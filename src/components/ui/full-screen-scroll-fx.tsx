@@ -154,7 +154,9 @@ export const FullScreenScrollFX = forwardRef<HTMLDivElement, FullScreenFXProps>(
       const words = text.split(/\s+/).filter(Boolean);
       return words.map((w, i) => (
         <span className="fx-word-mask" key={i}>
-          <span className="fx-word" ref={(el) => el && tempWordBucket.current.push(el)}>
+          <span className="fx-word" ref={(el) => {
+            if (el) tempWordBucket.current.push(el);
+          }}>
             {w}
           </span>
           {i < words.length - 1 ? " " : null}
@@ -184,6 +186,7 @@ export const FullScreenScrollFX = forwardRef<HTMLDivElement, FullScreenFXProps>(
       ) => {
         if (!container || items.length === 0) return;
         const first = items[0];
+        if (!first) return;
         const second = items[1];
         const contRect = container.getBoundingClientRect();
         let rowH = first.getBoundingClientRect().height;
@@ -385,7 +388,7 @@ export const FullScreenScrollFX = forwardRef<HTMLDivElement, FullScreenFXProps>(
       const pos = sectionTopRef.current[clamped];
       const snapMs = durations.snap ?? 800;
 
-      if (withScroll && typeof window !== "undefined") {
+      if (withScroll && typeof window !== "undefined" && pos !== undefined) {
         window.scrollTo({ top: pos, behavior: "smooth" });
         setTimeout(() => (isSnappingRef.current = false), snapMs);
       } else {
@@ -474,7 +477,9 @@ export const FullScreenScrollFX = forwardRef<HTMLDivElement, FullScreenFXProps>(
                     ) : (
                       <>
                         <img
-                          ref={(el) => el && (bgRefs.current[i] = el)}
+                           ref={(el) => {
+                             if (el) bgRefs.current[i] = el;
+                           }}
                           src={s.background}
                           alt=""
                           className="fx-bg-img"
@@ -496,7 +501,9 @@ export const FullScreenScrollFX = forwardRef<HTMLDivElement, FullScreenFXProps>(
                         <div
                           key={`L-${s.id ?? i}`}
                           className={`fx-item fx-left-item ${i === index ? "active" : ""}`}
-                          ref={(el) => el && (leftItemRefs.current[i] = el)}
+                           ref={(el) => {
+                             if (el) leftItemRefs.current[i] = el;
+                           }}
                           onClick={() => handleJump(i)}
                           role="button"
                           tabIndex={0}
@@ -539,7 +546,9 @@ export const FullScreenScrollFX = forwardRef<HTMLDivElement, FullScreenFXProps>(
                         <div
                           key={`R-${s.id ?? i}`}
                           className={`fx-item fx-right-item ${i === index ? "active" : ""}`}
-                          ref={(el) => el && (rightItemRefs.current[i] = el)}
+                           ref={(el) => {
+                             if (el) rightItemRefs.current[i] = el;
+                           }}
                           onClick={() => handleJump(i)}
                           role="button"
                           tabIndex={0}
@@ -575,7 +584,7 @@ export const FullScreenScrollFX = forwardRef<HTMLDivElement, FullScreenFXProps>(
           </div>
         </div>
 
-        <style jsx>{`
+        <style>{`
           .fx {
             width: 100%;
             overflow: hidden;
