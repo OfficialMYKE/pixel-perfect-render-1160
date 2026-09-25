@@ -41,6 +41,13 @@ const translations = {
     ],
     loginBtn: "Log in",
     signupBtn: "Sign up",
+    authPanel: {
+      vol: "VOL. 01 / NEW MEMBER",
+      number: "/ 10013",
+      kicker: "NEW YORK — CURATED ARCHIVE",
+      title: "STREET ARCHIVE",
+      eyebrow: "MEMBERS ONLY / 001",
+    },
     login: {
       title: "Welcome back",
       subtitle: "Sign in to your account to continue.",
@@ -190,6 +197,13 @@ const translations = {
     ],
     loginBtn: "Iniciar sesión",
     signupBtn: "Registrarse",
+    authPanel: {
+      vol: "VOL. 01 / NUEVO MIEMBRO",
+      number: "/ 10013",
+      kicker: "NUEVA YORK — ARCHIVO CURADO",
+      title: "ARCHIVO CALLEJERO",
+      eyebrow: "SOLO MIEMBROS / 001",
+    },
     login: {
       title: "Bienvenido de vuelta",
       subtitle: "Inicia sesión en tu cuenta para continuar.",
