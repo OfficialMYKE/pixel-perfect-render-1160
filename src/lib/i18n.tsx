@@ -1,6 +1,8 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useCallback, useContext, useEffect, useState } from "react";
 
 type Lang = "en" | "es";
+
+const STORAGE_KEY = "avnyc-lang";
 
 const translations = {
   en: {
@@ -58,6 +60,7 @@ const translations = {
       cta: "Sign in",
       or: "or",
       google: "Continue with Google",
+      apple: "Continue with Apple",
       noAccount: "Don't have an account?",
       signupLink: "Sign up",
     },
@@ -214,6 +217,7 @@ const translations = {
       cta: "Iniciar sesión",
       or: "o",
       google: "Continuar con Google",
+      apple: "Continuar con Apple",
       noAccount: "¿No tienes cuenta?",
       signupLink: "Regístrate",
     },
@@ -339,13 +343,30 @@ const LanguageContext = createContext<{
   setLang: (l: Lang) => void;
   t: Translations;
 }>({
-  lang: "en",
+  lang: "es",
   setLang: () => {},
-  t: translations.en,
+  t: translations.es,
 });
 
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
-  const [lang, setLang] = useState<Lang>("en");
+  const [lang, setLangState] = useState<Lang>("es");
+
+  useEffect(() => {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved === "en" || saved === "es") {
+      setLangState(saved);
+    }
+  }, []);
+
+  const setLang = useCallback((l: Lang) => {
+    setLangState(l);
+    localStorage.setItem(STORAGE_KEY, l);
+  }, []);
+
+  useEffect(() => {
+    document.documentElement.lang = lang;
+  }, [lang]);
+
   return (
     <LanguageContext.Provider value={{ lang, setLang, t: translations[lang] }}>
       {children}
