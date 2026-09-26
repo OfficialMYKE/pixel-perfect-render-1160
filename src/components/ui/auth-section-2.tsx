@@ -3,6 +3,7 @@
 import { useEffect, useState, type ReactNode } from "react";
 import { ArrowLeft, ArrowRight, Eye, EyeOff } from "lucide-react";
 import { useLanguage } from "@/lib/i18n";
+import AnnouncementBar from "@/components/ui/announcement-bar";
 import vintageStore from "@/assets/vintage-store.jpg";
 import vintage01 from "@/assets/vintage-streetwear-01.jpg";
 import vintage02 from "@/assets/vintage-streetwear-02.jpg";
@@ -17,8 +18,6 @@ const slides = [
   { src: vintage04, caption: { en: "The AVNYC curation process combines expertise with passion. We study fashion history and maintain relationships with collectors worldwide.", es: "El proceso de curaduría de AVNYC combina experiencia con pasión. Estudiamos historia de la moda y mantenemos relaciones con coleccionistas de todo el mundo." } },
 ];
 
-const FONT = "system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif";
-
 export default function AuthSectionTwo({ mode = "signup" }: { mode?: "login" | "signup" }) {
   const { t, lang } = useLanguage();
   const [activeIndex, setActiveIndex] = useState(0);
@@ -30,18 +29,23 @@ export default function AuthSectionTwo({ mode = "signup" }: { mode?: "login" | "
 
   useEffect(() => {
     const interval = window.setInterval(() => {
-      setActiveIndex((c) => (c + 1) % slides.length);
+      setActiveIndex((current) => (current + 1) % slides.length);
     }, 5000);
     return () => window.clearInterval(interval);
   }, []);
 
   return (
-    <div
-      className="h-screen w-full overflow-hidden flex flex-col md:flex-row"
-      style={{ background: "#0a0a0a", color: "#f5f5f5", fontFamily: FONT }}
+    <section
+      className="flex h-screen w-full flex-col"
+      style={{ background: "var(--vintage-ink)", color: "var(--vintage-paper)" }}
     >
-      {/* ── Left: Carousel ── */}
-      <div className="relative w-full md:w-1/2 h-full overflow-hidden hidden md:block">
+      {/* Announcement bar */}
+      <AnnouncementBar />
+
+      <div className="flex min-h-0 flex-1 flex-col md:flex-row overflow-hidden">
+      {/* Left — Carousel */}
+      <div className="relative w-full md:w-1/2 h-full overflow-hidden" style={{ background: "#0a0a0a" }}>
+        {/* Slides — full bleed images */}
         {slides.map((slide, i) => (
           <div
             key={i}
@@ -52,28 +56,28 @@ export default function AuthSectionTwo({ mode = "signup" }: { mode?: "login" | "
               src={slide.src}
               alt="Vintage streetwear"
               className="h-full w-full object-cover object-top"
-              style={{ filter: "saturate(0.7) contrast(1.05)" }}
+              style={{ filter: "saturate(0.6) contrast(1.1)" }}
             />
           </div>
         ))}
 
-        {/* Gradients */}
-        <div className="pointer-events-none absolute inset-x-0 top-0 z-10 h-20 bg-gradient-to-b from-[#0a0a0a]/80 to-transparent" />
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-32 bg-gradient-to-t from-[#0a0a0a]/90 to-transparent" />
+        {/* Gradient overlays */}
+        <div className="pointer-events-none absolute inset-x-0 top-0 z-10 h-24 bg-gradient-to-b from-[#0a0a0a] to-transparent" />
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-32 bg-gradient-to-t from-[#0a0a0a] to-transparent" />
 
-        {/* Caption */}
-        <div className="absolute bottom-14 left-6 right-6 z-20 max-w-[420px]">
+        {/* Caption — floating text */}
+        <div className="absolute bottom-16 left-6 right-6 z-20 max-w-[420px]">
           <div className="flex items-start gap-3">
             <p
-              className="line-clamp-3 flex-1 text-[11px] leading-[1.6]"
-              style={{ color: "#e0e0e0", textShadow: "0 1px 6px rgba(0,0,0,0.9), 0 2px 12px rgba(0,0,0,0.6)" }}
+              className="line-clamp-3 flex-1 text-[11px] leading-[1.5]"
+              style={{ color: "#e0e0e0", textShadow: "0 1px 4px rgba(0,0,0,0.8), 0 1px 8px rgba(0,0,0,0.5)" }}
             >
               {slides[activeIndex].caption[lang]}
             </p>
             <button
-              className="grid size-8 shrink-0 place-items-center rounded-full transition-colors hover:bg-white/30"
-              style={{ background: "rgba(255,255,255,0.15)", color: "#f5f5f5" }}
-              onClick={() => setActiveIndex((c) => (c + 1) % slides.length)}
+              className="grid size-8 shrink-0 place-items-center rounded-full transition-colors"
+              style={{ background: "rgba(255,255,255,0.2)", color: "var(--vintage-paper)" }}
+              onClick={() => setActiveIndex((current) => (current + 1) % slides.length)}
             >
               <ArrowRight className="size-4" />
             </button>
@@ -81,150 +85,223 @@ export default function AuthSectionTwo({ mode = "signup" }: { mode?: "login" | "
         </div>
 
         {/* Indicators */}
-        <div className="absolute bottom-5 left-1/2 z-20 flex -translate-x-1/2 gap-2">
-          {slides.map((_, i) => (
+        <div className="absolute bottom-6 left-1/2 z-20 flex -translate-x-1/2 gap-2">
+          {slides.map((_, index) => (
             <button
-              key={i}
+              key={index}
               type="button"
-              onClick={() => setActiveIndex(i)}
+              onClick={() => setActiveIndex(index)}
               className="rounded-full transition-all duration-300"
               style={{
-                height: "3px",
-                width: activeIndex === i ? "32px" : "12px",
-                background: activeIndex === i ? "#fff" : "rgba(255,255,255,0.3)",
+                height: "4px",
+                width: activeIndex === index ? "40px" : "16px",
+                background: activeIndex === index ? "#ffffff" : "rgba(255,255,255,0.3)",
               }}
-              aria-label={`Slide ${i + 1}`}
+              aria-label={`Show image ${index + 1}`}
             />
           ))}
         </div>
       </div>
 
-      {/* ── Right: Form ── */}
-      <div className="w-full md:w-1/2 h-full flex items-center justify-center overflow-hidden px-8 py-10 sm:px-12 md:p-12 lg:p-20">
-        <div className="mx-auto w-full max-w-[440px]">
-          {/* Back */}
-          <a href="/" className="mb-8 inline-flex items-center gap-2 text-xs uppercase tracking-widest hover:opacity-70 transition-opacity" style={{ color: "#999" }}>
-            <ArrowLeft className="size-3.5" />
-            {lang === "es" ? "Volver a la tienda" : "Back to store"}
-          </a>
-
-          {/* Eyebrow */}
-          <p className="mb-2 text-[10px] uppercase tracking-[0.12em]" style={{ color: "#777" }}>
-            {t.authPanel.eyebrow}
-          </p>
-
-          {/* Title */}
-          <h1 className="mb-4 text-[32px] leading-tight font-extrabold uppercase tracking-tight" style={{ color: "#f5f5f5" }}>
-            {title}
-          </h1>
-
-          {/* Subtitle */}
-          <p className="mb-6 text-[11px] uppercase tracking-[0.06em] leading-relaxed" style={{ color: "#777" }}>
-            {subtitle}
-          </p>
-
-          {/* Social */}
-          <div className="grid gap-3 sm:grid-cols-2">
-            <SocialBtn icon={<GoogleIcon />} label={t.login.google} />
-            <SocialBtn icon={<AppleIcon />} label={t.login.apple} />
-          </div>
-
-          {/* Divider */}
-          <div className="my-5 flex items-center gap-4">
-            <div className="h-px flex-1" style={{ background: "#333" }} />
-            <span className="text-xs" style={{ color: "#666" }}>{t.login.or}</span>
-            <div className="h-px flex-1" style={{ background: "#333" }} />
-          </div>
-
-          {/* Form */}
-          <form className="space-y-3" onSubmit={(e) => e.preventDefault()}>
-            {isSignup && (
-              <div className="grid grid-cols-2 gap-4">
-                <Field label={t.signup.firstName} type="text" />
-                <Field label={t.signup.lastName} type="text" />
-              </div>
-            )}
-
-            <Field label={isSignup ? t.signup.email : t.login.email} type="email" />
-
-            {/* Password with eye */}
-            <div>
-              <label className="mb-1.5 block text-[11px] font-medium tracking-wide" style={{ color: "#888" }}>
-                {isSignup ? t.signup.password : t.login.password}
-              </label>
-              <div className="relative">
-                <input
-                  type={showPassword ? "text" : "password"}
-                  className="h-11 w-full rounded-lg border px-4 pr-11 text-sm outline-none transition-colors focus:border-[#666]"
-                  style={{ borderColor: "#333", background: "transparent", color: "#f5f5f5" }}
-                />
-                <button
-                  type="button"
-                  className="absolute right-4 top-1/2 -translate-y-1/2 transition-colors hover:opacity-70"
-                  style={{ color: "#888" }}
-                  onClick={() => setShowPassword(!showPassword)}
-                >
-                  {showPassword ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
-                </button>
-              </div>
-            </div>
-
-            {isSignup && (
-              <Field label={t.signup.confirmPassword} type={showPassword ? "text" : "password"} />
-            )}
-
-            {!isSignup && (
-              <div className="flex items-center justify-between text-xs" style={{ color: "#888" }}>
-                <Check>{t.login.remember}</Check>
-                <a href="#" className="underline underline-offset-2 hover:opacity-80" style={{ color: "#f5f5f5" }}>
-                  {t.login.forgot}
-                </a>
-              </div>
-            )}
-
-            {isSignup && (
-              <div className="pt-1 text-xs leading-5" style={{ color: "#888" }}>
-                <Check>
-                  {t.signup.agree}{" "}
-                  <a href="#" className="font-medium underline underline-offset-2 hover:opacity-80" style={{ color: "#f5f5f5" }}>{t.signup.terms}</a>{" "}
-                  {t.signup.and}{" "}
-                  <a href="#" className="font-medium underline underline-offset-2 hover:opacity-80" style={{ color: "#f5f5f5" }}>{t.signup.privacy}</a>
-                </Check>
-              </div>
-            )}
-
-            <button
-              type="submit"
-              className="mt-4 flex h-12 w-full items-center justify-center rounded-lg text-base font-semibold transition-colors duration-300"
-              style={{ background: "#8b1a1a", color: "#f5f5f5" }}
-              onMouseEnter={(e) => { e.currentTarget.style.background = "#c0392b"; }}
-              onMouseLeave={(e) => { e.currentTarget.style.background = "#8b1a1a"; }}
-            >
-              {isSignup ? t.signup.cta : t.login.cta}
-            </button>
-          </form>
-
-          {/* Switch */}
-          <p className="mt-6 text-center text-xs" style={{ color: "#888" }}>
-            {isSignup ? t.signup.hasAccount : t.login.noAccount}{" "}
-            <a href={isSignup ? "/login" : "/signup"} className="font-bold underline underline-offset-2 hover:opacity-80" style={{ color: "#f5f5f5" }}>
-              {isSignup ? t.signup.loginLink : t.login.signupLink}
-            </a>
-          </p>
-        </div>
+      {/* Right — Form */}
+      <div className="w-full md:w-1/2 h-full flex items-center justify-center overflow-hidden px-6 py-8 sm:px-10 lg:px-14">
+        <AuthForm mode={mode} title={title} subtitle={subtitle} showPassword={showPassword} setShowPassword={setShowPassword} t={t} lang={lang} />
       </div>
+      </div>
+    </section>
+  );
+}
+
+/* ── Auth Form ─────────────────────────────────────── */
+
+function AuthForm({
+  mode,
+  title,
+  subtitle,
+  showPassword,
+  setShowPassword,
+  t,
+  lang,
+}: {
+  mode: "login" | "signup";
+  title: string;
+  subtitle: string;
+  showPassword: boolean;
+  setShowPassword: (v: boolean) => void;
+  t: any;
+  lang: string;
+}) {
+  const isSignup = mode === "signup";
+
+  return (
+    <div className="mx-auto w-full max-w-[440px]">
+      {/* Back button */}
+      <a
+        href="/"
+        className="mb-6 inline-flex items-center gap-2 text-xs tracking-wider uppercase transition-colors"
+        style={{
+          fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace",
+          color: "#b0b0b0",
+        }}
+      >
+        <ArrowLeft className="size-3.5" />
+        {lang === "es" ? "Volver a la tienda" : "Back to store"}
+      </a>
+
+      <p
+        className="mb-2 text-[10px] uppercase"
+        style={{
+          fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace",
+          letterSpacing: "0.08em",
+          color: "#b0b0b0",
+        }}
+      >
+        {t.authPanel.eyebrow}
+      </p>
+
+      <h1
+        className="mb-6 whitespace-nowrap text-3xl tracking-[-0.04em] sm:text-4xl lg:text-[42px] lg:leading-[1.05]"
+        style={{
+          fontFamily: "Impact, Haettenschweiler, 'Arial Narrow', sans-serif",
+          fontWeight: 400,
+          textTransform: "uppercase",
+          color: "var(--vintage-paper)",
+        }}
+      >
+        {title}
+      </h1>
+
+      <p
+        className="mt-2 mb-6 text-[10px] uppercase"
+        style={{
+          fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace",
+          letterSpacing: "0.08em",
+          color: "#b0b0b0",
+        }}
+      >
+        {subtitle}
+      </p>
+
+      {/* Social buttons */}
+      <div className="grid gap-3 sm:grid-cols-2">
+        <SocialButton icon={<GoogleIcon />} label={t.login.google} />
+        <SocialButton icon={<AppleIcon />} label={t.login.apple} />
+      </div>
+
+      {/* Divider */}
+      <div className="my-4 flex items-center gap-4 text-sm" style={{ color: "#b0b0b0" }}>
+        <div className="h-px flex-1" style={{ background: "var(--vintage-line)" }} />
+        {t.login.or}
+        <div className="h-px flex-1" style={{ background: "var(--vintage-line)" }} />
+      </div>
+
+      {/* Form */}
+      <form className="space-y-3 text-left" onSubmit={(e) => e.preventDefault()}>
+        {isSignup && (
+          <div className="grid gap-4 sm:grid-cols-2">
+            <LabelField label={t.signup.firstName} type="text" />
+            <LabelField label={t.signup.lastName} type="text" />
+          </div>
+        )}
+
+        <LabelField label={isSignup ? t.signup.email : t.login.email} type="email" />
+
+        <div>
+          <label className="mb-1 block text-[11px] font-medium tracking-wide" style={{ color: "#b0b0b0" }}>
+            {isSignup ? t.signup.password : t.login.password}
+          </label>
+          <div className="relative">
+            <input
+              type={showPassword ? "text" : "password"}
+              className="h-10 w-full rounded-[8px] border px-4 text-sm outline-none transition-colors focus:border-[#b0b0b0]"
+              style={{
+                borderColor: "var(--vintage-line)",
+                background: "transparent",
+                color: "var(--vintage-paper)",
+              }}
+            />
+            <button
+              type="button"
+              className="absolute right-3 top-1/2 -translate-y-1/2"
+              style={{ color: "#b0b0b0" }}
+              onClick={() => setShowPassword(!showPassword)}
+            >
+              {showPassword ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
+            </button>
+          </div>
+        </div>
+
+        {isSignup && (
+          <LabelField label={t.signup.confirmPassword} type={showPassword ? "text" : "password"} />
+        )}
+
+        {!isSignup && (
+          <div className="flex items-center justify-between text-xs" style={{ color: "#b0b0b0" }}>
+            <CheckboxLine>{t.login.remember}</CheckboxLine>
+            <a href="#" className="underline underline-offset-2" style={{ color: "var(--vintage-paper)" }}>
+              {t.login.forgot}
+            </a>
+          </div>
+        )}
+
+        {isSignup && (
+          <div className="space-y-3 pt-1 text-xs leading-4" style={{ color: "#b0b0b0" }}>
+            <CheckboxLine>
+              {t.signup.agree}{" "}
+              <a href="#" className="font-medium underline underline-offset-2" style={{ color: "var(--vintage-paper)" }}>
+                {t.signup.terms}
+              </a>{" "}
+              {t.signup.and}{" "}
+              <a href="#" className="font-medium underline underline-offset-2" style={{ color: "var(--vintage-paper)" }}>
+                {t.signup.privacy}
+              </a>
+            </CheckboxLine>
+          </div>
+        )}
+
+        <button
+          type="submit"
+          className="mt-6 flex h-12 w-full items-center justify-center rounded-none text-base font-medium transition-colors duration-300"
+          style={{
+            background: "#8b1a1a",
+            border: "1.5px solid #8b1a1a",
+            color: "var(--vintage-paper)",
+            fontFamily: "system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif",
+          }}
+          onMouseEnter={(e) => { e.currentTarget.style.background = "var(--vintage-red)"; e.currentTarget.style.borderColor = "var(--vintage-red)"; }}
+          onMouseLeave={(e) => { e.currentTarget.style.background = "#8b1a1a"; e.currentTarget.style.borderColor = "#8b1a1a"; }}
+        >
+          {isSignup ? t.signup.cta : t.login.cta}
+        </button>
+      </form>
+
+      {/* Switch */}
+      <p className="mt-5 text-center text-xs" style={{ color: "#b0b0b0" }}>
+        {isSignup ? t.signup.hasAccount : t.login.noAccount}{" "}
+        <a
+          href={isSignup ? "/login" : "/signup"}
+          className="font-bold underline underline-offset-2"
+          style={{ color: "var(--vintage-paper)" }}
+        >
+          {isSignup ? t.signup.loginLink : t.login.signupLink}
+        </a>
+      </p>
     </div>
   );
 }
 
-/* ── Components ────────────────────────────────────── */
+/* ── Sub-components ────────────────────────────────── */
 
-function SocialBtn({ icon, label }: { icon: ReactNode; label: string }) {
+function SocialButton({ icon, label }: { icon: ReactNode; label: string }) {
   return (
     <button
       type="button"
-      className="flex h-11 items-center justify-center gap-2.5 rounded-lg border text-sm transition-colors hover:bg-white/5"
-      style={{ borderColor: "#333", background: "transparent", color: "#f5f5f5" }}
+      className="flex h-9 items-center justify-center gap-2 rounded-[8px] border px-3 text-sm leading-none transition-colors"
+      style={{
+        borderColor: "var(--vintage-line)",
+        background: "transparent",
+        color: "var(--vintage-paper)",
+      }}
     >
       <span className="shrink-0">{icon}</span>
       <span className="whitespace-nowrap">{label}</span>
@@ -232,35 +309,55 @@ function SocialBtn({ icon, label }: { icon: ReactNode; label: string }) {
   );
 }
 
-function Field({ label, type = "text" }: { label: string; type?: string }) {
+function LabelField({
+  label,
+  type = "text",
+}: {
+  label: string;
+  type?: string;
+}) {
   return (
     <div>
-      <label className="mb-1.5 block text-[11px] font-medium tracking-wide" style={{ color: "#888" }}>
+      <label className="mb-1 block text-[11px] font-medium tracking-wide" style={{ color: "#b0b0b0" }}>
         {label}
       </label>
       <input
         type={type}
-        className="h-11 w-full rounded-lg border px-4 text-sm outline-none transition-colors focus:border-[#666]"
-        style={{ borderColor: "#333", background: "transparent", color: "#f5f5f5" }}
+        className="h-10 w-full rounded-[8px] border px-4 text-sm outline-none transition-colors focus:border-[#b0b0b0]"
+        style={{
+          borderColor: "var(--vintage-line)",
+          background: "transparent",
+          color: "var(--vintage-paper)",
+        }}
       />
     </div>
   );
 }
 
-function Check({ children }: { children: ReactNode }) {
+function CheckboxLine({ children }: { children: ReactNode }) {
   return (
-    <label className="flex items-center gap-2 cursor-pointer select-none">
+    <label className="flex items-center gap-2 cursor-pointer">
       <span className="relative size-3.5 shrink-0">
         <input
           type="checkbox"
           className="peer size-full appearance-none rounded-[3px] border checked:bg-current"
-          style={{ borderColor: "#666", background: "transparent" }}
+          style={{ borderColor: "#999", background: "transparent" }}
         />
-        <svg viewBox="0 0 12 12" className="pointer-events-none absolute inset-0 hidden size-full p-px text-white peer-checked:block" fill="none">
-          <path d="M3 6.2 5 8.1 9 3.9" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+        <svg
+          viewBox="0 0 12 12"
+          className="pointer-events-none absolute inset-0 hidden size-full p-px text-white peer-checked:block"
+          fill="none"
+        >
+          <path
+            d="M3 6.2 5 8.1 9 3.9"
+            stroke="currentColor"
+            strokeWidth="1.6"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
         </svg>
       </span>
-      <span style={{ color: "#999" }}>{children}</span>
+      <span className="text-xs leading-none" style={{ color: "#b0b0b0" }}>{children}</span>
     </label>
   );
 }
