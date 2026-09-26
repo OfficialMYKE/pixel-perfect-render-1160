@@ -336,7 +336,7 @@ const translations = {
   },
 } as const;
 
-export type Translations = (typeof translations)["en"];
+export type Translations = (typeof translations)[Lang];
 
 const LanguageContext = createContext<{
   lang: Lang;

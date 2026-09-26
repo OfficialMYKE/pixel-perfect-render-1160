@@ -58,8 +58,8 @@ export default function AnnouncementBar() {
           className="announcement-bar__message"
           style={{ opacity, transition: "opacity 0.4s ease-in-out" }}
         >
-          {msg.text}{" "}
-          {msg.links.map((link) => (
+          {msg?.text}{" "}
+          {msg?.links.map((link) => (
             <a key={link.label} href={link.href} className="announcement-bar__link">
               {link.label}
             </a>

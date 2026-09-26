@@ -1,7 +1,10 @@
 import { Link } from "@tanstack/react-router";
 import { ArrowLeft } from "lucide-react";
 
-import streetwearImage from "@/assets/vintage-streetwear-02.jpg";
+import streetwearOne from "@/assets/vintage-streetwear-01.jpg";
+import streetwearTwo from "@/assets/vintage-streetwear-02.jpg";
+import streetwearThree from "@/assets/vintage-streetwear-03.jpg";
+import streetwearFour from "@/assets/vintage-streetwear-04.jpg";
 import { Button } from "@/components/ui/button";
 import { useLanguage } from "@/lib/i18n";
 
@@ -47,7 +50,12 @@ export default function AuthShell({ children, issue }: AuthShellProps) {
 
       <section className="auth__frame">
         <aside className="auth__editorial" aria-label="AVNYC Street Archive">
-          <img src={streetwearImage} alt="Curated vintage streetwear inside the AVNYC archive" />
+          <div className="auth__editorial-grid" aria-hidden="true">
+            <img src={streetwearTwo} alt="" />
+            <img src={streetwearOne} alt="" />
+            <img src={streetwearFour} alt="" />
+            <img src={streetwearThree} alt="" />
+          </div>
           <div className="auth__editorial-shade" />
           <div className="auth__editorial-head">
             <span>{issue}</span>
