@@ -35,80 +35,72 @@ export default function AuthSectionTwo({ mode = "signup" }: { mode?: "login" | "
   }, []);
 
   return (
-    <section
-      className="flex h-screen w-full flex-col"
-      style={{ background: "var(--vintage-ink)", color: "var(--vintage-paper)" }}
-    >
-      {/* Announcement bar */}
+    <div className="h-screen w-full flex flex-col overflow-hidden" style={{ background: "#0a0a0a", color: "#f5f5f5" }}>
       <AnnouncementBar />
 
-      <div className="flex min-h-0 flex-1 flex-col md:flex-row overflow-hidden">
-      {/* Left — Carousel */}
-      <div className="relative w-full md:w-1/2 h-full overflow-hidden" style={{ background: "#0a0a0a" }}>
-        {/* Slides — full bleed images */}
-        {slides.map((slide, i) => (
-          <div
-            key={i}
-            className="absolute inset-0 transition-opacity duration-700 ease-in-out"
-            style={{ opacity: activeIndex === i ? 1 : 0, zIndex: activeIndex === i ? 1 : 0 }}
-          >
-            <img
-              src={slide.src}
-              alt="Vintage streetwear"
-              className="h-full w-full object-cover object-top"
-              style={{ filter: "saturate(0.6) contrast(1.1)" }}
-            />
-          </div>
-        ))}
-
-        {/* Gradient overlays */}
-        <div className="pointer-events-none absolute inset-x-0 top-0 z-10 h-24 bg-gradient-to-b from-[#0a0a0a] to-transparent" />
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-32 bg-gradient-to-t from-[#0a0a0a] to-transparent" />
-
-        {/* Caption — floating text */}
-        <div className="absolute bottom-16 left-6 right-6 z-20 max-w-[420px]">
-          <div className="flex items-start gap-3">
-            <p
-              className="line-clamp-3 flex-1 text-[11px] leading-[1.5]"
-              style={{ color: "#e0e0e0", textShadow: "0 1px 4px rgba(0,0,0,0.8), 0 1px 8px rgba(0,0,0,0.5)" }}
+      <div className="flex min-h-0 flex-1 flex-col md:flex-row">
+        {/* Left — Carousel */}
+        <div className="relative w-full md:w-1/2 h-full overflow-hidden hidden md:block">
+          {slides.map((slide, i) => (
+            <div
+              key={i}
+              className="absolute inset-0 transition-opacity duration-700 ease-in-out"
+              style={{ opacity: activeIndex === i ? 1 : 0, zIndex: activeIndex === i ? 1 : 0 }}
             >
-              {slides[activeIndex].caption[lang]}
-            </p>
-            <button
-              className="grid size-8 shrink-0 place-items-center rounded-full transition-colors"
-              style={{ background: "rgba(255,255,255,0.2)", color: "var(--vintage-paper)" }}
-              onClick={() => setActiveIndex((current) => (current + 1) % slides.length)}
-            >
-              <ArrowRight className="size-4" />
-            </button>
-          </div>
-        </div>
-
-        {/* Indicators */}
-        <div className="absolute bottom-6 left-1/2 z-20 flex -translate-x-1/2 gap-2">
-          {slides.map((_, index) => (
-            <button
-              key={index}
-              type="button"
-              onClick={() => setActiveIndex(index)}
-              className="rounded-full transition-all duration-300"
-              style={{
-                height: "4px",
-                width: activeIndex === index ? "40px" : "16px",
-                background: activeIndex === index ? "#ffffff" : "rgba(255,255,255,0.3)",
-              }}
-              aria-label={`Show image ${index + 1}`}
-            />
+              <img
+                src={slide.src}
+                alt="Vintage streetwear"
+                className="h-full w-full object-cover object-top"
+                style={{ filter: "saturate(0.7) contrast(1.05)" }}
+              />
+            </div>
           ))}
+
+          <div className="pointer-events-none absolute inset-x-0 top-0 z-10 h-20 bg-gradient-to-b from-[#0a0a0a] to-transparent" />
+          <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-28 bg-gradient-to-t from-[#0a0a0a] to-transparent" />
+
+          <div className="absolute bottom-12 left-6 right-6 z-20 max-w-[420px]">
+            <div className="flex items-start gap-3">
+              <p
+                className="line-clamp-3 flex-1 text-[11px] leading-[1.5]"
+                style={{ color: "#e0e0e0", textShadow: "0 1px 4px rgba(0,0,0,0.9), 0 1px 10px rgba(0,0,0,0.6)" }}
+              >
+                {slides[activeIndex].caption[lang]}
+              </p>
+              <button
+                className="grid size-8 shrink-0 place-items-center rounded-full transition-colors"
+                style={{ background: "rgba(255,255,255,0.2)", color: "#f5f5f5" }}
+                onClick={() => setActiveIndex((current) => (current + 1) % slides.length)}
+              >
+                <ArrowRight className="size-4" />
+              </button>
+            </div>
+          </div>
+
+          <div className="absolute bottom-5 left-1/2 z-20 flex -translate-x-1/2 gap-2">
+            {slides.map((_, index) => (
+              <button
+                key={index}
+                type="button"
+                onClick={() => setActiveIndex(index)}
+                className="rounded-full transition-all duration-300"
+                style={{
+                  height: "4px",
+                  width: activeIndex === index ? "40px" : "16px",
+                  background: activeIndex === index ? "#ffffff" : "rgba(255,255,255,0.3)",
+                }}
+                aria-label={`Show image ${index + 1}`}
+              />
+            ))}
+          </div>
+        </div>
+
+        {/* Right — Form */}
+        <div className="w-full md:w-1/2 h-full flex items-center justify-center overflow-hidden px-6 py-8 sm:px-10 lg:px-14">
+          <AuthForm mode={mode} title={title} subtitle={subtitle} showPassword={showPassword} setShowPassword={setShowPassword} t={t} lang={lang} />
         </div>
       </div>
-
-      {/* Right — Form */}
-      <div className="w-full md:w-1/2 h-full flex items-center justify-center overflow-hidden px-6 py-8 sm:px-10 lg:px-14">
-        <AuthForm mode={mode} title={title} subtitle={subtitle} showPassword={showPassword} setShowPassword={setShowPassword} t={t} lang={lang} />
-      </div>
-      </div>
-    </section>
+    </div>
   );
 }
 
@@ -135,14 +127,10 @@ function AuthForm({
 
   return (
     <div className="mx-auto w-full max-w-[440px]">
-      {/* Back button */}
       <a
         href="/"
-        className="mb-6 inline-flex items-center gap-2 text-xs tracking-wider uppercase transition-colors"
-        style={{
-          fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace",
-          color: "#b0b0b0",
-        }}
+        className="mb-6 inline-flex items-center gap-2 text-xs tracking-wider uppercase transition-colors hover:opacity-80"
+        style={{ fontFamily: "system-ui, -apple-system, sans-serif", color: "#999" }}
       >
         <ArrowLeft className="size-3.5" />
         {lang === "es" ? "Volver a la tienda" : "Back to store"}
@@ -150,55 +138,39 @@ function AuthForm({
 
       <p
         className="mb-2 text-[10px] uppercase"
-        style={{
-          fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace",
-          letterSpacing: "0.08em",
-          color: "#b0b0b0",
-        }}
+        style={{ fontFamily: "system-ui, -apple-system, sans-serif", letterSpacing: "0.1em", color: "#888" }}
       >
         {t.authPanel.eyebrow}
       </p>
 
       <h1
-        className="mb-6 whitespace-nowrap text-3xl tracking-[-0.04em] sm:text-4xl lg:text-[42px] lg:leading-[1.05]"
-        style={{
-          fontFamily: "Impact, Haettenschweiler, 'Arial Narrow', sans-serif",
-          fontWeight: 400,
-          textTransform: "uppercase",
-          color: "var(--vintage-paper)",
-        }}
+        className="mb-6 text-3xl sm:text-4xl lg:text-[38px] lg:leading-[1.1]"
+        style={{ fontFamily: "system-ui, -apple-system, sans-serif", fontWeight: 700, color: "#f5f5f5" }}
       >
         {title}
       </h1>
 
       <p
-        className="mt-2 mb-6 text-[10px] uppercase"
-        style={{
-          fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace",
-          letterSpacing: "0.08em",
-          color: "#b0b0b0",
-        }}
+        className="mb-6 text-[11px] uppercase"
+        style={{ fontFamily: "system-ui, -apple-system, sans-serif", letterSpacing: "0.06em", color: "#888" }}
       >
         {subtitle}
       </p>
 
-      {/* Social buttons */}
       <div className="grid gap-3 sm:grid-cols-2">
         <SocialButton icon={<GoogleIcon />} label={t.login.google} />
         <SocialButton icon={<AppleIcon />} label={t.login.apple} />
       </div>
 
-      {/* Divider */}
-      <div className="my-4 flex items-center gap-4 text-sm" style={{ color: "#b0b0b0" }}>
-        <div className="h-px flex-1" style={{ background: "var(--vintage-line)" }} />
+      <div className="my-5 flex items-center gap-4 text-sm" style={{ color: "#888" }}>
+        <div className="h-px flex-1" style={{ background: "#333" }} />
         {t.login.or}
-        <div className="h-px flex-1" style={{ background: "var(--vintage-line)" }} />
+        <div className="h-px flex-1" style={{ background: "#333" }} />
       </div>
 
-      {/* Form */}
       <form className="space-y-3 text-left" onSubmit={(e) => e.preventDefault()}>
         {isSignup && (
-          <div className="grid gap-4 sm:grid-cols-2">
+          <div className="grid gap-3 sm:grid-cols-2">
             <LabelField label={t.signup.firstName} type="text" />
             <LabelField label={t.signup.lastName} type="text" />
           </div>
@@ -207,23 +179,21 @@ function AuthForm({
         <LabelField label={isSignup ? t.signup.email : t.login.email} type="email" />
 
         <div>
-          <label className="mb-1 block text-[11px] font-medium tracking-wide" style={{ color: "#b0b0b0" }}>
+          <label className="mb-1 block text-[11px] font-medium tracking-wide" style={{ color: "#888", fontFamily: "system-ui, -apple-system, sans-serif" }}>
             {isSignup ? t.signup.password : t.login.password}
           </label>
           <div className="relative">
             <input
               type={showPassword ? "text" : "password"}
-              className="h-10 w-full rounded-[8px] border px-4 text-sm outline-none transition-colors focus:border-[#b0b0b0]"
-              style={{
-                borderColor: "var(--vintage-line)",
-                background: "transparent",
-                color: "var(--vintage-paper)",
-              }}
+              className="h-10 w-full rounded-lg border px-4 text-sm outline-none transition-colors"
+              style={{ borderColor: "#333", background: "transparent", color: "#f5f5f5", fontFamily: "system-ui, -apple-system, sans-serif" }}
+              onFocus={(e) => { e.currentTarget.style.borderColor = "#666"; }}
+              onBlur={(e) => { e.currentTarget.style.borderColor = "#333"; }}
             />
             <button
               type="button"
               className="absolute right-3 top-1/2 -translate-y-1/2"
-              style={{ color: "#b0b0b0" }}
+              style={{ color: "#888" }}
               onClick={() => setShowPassword(!showPassword)}
             >
               {showPassword ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
@@ -236,23 +206,23 @@ function AuthForm({
         )}
 
         {!isSignup && (
-          <div className="flex items-center justify-between text-xs" style={{ color: "#b0b0b0" }}>
+          <div className="flex items-center justify-between text-xs" style={{ color: "#888" }}>
             <CheckboxLine>{t.login.remember}</CheckboxLine>
-            <a href="#" className="underline underline-offset-2" style={{ color: "var(--vintage-paper)" }}>
+            <a href="#" className="underline underline-offset-2" style={{ color: "#f5f5f5" }}>
               {t.login.forgot}
             </a>
           </div>
         )}
 
         {isSignup && (
-          <div className="space-y-3 pt-1 text-xs leading-4" style={{ color: "#b0b0b0" }}>
+          <div className="space-y-3 pt-1 text-xs leading-4" style={{ color: "#888" }}>
             <CheckboxLine>
               {t.signup.agree}{" "}
-              <a href="#" className="font-medium underline underline-offset-2" style={{ color: "var(--vintage-paper)" }}>
+              <a href="#" className="font-medium underline underline-offset-2" style={{ color: "#f5f5f5" }}>
                 {t.signup.terms}
               </a>{" "}
               {t.signup.and}{" "}
-              <a href="#" className="font-medium underline underline-offset-2" style={{ color: "var(--vintage-paper)" }}>
+              <a href="#" className="font-medium underline underline-offset-2" style={{ color: "#f5f5f5" }}>
                 {t.signup.privacy}
               </a>
             </CheckboxLine>
@@ -261,27 +231,26 @@ function AuthForm({
 
         <button
           type="submit"
-          className="mt-6 flex h-12 w-full items-center justify-center rounded-none text-base font-medium transition-colors duration-300"
+          className="mt-5 flex h-11 w-full items-center justify-center rounded-lg text-base font-medium transition-colors duration-300"
           style={{
             background: "#8b1a1a",
-            border: "1.5px solid #8b1a1a",
-            color: "var(--vintage-paper)",
-            fontFamily: "system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif",
+            border: "none",
+            color: "#f5f5f5",
+            fontFamily: "system-ui, -apple-system, sans-serif",
           }}
-          onMouseEnter={(e) => { e.currentTarget.style.background = "var(--vintage-red)"; e.currentTarget.style.borderColor = "var(--vintage-red)"; }}
-          onMouseLeave={(e) => { e.currentTarget.style.background = "#8b1a1a"; e.currentTarget.style.borderColor = "#8b1a1a"; }}
+          onMouseEnter={(e) => { e.currentTarget.style.background = "#c0392b"; }}
+          onMouseLeave={(e) => { e.currentTarget.style.background = "#8b1a1a"; }}
         >
           {isSignup ? t.signup.cta : t.login.cta}
         </button>
       </form>
 
-      {/* Switch */}
-      <p className="mt-5 text-center text-xs" style={{ color: "#b0b0b0" }}>
+      <p className="mt-5 text-center text-xs" style={{ color: "#888" }}>
         {isSignup ? t.signup.hasAccount : t.login.noAccount}{" "}
         <a
           href={isSignup ? "/login" : "/signup"}
           className="font-bold underline underline-offset-2"
-          style={{ color: "var(--vintage-paper)" }}
+          style={{ color: "#f5f5f5" }}
         >
           {isSignup ? t.signup.loginLink : t.login.signupLink}
         </a>
@@ -296,12 +265,8 @@ function SocialButton({ icon, label }: { icon: ReactNode; label: string }) {
   return (
     <button
       type="button"
-      className="flex h-9 items-center justify-center gap-2 rounded-[8px] border px-3 text-sm leading-none transition-colors"
-      style={{
-        borderColor: "var(--vintage-line)",
-        background: "transparent",
-        color: "var(--vintage-paper)",
-      }}
+      className="flex h-10 items-center justify-center gap-2 rounded-lg border px-3 text-sm leading-none transition-colors"
+      style={{ borderColor: "#333", background: "transparent", color: "#f5f5f5", fontFamily: "system-ui, -apple-system, sans-serif" }}
     >
       <span className="shrink-0">{icon}</span>
       <span className="whitespace-nowrap">{label}</span>
@@ -309,26 +274,18 @@ function SocialButton({ icon, label }: { icon: ReactNode; label: string }) {
   );
 }
 
-function LabelField({
-  label,
-  type = "text",
-}: {
-  label: string;
-  type?: string;
-}) {
+function LabelField({ label, type = "text" }: { label: string; type?: string }) {
   return (
     <div>
-      <label className="mb-1 block text-[11px] font-medium tracking-wide" style={{ color: "#b0b0b0" }}>
+      <label className="mb-1 block text-[11px] font-medium tracking-wide" style={{ color: "#888", fontFamily: "system-ui, -apple-system, sans-serif" }}>
         {label}
       </label>
       <input
         type={type}
-        className="h-10 w-full rounded-[8px] border px-4 text-sm outline-none transition-colors focus:border-[#b0b0b0]"
-        style={{
-          borderColor: "var(--vintage-line)",
-          background: "transparent",
-          color: "var(--vintage-paper)",
-        }}
+        className="h-10 w-full rounded-lg border px-4 text-sm outline-none transition-colors"
+        style={{ borderColor: "#333", background: "transparent", color: "#f5f5f5", fontFamily: "system-ui, -apple-system, sans-serif" }}
+        onFocus={(e) => { e.currentTarget.style.borderColor = "#666"; }}
+        onBlur={(e) => { e.currentTarget.style.borderColor = "#333"; }}
       />
     </div>
   );
@@ -341,23 +298,13 @@ function CheckboxLine({ children }: { children: ReactNode }) {
         <input
           type="checkbox"
           className="peer size-full appearance-none rounded-[3px] border checked:bg-current"
-          style={{ borderColor: "#999", background: "transparent" }}
+          style={{ borderColor: "#666", background: "transparent" }}
         />
-        <svg
-          viewBox="0 0 12 12"
-          className="pointer-events-none absolute inset-0 hidden size-full p-px text-white peer-checked:block"
-          fill="none"
-        >
-          <path
-            d="M3 6.2 5 8.1 9 3.9"
-            stroke="currentColor"
-            strokeWidth="1.6"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
+        <svg viewBox="0 0 12 12" className="pointer-events-none absolute inset-0 hidden size-full p-px text-white peer-checked:block" fill="none">
+          <path d="M3 6.2 5 8.1 9 3.9" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
       </span>
-      <span className="text-xs leading-none" style={{ color: "#b0b0b0" }}>{children}</span>
+      <span className="text-xs leading-none" style={{ color: "#888" }}>{children}</span>
     </label>
   );
 }
