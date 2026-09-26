@@ -621,9 +621,11 @@ body {
   top: 100%;
   left: 0;
   right: 0;
-  background: var(--vintage-ink);
-  border-bottom: 1px solid var(--vintage-line);
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+  background: rgba(10, 10, 10, 0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid #222;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
   animation: vn-fade-in 0.2s ease-out;
 }
 
