@@ -3,6 +3,7 @@
 import { useEffect, useState, type ReactNode } from "react";
 import { ArrowLeft, ArrowRight, Eye, EyeOff } from "lucide-react";
 import { useLanguage } from "@/lib/i18n";
+import LegalPages from "@/components/ui/legal-pages";
 import vintageStore from "@/assets/vintage-store.jpg";
 import vintage01 from "@/assets/vintage-streetwear-01.jpg";
 import vintage02 from "@/assets/vintage-streetwear-02.jpg";
@@ -35,11 +36,16 @@ export default function AuthSectionTwo({ mode = "signup" }: { mode?: "login" | "
     return () => window.clearInterval(interval);
   }, []);
 
+  const openLegal = (id: string) => {
+    document.getElementById(`legal-${id}`)?.click();
+  };
+
   return (
     <div
       className="h-screen w-full overflow-hidden flex flex-col md:flex-row"
       style={{ background: "#0a0a0a", color: "#f5f5f5", fontFamily: FONT }}
     >
+      <LegalPages />
       {/* ── Left: Carousel ── */}
       <div className="relative w-full md:w-1/2 h-full overflow-hidden hidden md:block">
         {slides.map((slide, i) => (
@@ -186,9 +192,9 @@ export default function AuthSectionTwo({ mode = "signup" }: { mode?: "login" | "
               <div className="pt-1 text-xs leading-5" style={{ color: "#888" }}>
                 <Check>
                   {t.signup.agree}{" "}
-                  <a href="#" className="font-medium underline underline-offset-2 hover:opacity-80" style={{ color: "#f5f5f5" }}>{t.signup.terms}</a>{" "}
+                  <button type="button" onClick={() => openLegal("terms")} className="font-medium underline underline-offset-2 hover:opacity-80" style={{ color: "#f5f5f5" }}>{t.signup.terms}</button>{" "}
                   {t.signup.and}{" "}
-                  <a href="#" className="font-medium underline underline-offset-2 hover:opacity-80" style={{ color: "#f5f5f5" }}>{t.signup.privacy}</a>
+                  <button type="button" onClick={() => openLegal("privacy")} className="font-medium underline underline-offset-2 hover:opacity-80" style={{ color: "#f5f5f5" }}>{t.signup.privacy}</button>
                 </Check>
               </div>
             )}
