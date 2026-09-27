@@ -17,17 +17,6 @@ interface NavItem {
 function getNavItems(t: ReturnType<typeof useLanguage>["t"]): NavItem[] {
   return [
     {
-      title: t.nav.unisex,
-      url: "/unisex",
-      columns: [
-        { label: t.nav.ropaSuperior, items: t.nav.subUnisexRopa },
-        { label: t.nav.ropaInferior, items: t.nav.subUnisexInferior },
-        { label: t.nav.calzado, items: t.nav.subUnisexCalzado },
-        { label: t.nav.estilos, items: t.nav.subUnisexEstilos },
-        { label: t.nav.marcas, items: t.nav.subMarcas },
-      ],
-    },
-    {
       title: t.nav.hombre,
       url: "/hombre",
       columns: [

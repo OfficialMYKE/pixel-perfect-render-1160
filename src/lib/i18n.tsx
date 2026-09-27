@@ -83,7 +83,6 @@ const translations = {
       loginLink: "Sign in",
     },
     nav: {
-      unisex: "UNISEX",
       hombre: "MEN",
       mujer: "WOMEN",
       ninos: "KIDS",
@@ -102,28 +101,6 @@ const translations = {
       estilos: "STYLES",
       marcas: "BRANDS",
       bebe: "BABY",
-      subUnisexRopa: [
-        "Graphic Tees & Vintage Prints",
-        "Hoodies & Sweatshirts",
-        "Jackets & Outerwear",
-        "Vests & Gilets",
-        "Knitwear & Sweaters",
-        "Shirts & Flannels",
-      ],
-      subUnisexInferior: [
-        "Vintage Jeans",
-        "Cargo & Work Pants",
-        "Joggers & Sweatpants",
-        "Dress Pants & Tailoring",
-        "Shorts",
-      ],
-      subUnisexCalzado: [
-        "Sneakers & Retro",
-        "Boots",
-        "Loafers & Casual",
-        "Sandals",
-      ],
-      subUnisexEstilos: ["Y2K Aesthetic", "90s Classics", "Workwear & Utility", "Oversize"],
       subHombreRopa: [
         "Jackets & Coats",
         "T-Shirts & Polos",
@@ -302,7 +279,6 @@ const translations = {
       loginLink: "Inicia sesión",
     },
     nav: {
-      unisex: "UNISEX",
       hombre: "HOMBRE",
       mujer: "MUJER",
       ninos: "NIÑOS",
@@ -321,28 +297,6 @@ const translations = {
       estilos: "ESTILOS",
       marcas: "MARCAS",
       bebe: "BEBÉ",
-      subUnisexRopa: [
-        "Camisetas Gráficas & Vintage",
-        "Sudaderas y Buzos",
-        "Chaquetas y Abrigos",
-        "Chalecos y Gilets",
-        "Punto y Suéteres",
-        "Camisas y Franelas",
-      ],
-      subUnisexInferior: [
-        "Jeans Vintage",
-        "Pantalones Cargo & Trabajo",
-        "Joggers y Sudadera",
-        "Pantalones de Vestir",
-        "Shorts",
-      ],
-      subUnisexCalzado: [
-        "Sneakers & Retro",
-        "Botas",
-        "Zapatos Casuales & Loafers",
-        "Sandalias",
-      ],
-      subUnisexEstilos: ["Estética Y2K", "Clásicos de los 90s", "Workwear & Utility", "Oversize"],
       subHombreRopa: [
         "Chaquetas y Abrigos",
         "Camisetas y Polos",
