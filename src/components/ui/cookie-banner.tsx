@@ -6,14 +6,14 @@ import { X } from "lucide-react";
 const cookieText = {
   en: {
     title: "Cookie Settings",
-    desc: "We use cookies to enhance your browsing experience, serve personalized content, and analyze our traffic. By clicking \"Accept All\", you consent to our use of cookies.",
+    desc: "We use cookies and similar technologies to enhance your browsing experience, provide personalized content and recommendations, analyze site traffic, and understand where our audience comes from. Some cookies are essential for the site to function, while others help us improve performance and deliver a more tailored experience. You can choose to accept all cookies, personalize your preferences, or continue without accepting non-essential cookies.",
     acceptAll: "ACCEPT ALL",
     personalize: "PERSONALISE COOKIE CHOICES",
     decline: "Continue without accepting",
   },
   es: {
     title: "Configuración de Cookies",
-    desc: "Utilizamos cookies para mejorar tu experiencia de navegación, contenido personalizado y analizar nuestro tráfico. Al hacer clic en \"Aceptar todo\", aceptas nuestro uso de cookies.",
+    desc: "Utilizamos cookies y tecnologías similares para mejorar tu experiencia de navegación, ofrecer contenido y recomendaciones personalizadas, analizar el tráfico del sitio y comprender el origen de nuestra audiencia. Algunas cookies son esenciales para el funcionamiento del sitio, mientras que otras nos ayudan a mejorar el rendimiento y ofrecer una experiencia más adaptada a tus preferencias. Puedes elegir aceptar todas las cookies, personalizar tus preferencias o continuar sin aceptar las cookies no esenciales.",
     acceptAll: "ACEPTAR TODO",
     personalize: "PERSONALIZAR",
     decline: "Continuar sin aceptar",
