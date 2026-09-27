@@ -73,10 +73,10 @@ export default function CookieBanner() {
           <div className="flex w-full flex-col gap-2 sm:flex-row md:w-auto">
             <button
               onClick={dismiss}
-              className="w-full rounded px-5 py-2.5 text-xs font-semibold uppercase tracking-wide transition-colors sm:w-auto"
+              className="w-full rounded px-5 py-2.5 text-xs font-semibold uppercase tracking-wide transition-colors hover:bg-[#b91c1c] sm:w-auto"
               style={{
-                background: "#f5f5f5",
-                color: "#0a0a0a",
+                background: "#dc2626",
+                color: "#f5f5f5",
                 fontFamily: "system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif",
               }}
             >
