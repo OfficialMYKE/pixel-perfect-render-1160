@@ -17,6 +17,17 @@ interface NavItem {
 function getNavItems(t: ReturnType<typeof useLanguage>["t"]): NavItem[] {
   return [
     {
+      title: t.nav.unisex,
+      url: "/unisex",
+      columns: [
+        { label: t.nav.ropaSuperior, items: t.nav.subUnisexRopa },
+        { label: t.nav.ropaInferior, items: t.nav.subUnisexInferior },
+        { label: t.nav.calzado, items: t.nav.subUnisexCalzado },
+        { label: t.nav.estilos, items: t.nav.subUnisexEstilos },
+        { label: t.nav.marcas, items: t.nav.subMarcas },
+      ],
+    },
+    {
       title: t.nav.hombre,
       url: "/hombre",
       columns: [
@@ -24,7 +35,7 @@ function getNavItems(t: ReturnType<typeof useLanguage>["t"]): NavItem[] {
         { label: t.nav.ropaInferior, items: t.nav.subHombreInferior },
         { label: t.nav.calzado, items: t.nav.subHombreCalzado },
         { label: t.nav.estilos, items: t.nav.subHombreEstilos },
-        { label: t.nav.marcas, items: t.nav.subHombreMarcas },
+        { label: t.nav.marcas, items: t.nav.subMarcas },
       ],
     },
     {
@@ -35,7 +46,7 @@ function getNavItems(t: ReturnType<typeof useLanguage>["t"]): NavItem[] {
         { label: t.nav.ropaInferior, items: t.nav.subMujerInferior },
         { label: t.nav.calzado, items: t.nav.subMujerCalzado },
         { label: t.nav.estilos, items: t.nav.subMujerEstilos },
-        { label: t.nav.marcas, items: t.nav.subMujerMarcas },
+        { label: t.nav.marcas, items: t.nav.subMarcas },
       ],
     },
     {
