@@ -208,6 +208,7 @@ body {
 .vintage-hero__shade {
   position: absolute;
   inset: 0;
+  z-index: 2;
   background: linear-gradient(
     to bottom,
     color-mix(in oklab, var(--vintage-ink) 60%, transparent),
@@ -220,6 +221,7 @@ body {
 .vintage-hero__text {
   position: absolute;
   inset: 0;
+  z-index: 3;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -276,6 +278,7 @@ body {
 .vintage-hero__progress {
   position: absolute;
   inset: auto 0 0;
+  z-index: 4;
   height: 3px;
   background: color-mix(in oklab, var(--vintage-paper) 18%, transparent);
 }
