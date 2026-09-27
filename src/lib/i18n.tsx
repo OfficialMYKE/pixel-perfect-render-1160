@@ -175,8 +175,6 @@ const translations = {
         "Stüssy",
         "Levi's Archive",
         "Deadstock",
-        "Adidas Originals",
-        "Champion",
       ],
     },
     footer: {
@@ -397,8 +395,6 @@ const translations = {
         "Stüssy",
         "Levi's Archivo",
         "Deadstock",
-        "Adidas Originals",
-        "Champion",
       ],
     },
     footer: {

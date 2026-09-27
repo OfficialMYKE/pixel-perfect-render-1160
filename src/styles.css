@@ -795,8 +795,8 @@ body {
 
 .vn__mega-seeall {
   display: block;
-  margin-top: 16px;
-  padding-top: 12px;
+  margin-top: 24px;
+  padding-top: 14px;
   border-top: 1px solid #333;
   color: var(--vintage-fog);
   text-decoration: none;
