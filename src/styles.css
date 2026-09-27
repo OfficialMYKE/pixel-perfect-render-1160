@@ -502,11 +502,11 @@ body {
 }
 
 .vn__item--highlight {
-  color: var(--vintage-red);
+  color: #dc2626;
 }
 
 .vn__item--highlight:hover {
-  color: var(--vintage-red);
+  color: #ef4444;
 }
 
 .vn__chevron {
@@ -700,8 +700,20 @@ body {
 
 .vn__mega-columns {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 40px;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 32px;
+}
+
+@media (max-width: 1100px) {
+  .vn__mega-columns {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (max-width: 900px) {
+  .vn__mega-columns {
+    grid-template-columns: repeat(3, 1fr);
+  }
 }
 
 .vn__mega-label {

@@ -23,6 +23,8 @@ function getNavItems(t: ReturnType<typeof useLanguage>["t"]): NavItem[] {
         { label: t.nav.ropaSuperior, items: t.nav.subHombreRopa },
         { label: t.nav.ropaInferior, items: t.nav.subHombreInferior },
         { label: t.nav.calzado, items: t.nav.subHombreCalzado },
+        { label: t.nav.estilos, items: t.nav.subHombreEstilos },
+        { label: t.nav.marcas, items: t.nav.subHombreMarcas },
       ],
     },
     {
@@ -32,6 +34,8 @@ function getNavItems(t: ReturnType<typeof useLanguage>["t"]): NavItem[] {
         { label: t.nav.ropaSuperior, items: t.nav.subMujerRopa },
         { label: t.nav.ropaInferior, items: t.nav.subMujerInferior },
         { label: t.nav.calzado, items: t.nav.subMujerCalzado },
+        { label: t.nav.estilos, items: t.nav.subMujerEstilos },
+        { label: t.nav.marcas, items: t.nav.subMujerMarcas },
       ],
     },
     {
@@ -39,7 +43,9 @@ function getNavItems(t: ReturnType<typeof useLanguage>["t"]): NavItem[] {
       url: "/ninos",
       columns: [
         { label: t.nav.ropaSuperior, items: t.nav.subNinosRopa },
+        { label: t.nav.ropaInferior, items: t.nav.subNinosInferior },
         { label: t.nav.calzado, items: t.nav.subNinosCalzado },
+        { label: t.nav.accesorios, items: t.nav.subNinosAccesorios },
       ],
     },
     {
