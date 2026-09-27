@@ -319,6 +319,7 @@ body {
 
 .announcement-bar__center {
   flex: 1;
+  min-width: 0;
   text-align: center;
   white-space: nowrap;
 }
@@ -411,6 +412,29 @@ body {
 
 .announcement-bar__message {
   display: inline;
+}
+
+@media (max-width: 700px) {
+  .announcement-bar {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 8px 12px;
+    padding: 9px 16px;
+  }
+
+  .announcement-bar__left { min-width: 0; }
+  .announcement-bar__right { min-width: 0; flex: none; }
+  .announcement-bar__center {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    white-space: normal;
+    line-height: 1.4;
+  }
+}
+
+@media (max-width: 360px) {
+  .announcement-bar__right { gap: 6px; }
+  .announcement-bar__item { gap: 2px; }
 }
 
 /* ── Navbar ─────────────────────────────────────────── */
@@ -975,10 +999,14 @@ body {
 
 @media (max-width: 640px) {
   .vintage-hero h1 {
-    font-size: clamp(45px, 18vw, 80px);
+    font-size: clamp(30px, 10.5vw, 64px);
+    line-height: 0.93;
+    overflow-wrap: anywhere;
   }
   .vintage-hero__text--b p {
-    font-size: clamp(42px, 16vw, 72px);
+    font-size: clamp(30px, 10.5vw, 64px);
+    line-height: 0.93;
+    overflow-wrap: anywhere;
   }
   .vintage-lookbook__copy {
     padding: 0 20px;
