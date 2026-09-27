@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { X } from "lucide-react";
+import { useLanguage } from "@/lib/i18n";
 
 const cookieText = {
   en: {
@@ -21,15 +21,12 @@ const cookieText = {
 };
 
 export default function CookieBanner() {
+  const { lang } = useLanguage();
   const [visible, setVisible] = useState(false);
-  const [lang, setLang] = useState<"en" | "es">("en");
 
   useEffect(() => {
     const saved = localStorage.getItem("avnyc-cookie-consent");
     if (saved) return;
-
-    const browserLang = navigator.languages?.[0] || navigator.language;
-    setLang(browserLang.startsWith("es") ? "es" : "en");
 
     const timer = setTimeout(() => setVisible(true), 1200);
     return () => clearTimeout(timer);
