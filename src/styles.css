@@ -256,12 +256,14 @@ body {
   max-width: 1120px;
   margin: 0;
   font:
-    800 clamp(48px, 10vw, 150px)/0.84 Arial,
+    800 clamp(42px, 10vw, 150px)/0.84 Arial,
     Helvetica,
     sans-serif;
   letter-spacing: 0;
   text-transform: uppercase;
   text-wrap: balance;
+  word-break: break-word;
+  overflow-wrap: break-word;
   text-shadow: 0 8px 36px color-mix(in oklab, var(--vintage-ink) 70%, transparent);
 }
 
@@ -269,10 +271,12 @@ body {
   max-width: 1100px;
   margin: 4px 0 14px;
   font:
-    900 clamp(44px, 9.5vw, 142px)/0.82 Arial,
+    900 clamp(38px, 9.5vw, 142px)/0.82 Arial,
     Helvetica,
     sans-serif;
   letter-spacing: 0;
+  word-break: break-word;
+  overflow-wrap: break-word;
 }
 
 .vintage-hero__progress {
@@ -554,8 +558,8 @@ body {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 40px;
-  height: 40px;
+  width: 44px;
+  height: 44px;
   border: none;
   background: none;
   color: var(--vintage-fog);
@@ -598,7 +602,8 @@ body {
 
 .vn__auth-btn {
   display: none;
-  padding: 6px 14px;
+  padding: 8px 16px;
+  min-height: 44px;
   border-radius: 4px;
   text-decoration: none;
   font:
@@ -791,10 +796,9 @@ body {
 
 .vn__mobile {
   position: fixed;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  width: min(380px, 85vw);
+  inset: 0;
+  width: 100%;
+  height: 100%;
   background: var(--vintage-ink);
   z-index: 60;
   transform: translateX(100%);
@@ -841,9 +845,10 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 16px 20px;
+  padding: 20px 24px;
+  min-height: 56px;
   font:
-    600 14px/1 Arial,
+    600 18px/1 Arial,
     Helvetica,
     sans-serif;
   letter-spacing: 0.06em;
@@ -853,7 +858,7 @@ body {
 }
 
 .vn__mobile-sub {
-  padding: 0 20px 16px;
+  padding: 0 24px 20px;
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -879,11 +884,14 @@ body {
 
 .vn__mobile-link {
   display: block;
-  padding: 8px 0;
+  padding: 14px 0;
+  min-height: 48px;
+  display: flex;
+  align-items: center;
   color: var(--vintage-fog);
   text-decoration: none;
   font:
-    400 14px/1.4 Arial,
+    400 16px/1.4 Arial,
     Helvetica,
     sans-serif;
   border-bottom: 1px solid color-mix(in oklab, var(--vintage-line) 50%, transparent);
@@ -945,6 +953,7 @@ body {
   align-items: center;
   gap: 10px;
   min-height: 44px;
+  padding: 8px 0;
   border-bottom: 1px solid var(--vintage-red);
   color: var(--vintage-paper);
   font:
@@ -961,21 +970,20 @@ body {
   mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
 }
 .vintage-lookbook__track {
-  display: flex;
-  width: max-content;
+  display: grid;
+  grid-template-columns: 1fr;
   gap: clamp(12px, 2vw, 26px);
-  animation: vintage-marquee 34s linear infinite;
-}
-.vintage-lookbook__track:hover {
-  animation-play-state: paused;
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 5vw;
 }
 .vintage-lookbook figure {
-  width: clamp(230px, 28vw, 390px);
+  width: 100%;
   margin: 0;
-  flex: 0 0 auto;
 }
 .vintage-lookbook figure:nth-child(even) {
-  transform: translateY(22px);
+  transform: none;
 }
 .vintage-lookbook img {
   display: block;
@@ -1000,22 +1008,66 @@ body {
   }
 }
 
+/* Mobile: 2-col tight grid */
+@media (min-width: 480px) {
+  .vintage-lookbook__track {
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    padding: 0 20px;
+  }
+}
+
+/* Tablet: 2-col staggered */
+@media (min-width: 768px) {
+  .vintage-lookbook__track {
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(12px, 2vw, 20px);
+    padding: 0 4vw;
+  }
+  .vintage-lookbook figure:nth-child(even) {
+    transform: translateY(22px);
+  }
+}
+
+/* Desktop: horizontal marquee */
+@media (min-width: 1024px) {
+  .vintage-lookbook__rail {
+    overflow: hidden;
+    mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
+  }
+  .vintage-lookbook__track {
+    display: flex;
+    width: max-content;
+    gap: clamp(12px, 2vw, 26px);
+    animation: vintage-marquee 34s linear infinite;
+    padding: 0;
+  }
+  .vintage-lookbook__track:hover {
+    animation-play-state: paused;
+  }
+  .vintage-lookbook figure {
+    width: clamp(230px, 28vw, 390px);
+    flex: 0 0 auto;
+  }
+  .vintage-lookbook figure:nth-child(even) {
+    transform: translateY(22px);
+  }
+}
+
 @media (max-width: 640px) {
   .vintage-hero h1 {
-    font-size: clamp(30px, 10.5vw, 64px);
-    line-height: 0.93;
-    overflow-wrap: anywhere;
+    font-size: clamp(38px, 14vw, 64px);
+    line-height: 0.88;
   }
   .vintage-hero__text--b p {
-    font-size: clamp(30px, 10.5vw, 64px);
-    line-height: 0.93;
-    overflow-wrap: anywhere;
+    font-size: clamp(34px, 12vw, 56px);
+    line-height: 0.85;
   }
   .vintage-lookbook__copy {
     padding: 0 20px;
   }
   .vintage-lookbook h2 {
-    font-size: clamp(46px, 14.5vw, 68px);
+    font-size: clamp(40px, 12vw, 56px);
   }
   .vintage-lookbook__details {
     align-items: flex-start;
