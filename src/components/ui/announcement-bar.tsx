@@ -98,7 +98,7 @@ export default function AnnouncementBar() {
             </div>
           )}
         </div>
-        <span className="announcement-bar__divider">|</span>
+        <span className="announcement-bar__divider" aria-hidden="true" />
         <div className="announcement-bar__dropdown-wrap" ref={helpRef}>
           <button
             className="announcement-bar__item announcement-bar__btn"

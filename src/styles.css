@@ -354,7 +354,12 @@ body {
 }
 
 .announcement-bar__divider {
-  color: var(--vintage-line);
+  display: inline-block;
+  width: 1px;
+  height: 12px;
+  background: #555;
+  vertical-align: middle;
+  margin: 0 4px;
 }
 
 .announcement-bar__link {
@@ -581,8 +586,8 @@ body {
 
 .vn__badge {
   position: absolute;
-  top: 4px;
-  right: 4px;
+  top: -2px;
+  right: -4px;
   min-width: 16px;
   height: 16px;
   padding: 0 4px;
@@ -590,9 +595,12 @@ body {
   background: var(--vintage-red);
   color: var(--vintage-paper);
   font:
-    600 9px/16px Arial,
+    600 9px/1 Arial,
     Helvetica,
     sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   text-align: center;
 }
 
@@ -625,13 +633,14 @@ body {
 }
 
 .vn__auth-btn--primary {
-  background: var(--vintage-red);
-  border-color: var(--vintage-red);
+  background: #dc2626;
+  border-color: #dc2626;
   color: var(--vintage-paper);
 }
 
 .vn__auth-btn--primary:hover {
-  background: color-mix(in oklab, var(--vintage-red) 85%, #000);
+  background: #b91c1c;
+  border-color: #b91c1c;
 }
 
 @media (min-width: 1024px) {
