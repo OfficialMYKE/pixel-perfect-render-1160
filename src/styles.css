@@ -793,6 +793,26 @@ body {
   color: var(--vintage-paper);
 }
 
+.vn__mega-seeall {
+  display: block;
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px solid #333;
+  color: var(--vintage-fog);
+  text-decoration: none;
+  font:
+    500 13px/1.4 Arial,
+    Helvetica,
+    sans-serif;
+  transition: color 0.15s;
+}
+
+.vn__mega-seeall:hover {
+  color: var(--vintage-paper);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
 /* ── Mobile overlay ────────────────────────────────── */
 
 .vn__overlay {

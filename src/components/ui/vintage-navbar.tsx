@@ -219,6 +219,11 @@ export default function VintageNavbar() {
                       </li>
                     ))}
                   </ul>
+                  {col.label === t.nav.marcas && (
+                    <a href="/marcas" className="vn__mega-seeall">
+                      {t.nav.verMarcas}
+                    </a>
+                  )}
                 </div>
               ))}
             </div>
