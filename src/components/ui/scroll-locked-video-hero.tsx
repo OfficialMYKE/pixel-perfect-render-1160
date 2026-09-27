@@ -73,12 +73,12 @@ export default function MetroHero({ videoSrc = DEFAULT_VIDEO, className }: Metro
 
     const onError = () => {
       clearTimeout(fallbackTimer);
-      setReady(true); // show hero with poster fallback
+      setReady(false); // keep the streetwear photo visible if the video fails
     };
 
-    // Fallback: if video doesn't load in 8s, show hero anyway
+    // Keep the streetwear photo visible if the video takes too long to load.
     fallbackTimer = setTimeout(() => {
-      setReady(true);
+      setReady(false);
     }, 8000);
 
     video.addEventListener("loadeddata", onLoaded);
@@ -187,15 +187,12 @@ export default function MetroHero({ videoSrc = DEFAULT_VIDEO, className }: Metro
   return (
     <main className={className}>
       <section ref={heroRef} className="vintage-hero" aria-label="Vintage streetwear introduction">
-        {/* Poster fallback — shows first frame or black while video loads */}
-        {poster && (
-          <img
-            src={poster}
-            alt=""
-            aria-hidden="true"
-            className={`vintage-hero__poster ${ready ? "is-hidden" : ""}`}
-          />
-        )}
+        <img
+          src={poster ?? streetwearOne}
+          alt=""
+          aria-hidden="true"
+          className={`vintage-hero__poster ${ready ? "is-hidden" : ""}`}
+        />
 
         <video
           ref={videoRef}

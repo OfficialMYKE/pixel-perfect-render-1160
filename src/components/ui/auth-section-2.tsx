@@ -74,7 +74,7 @@ export default function AuthSectionTwo({ mode = "signup" }: { mode?: "login" | "
               className="line-clamp-3 flex-1 text-[11px] leading-[1.6]"
               style={{ color: "#e0e0e0", textShadow: "0 1px 6px rgba(0,0,0,0.9), 0 2px 12px rgba(0,0,0,0.6)" }}
             >
-              {slides[activeIndex].caption[lang]}
+              {slides[activeIndex]?.caption[lang]}
             </p>
             <button
               className="grid size-8 shrink-0 place-items-center rounded-full transition-colors hover:bg-white/30"
