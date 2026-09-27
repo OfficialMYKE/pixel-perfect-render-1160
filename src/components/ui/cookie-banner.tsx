@@ -50,8 +50,9 @@ export default function CookieBanner() {
     const saved = localStorage.getItem("avnyc-cookie-consent");
     if (saved) return;
 
-    const timer = setTimeout(() => setVisible(true), 1200);
-    return () => clearTimeout(timer);
+    const onHeroCollapsed = () => setVisible(true);
+    window.addEventListener("hero-collapsed", onHeroCollapsed);
+    return () => window.removeEventListener("hero-collapsed", onHeroCollapsed);
   }, []);
 
   const save = (prefs: { analytics: boolean; marketing: boolean }) => {

@@ -144,6 +144,7 @@ export default function MetroHero({ videoSrc = DEFAULT_VIDEO, className }: Metro
             heroRef.current.style.minHeight = "0";
             heroRef.current.style.overflow = "hidden";
           }
+          window.dispatchEvent(new Event("hero-collapsed"));
         }, 3200);
       }
 
@@ -168,6 +169,7 @@ export default function MetroHero({ videoSrc = DEFAULT_VIDEO, className }: Metro
               heroRef.current.style.minHeight = "0";
               heroRef.current.style.overflow = "hidden";
             }
+            window.dispatchEvent(new Event("hero-collapsed"));
           }, 600);
         }
       }
