@@ -1,0 +1,30 @@
+.fill-text-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.fill-text-stack {
+  position: relative;
+  display: inline-block;
+}
+
+.fill-text {
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-weight: 800;
+  font-size: clamp(48px, 8vw, 96px);
+  letter-spacing: -0.02em;
+  line-height: 1;
+  text-transform: uppercase;
+  user-select: none;
+}
+
+.fill-text-bg {
+  color: #1f2937;
+}
+
+.fill-text-fill {
+  position: absolute;
+  inset: 0;
+  color: #dc2626;
+}
