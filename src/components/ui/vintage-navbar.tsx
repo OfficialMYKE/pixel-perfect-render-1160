@@ -100,10 +100,6 @@ export default function VintageNavbar() {
   }, []);
 
   useEffect(() => {
-    setLastScrollY(window.scrollY);
-  }, []);
-
-  useEffect(() => {
     const onScroll = () => {
       const currentScrollY = window.scrollY;
       if (currentScrollY > lastScrollY && currentScrollY > 50) {
