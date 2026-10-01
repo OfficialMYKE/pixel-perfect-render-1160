@@ -39,6 +39,7 @@ export default function MetroHero({ videoSrc = DEFAULT_VIDEO, className }: Metro
   const heroRef = useRef<HTMLElement>(null);
   const [ready, setReady] = useState(false);
   const [poster, setPoster] = useState<string | null>(null);
+  const [barsVisible, setBarsVisible] = useState(false);
   const transitioned = useRef(false);
 
   useEffect(() => {
@@ -144,6 +145,7 @@ export default function MetroHero({ videoSrc = DEFAULT_VIDEO, className }: Metro
             heroRef.current.style.minHeight = "0";
             heroRef.current.style.overflow = "hidden";
           }
+          setBarsVisible(true);
           window.dispatchEvent(new Event("hero-collapsed"));
         }, 3200);
       }
@@ -169,6 +171,7 @@ export default function MetroHero({ videoSrc = DEFAULT_VIDEO, className }: Metro
               heroRef.current.style.minHeight = "0";
               heroRef.current.style.overflow = "hidden";
             }
+            setBarsVisible(true);
             window.dispatchEvent(new Event("hero-collapsed"));
           }, 600);
         }
@@ -223,11 +226,14 @@ export default function MetroHero({ videoSrc = DEFAULT_VIDEO, className }: Metro
         </div>
       </section>
 
-      <div ref={announcementRef}>
-        <AnnouncementBar />
-      </div>
-
-      <VintageNavbar />
+      {barsVisible && (
+        <>
+          <div ref={announcementRef}>
+            <AnnouncementBar />
+          </div>
+          <VintageNavbar />
+        </>
+      )}
 
       <section ref={lookbookRef} className="vintage-lookbook" aria-labelledby="lookbook-title">
         <div className="vintage-lookbook__copy">
