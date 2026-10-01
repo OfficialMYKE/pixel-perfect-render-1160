@@ -452,9 +452,7 @@ body {
 /* ── Navbar ─────────────────────────────────────────── */
 
 .vn {
-  position: sticky;
-  top: 0;
-  z-index: 40;
+  will-change: transform;
 }
 
 .vn__bar {
