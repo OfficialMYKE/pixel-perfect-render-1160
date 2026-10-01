@@ -134,7 +134,7 @@ export default function VintageNavbar() {
   return (
     <div
       ref={navRef}
-      className={`vn fixed top-0 left-0 w-full z-50 transition-transform duration-300 ease-in-out ${isVisible ? "translate-y-0" : "-translate-y-full"}`}
+      className={`vn w-full z-50 transition-transform duration-300 ease-in-out ${isVisible ? "translate-y-0" : "-translate-y-full"}`}
     >
       {/* Desktop */}
       <div className="vn__bar">

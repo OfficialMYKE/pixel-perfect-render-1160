@@ -227,12 +227,12 @@ export default function MetroHero({ videoSrc = DEFAULT_VIDEO, className }: Metro
       </section>
 
       {barsVisible && (
-        <>
+        <div className="fixed top-0 left-0 w-full z-50">
           <div ref={announcementRef}>
             <AnnouncementBar />
           </div>
           <VintageNavbar />
-        </>
+        </div>
       )}
 
       <section ref={lookbookRef} className="vintage-lookbook" aria-labelledby="lookbook-title">
