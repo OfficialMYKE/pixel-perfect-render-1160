@@ -75,8 +75,6 @@ export default function VintageNavbar() {
   const [activeDropdown, setActiveDropdown] = useState<number | null>(null);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [mobileExpanded, setMobileExpanded] = useState<number | null>(null);
-  const [isVisible, setIsVisible] = useState(true);
-  const [lastScrollY, setLastScrollY] = useState(0);
   const navRef = useRef<HTMLDivElement>(null);
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
@@ -100,24 +98,6 @@ export default function VintageNavbar() {
   }, []);
 
   useEffect(() => {
-    setLastScrollY(window.scrollY);
-  }, []);
-
-  useEffect(() => {
-    const onScroll = () => {
-      const currentScrollY = window.scrollY;
-      if (currentScrollY > lastScrollY && currentScrollY > 50) {
-        setIsVisible(false);
-      } else if (currentScrollY < lastScrollY) {
-        setIsVisible(true);
-      }
-      setLastScrollY(currentScrollY);
-    };
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, [lastScrollY]);
-
-  useEffect(() => {
     document.body.style.overflow = mobileOpen ? "hidden" : "";
     return () => {
       document.body.style.overflow = "";
@@ -132,10 +112,7 @@ export default function VintageNavbar() {
   const activeItem = activeDropdown !== null ? navItems[activeDropdown] : null;
 
   return (
-    <div
-      ref={navRef}
-      className={`vn w-full z-50 transition-transform duration-300 ease-in-out ${isVisible ? "translate-y-0" : "-translate-y-full"}`}
-    >
+    <div ref={navRef} className="vn">
       {/* Desktop */}
       <div className="vn__bar">
         <div className="vn__inner">

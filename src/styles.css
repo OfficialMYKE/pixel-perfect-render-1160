@@ -310,8 +310,6 @@ body {
     monospace;
   letter-spacing: 0.02em;
   border-bottom: 1px solid var(--vintage-line);
-  position: relative;
-  z-index: 1;
 }
 
 .announcement-bar__left,
@@ -454,9 +452,9 @@ body {
 /* ── Navbar ─────────────────────────────────────────── */
 
 .vn {
-  will-change: transform;
-  position: relative;
-  z-index: 2;
+  position: sticky;
+  top: 0;
+  z-index: 40;
 }
 
 .vn__bar {

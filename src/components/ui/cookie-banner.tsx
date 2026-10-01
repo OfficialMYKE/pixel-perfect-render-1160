@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { X } from "lucide-react";
 import { useLanguage } from "@/lib/i18n";
 
 const cookieText = {
