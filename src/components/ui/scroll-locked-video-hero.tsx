@@ -227,7 +227,7 @@ export default function MetroHero({ videoSrc = DEFAULT_VIDEO, className }: Metro
       </section>
 
       {barsVisible && (
-        <div className="fixed top-0 left-0 w-full z-50">
+        <div className="fixed top-0 left-0 w-full z-[100]">
           <div ref={announcementRef}>
             <AnnouncementBar />
           </div>
