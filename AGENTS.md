@@ -10,3 +10,5 @@
 > the editor, so keep the branch in a working state.
 
 <!-- LOVABLE:END -->
+
+- Keep the interactive garment rail in its own UI module and compose its translated archive content separately, so animation logic stays independent of store copy.

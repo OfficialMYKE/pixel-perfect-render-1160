@@ -3,6 +3,7 @@ import { ArrowUpRight } from "lucide-react";
 import AnnouncementBar from "@/components/ui/announcement-bar";
 import VintageNavbar from "@/components/ui/vintage-navbar";
 import Footer from "@/components/ui/footer";
+import VintageArchiveRail from "@/components/ui/vintage-archive-rail";
 import { useLanguage } from "@/lib/i18n";
 import streetwearOne from "@/assets/vintage-streetwear-01.jpg";
 import streetwearTwo from "@/assets/vintage-streetwear-02.jpg";
@@ -239,7 +240,7 @@ export default function MetroHero({ videoSrc = DEFAULT_VIDEO, className }: Metro
           </h2>
           <div className="vintage-lookbook__details">
             <p>{t.lookbookDesc}</p>
-            <a href="#archive">
+            <a href="#new-arrivals">
               {t.lookbookCta} <ArrowUpRight aria-hidden="true" size={17} />
             </a>
           </div>
@@ -269,6 +270,7 @@ export default function MetroHero({ videoSrc = DEFAULT_VIDEO, className }: Metro
         </div>
       </section>
 
+      <VintageArchiveRail />
       <Footer />
     </main>
   );
