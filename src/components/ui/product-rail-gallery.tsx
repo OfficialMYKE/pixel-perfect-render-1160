@@ -1,7 +1,6 @@
 
 import * as React from "react";
 import { createPortal } from "react-dom";
-import { Button } from "@/components/ui/button";
 
 export type GarmentKind = "tee" | "knit" | "hoodie" | "shirt" | "jacket" | "coat";
 
@@ -261,7 +260,7 @@ function silhouetteMask(kind: GarmentKind, side: "front" | "back") {
 function mix(color: string, amount: number) {
   if (amount === 0) return color;
   const keep = Math.round((1 - Math.min(1, Math.abs(amount))) * 1000) / 10;
-  return `color-mix(in oklab, ${color} ${keep}%, ${amount > 0 ? "var(--rail-white)" : "var(--rail-black)"})`;
+  return `color-mix(in oklab, ${color} ${keep}%, ${amount > 0 ? "white" : "black"})`;
 }
 
 function clamp(value: number, min: number, max: number) {
@@ -284,25 +283,25 @@ function Defs({ uid }: { uid: string }) {
           </clipPath>
         )))}
         <linearGradient id={`${uid}-volume`} x1="0" x2="1" y1="0" y2="0">
-          <stop offset="0" stopColor="var(--rail-black)" stopOpacity="0.34" />
-          <stop offset="0.16" stopColor="var(--rail-black)" stopOpacity="0.1" />
-          <stop offset="0.42" stopColor="var(--rail-white)" stopOpacity="0.07" />
-          <stop offset="0.58" stopColor="var(--rail-white)" stopOpacity="0.04" />
-          <stop offset="0.84" stopColor="var(--rail-black)" stopOpacity="0.12" />
-          <stop offset="1" stopColor="var(--rail-black)" stopOpacity="0.38" />
+          <stop offset="0" stopColor="black" stopOpacity="0.34" />
+          <stop offset="0.16" stopColor="black" stopOpacity="0.1" />
+          <stop offset="0.42" stopColor="white" stopOpacity="0.07" />
+          <stop offset="0.58" stopColor="white" stopOpacity="0.04" />
+          <stop offset="0.84" stopColor="black" stopOpacity="0.12" />
+          <stop offset="1" stopColor="black" stopOpacity="0.38" />
         </linearGradient>
         <linearGradient id={`${uid}-drape`} x1="0" x2="0" y1="0" y2="1">
-          <stop offset="0" stopColor="var(--rail-white)" stopOpacity="0.16" />
-          <stop offset="0.22" stopColor="var(--rail-white)" stopOpacity="0" />
-          <stop offset="0.75" stopColor="var(--rail-black)" stopOpacity="0.04" />
-          <stop offset="1" stopColor="var(--rail-black)" stopOpacity="0.2" />
+          <stop offset="0" stopColor="white" stopOpacity="0.16" />
+          <stop offset="0.22" stopColor="white" stopOpacity="0" />
+          <stop offset="0.75" stopColor="black" stopOpacity="0.04" />
+          <stop offset="1" stopColor="black" stopOpacity="0.2" />
         </linearGradient>
         <linearGradient id={`${uid}-sidevol`} gradientUnits="userSpaceOnUse" x1="80" x2="120" y1="0" y2="0">
-          <stop offset="0" stopColor="var(--rail-white)" stopOpacity="0.14" />
-          <stop offset="0.28" stopColor="var(--rail-white)" stopOpacity="0.04" />
-          <stop offset="0.7" stopColor="var(--rail-black)" stopOpacity="0.08" />
-          <stop offset="0.95" stopColor="var(--rail-black)" stopOpacity="0.3" />
-          <stop offset="1" stopColor="var(--rail-black)" stopOpacity="0.18" />
+          <stop offset="0" stopColor="white" stopOpacity="0.14" />
+          <stop offset="0.28" stopColor="white" stopOpacity="0.04" />
+          <stop offset="0.7" stopColor="black" stopOpacity="0.08" />
+          <stop offset="0.95" stopColor="black" stopOpacity="0.3" />
+          <stop offset="1" stopColor="black" stopOpacity="0.18" />
         </linearGradient>
         <filter id={`${uid}-cloth`} x="-12%" y="-4%" width="124%" height="108%">
           <feTurbulence type="fractalNoise" baseFrequency="0.016 0.028" numOctaves="2" seed="3" result="n" />
@@ -315,28 +314,28 @@ function Defs({ uid }: { uid: string }) {
           </React.Fragment>
         ))}
         <linearGradient id={`${uid}-wood`} x1="0" x2="0" y1="0" y2="1">
-          <stop offset="0" stopColor="color-mix(in oklab, var(--rail-wood) 55%, var(--rail-white))" />
-          <stop offset="0.45" stopColor="color-mix(in oklab, var(--rail-wood) 80%, var(--rail-black))" />
-          <stop offset="1" stopColor="color-mix(in oklab, var(--rail-wood) 45%, var(--rail-black))" />
+          <stop offset="0" stopColor="color-mix(in oklab, sienna 55%, white)" />
+          <stop offset="0.45" stopColor="color-mix(in oklab, sienna 80%, black)" />
+          <stop offset="1" stopColor="color-mix(in oklab, sienna 45%, black)" />
         </linearGradient>
         <linearGradient id={`${uid}-woodgrain`} gradientUnits="userSpaceOnUse" spreadMethod="repeat" x1="0" x2="11" y1="0" y2="0.6">
-          <stop offset="0" stopColor="var(--rail-black)" stopOpacity="0" />
-          <stop offset="0.45" stopColor="var(--rail-black)" stopOpacity="0.16" />
-          <stop offset="0.6" stopColor="var(--rail-white)" stopOpacity="0.08" />
-          <stop offset="1" stopColor="var(--rail-black)" stopOpacity="0" />
+          <stop offset="0" stopColor="black" stopOpacity="0" />
+          <stop offset="0.45" stopColor="black" stopOpacity="0.16" />
+          <stop offset="0.6" stopColor="white" stopOpacity="0.08" />
+          <stop offset="1" stopColor="black" stopOpacity="0" />
         </linearGradient>
         <linearGradient id={`${uid}-chrome`} gradientUnits="userSpaceOnUse" x1="98.5" x2="101.7" y1="0" y2="0">
-          <stop offset="0" stopColor="color-mix(in oklab, var(--rail-white) 45%, var(--rail-metal))" />
-          <stop offset="0.35" stopColor="var(--rail-white)" />
-          <stop offset="0.78" stopColor="color-mix(in oklab, var(--rail-metal) 65%, var(--rail-black))" />
-          <stop offset="1" stopColor="color-mix(in oklab, var(--rail-metal) 75%, var(--rail-white))" />
+          <stop offset="0" stopColor="color-mix(in oklab, white 45%, gray)" />
+          <stop offset="0.35" stopColor="white" />
+          <stop offset="0.78" stopColor="color-mix(in oklab, gray 65%, black)" />
+          <stop offset="1" stopColor="color-mix(in oklab, gray 75%, white)" />
         </linearGradient>
         <pattern id={`${uid}-rib`} width="2.6" height="8" patternUnits="userSpaceOnUse">
-          <rect width="1.1" height="8" fill="var(--rail-black)" fillOpacity="0.2" />
-          <rect x="1.3" width="0.7" height="8" fill="var(--rail-white)" fillOpacity="0.08" />
+          <rect width="1.1" height="8" fill="black" fillOpacity="0.2" />
+          <rect x="1.3" width="0.7" height="8" fill="white" fillOpacity="0.08" />
         </pattern>
         <pattern id={`${uid}-knit`} width="5" height="4" patternUnits="userSpaceOnUse">
-          <path d="M0,0 L2.5,4 L5,0" fill="none" stroke="var(--rail-black)" strokeOpacity="0.09" strokeWidth="0.7" />
+          <path d="M0,0 L2.5,4 L5,0" fill="none" stroke="black" strokeOpacity="0.09" strokeWidth="0.7" />
         </pattern>
         <filter id={`${uid}-grain`} x="0" y="0" width="100%" height="100%">
           <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="7" />
@@ -361,12 +360,12 @@ const BAR_HI = "M40,54.5 Q71,35.5 100,33.5 Q129,35.5 160,54.5";
 function Hook({ uid }: { uid: string }) {
   return (
     <>
-      <path d={HOOK} fill="none" stroke="var(--rail-black)" strokeOpacity="0.28" strokeWidth="3.4" strokeLinecap="round" transform="translate(0.9 1.1)" />
+      <path d={HOOK} fill="none" stroke="black" strokeOpacity="0.28" strokeWidth="3.4" strokeLinecap="round" transform="translate(0.9 1.1)" />
       <path d={HOOK} fill="none" stroke={`url(#${uid}-chrome)`} strokeWidth="2.6" strokeLinecap="round" />
-      <path d={HOOK_HI} fill="none" stroke="var(--rail-white)" strokeOpacity="0.6" strokeWidth="0.6" strokeLinecap="round" />
-      <ellipse cx="105.9" cy="0.6" rx="1.9" ry="0.9" fill="var(--rail-black)" fillOpacity="0.4" />
+      <path d={HOOK_HI} fill="none" stroke="white" strokeOpacity="0.6" strokeWidth="0.6" strokeLinecap="round" />
+      <ellipse cx="105.9" cy="0.6" rx="1.9" ry="0.9" fill="black" fillOpacity="0.4" />
       <rect x="96" y="27" width="8" height="9" rx="2" fill={`url(#${uid}-chrome)`} />
-      <rect x="97.2" y="28.2" width="2" height="6.6" rx="1" fill="var(--rail-white)" fillOpacity="0.5" />
+      <rect x="97.2" y="28.2" width="2" height="6.6" rx="1" fill="white" fillOpacity="0.5" />
     </>
   );
 }
@@ -377,14 +376,14 @@ function Hanger({ uid, side, kind, material }: { uid: string; side: "front" | "b
   return (
     <svg aria-hidden="true" viewBox={`0 0 ${VB_W} ${VB_H}`} preserveAspectRatio="xMidYMin meet" className={`absolute inset-0 size-full overflow-visible ${material === "matte" ? "text-foreground/85" : ""}`}>
       {art?.hood && <path d={art.hood} fill="var(--garment-color)" />}
-      {art?.hood && <path d={art.hood} fill="var(--rail-black)" fillOpacity="0.22" />}
+      {art?.hood && <path d={art.hood} fill="black" fillOpacity="0.22" />}
       {art?.under && <path d={art.under} fill="var(--garment-under)" />}
       {material !== "none" && (
         <>
-          <path d={BAR} fill="none" stroke="var(--rail-black)" strokeOpacity="0.25" strokeWidth="9.5" strokeLinecap="round" transform="translate(0.6 1.6)" />
+          <path d={BAR} fill="none" stroke="black" strokeOpacity="0.25" strokeWidth="9.5" strokeLinecap="round" transform="translate(0.6 1.6)" />
           <path d={BAR} fill="none" stroke={bar} strokeWidth="8.5" strokeLinecap="round" />
           {material === "wood" && <path d={BAR} fill="none" stroke={`url(#${uid}-woodgrain)`} strokeWidth="8.5" strokeLinecap="round" />}
-          <path d={BAR_HI} fill="none" stroke="var(--rail-white)" strokeOpacity={material === "wood" ? 0.3 : 0.14} strokeWidth="1.1" strokeLinecap="round" />
+          <path d={BAR_HI} fill="none" stroke="white" strokeOpacity={material === "wood" ? 0.3 : 0.14} strokeWidth="1.1" strokeLinecap="round" />
           <Hook uid={uid} />
         </>
       )}
@@ -398,7 +397,7 @@ function SideHanger({ uid, material }: { uid: string; material: "wood" | "matte"
   return (
     <svg aria-hidden="true" viewBox={`0 0 ${VB_W} ${VB_H}`} preserveAspectRatio="xMidYMin meet" className={`absolute inset-0 size-full overflow-visible ${material === "matte" ? "text-foreground/85" : ""}`}>
       <path d="M97.8,35 L102.2,35 L104.5,50 L95.5,50 Z" fill={bar} />
-      <path d="M98.6,36 L100,36 L100,49 L97.3,49 Z" fill="var(--rail-white)" fillOpacity="0.22" />
+      <path d="M98.6,36 L100,36 L100,49 L97.3,49 Z" fill="white" fillOpacity="0.22" />
       <Hook uid={uid} />
     </svg>
   );
@@ -418,16 +417,16 @@ function Fabric({ uid, kind, side, color, trim }: { uid: string; kind: GarmentKi
         {art.ribs.map((d) => <path key={d} d={d} fill={mix(trim, 0)} />)}
         {art.ribs.map((d) => <path key={`${d}-rib`} d={d} fill={`url(#${uid}-rib)`} />)}
         <g filter={`url(#${uid}-soft)`} fill="none" strokeLinecap="round">
-          {art.folds.map((d) => <path key={d} d={d} stroke="var(--rail-black)" strokeOpacity="0.22" strokeWidth="4" />)}
-          {art.folds.map((d) => <path key={`${d}-hi`} d={d} stroke="var(--rail-white)" strokeOpacity="0.1" strokeWidth="2" transform="translate(2.2 0)" />)}
-          {art.sleeves.map((d) => <path key={`${d}-edge`} d={d} stroke="var(--rail-black)" strokeOpacity="0.2" strokeWidth="3" />)}
+          {art.folds.map((d) => <path key={d} d={d} stroke="black" strokeOpacity="0.22" strokeWidth="4" />)}
+          {art.folds.map((d) => <path key={`${d}-hi`} d={d} stroke="white" strokeOpacity="0.1" strokeWidth="2" transform="translate(2.2 0)" />)}
+          {art.sleeves.map((d) => <path key={`${d}-edge`} d={d} stroke="black" strokeOpacity="0.2" strokeWidth="3" />)}
         </g>
         <rect width={VB_W} height={VB_H} fill={`url(#${uid}-volume)`} />
         <rect width={VB_W} height={VB_H} fill={`url(#${uid}-drape)`} />
         <rect width={VB_W} height={VB_H} filter={`url(#${uid}-grain)`} opacity="0.16" style={{ mixBlendMode: "multiply" }} />
       </g>
       <g fill="none" strokeLinecap="round" strokeLinejoin="round">
-        {art.seams.map((d) => <path key={d} d={d} stroke="var(--rail-black)" strokeOpacity="0.22" strokeWidth="0.8" />)}
+        {art.seams.map((d) => <path key={d} d={d} stroke="black" strokeOpacity="0.22" strokeWidth="0.8" />)}
         {art.stitches.map((d) => <path key={d} d={d} stroke={mix(color, 0.35)} strokeOpacity="0.5" strokeWidth="0.6" strokeDasharray="1.6 1.4" />)}
         {art.cords?.map((d) => <path key={d} d={d} stroke={trim} strokeWidth="1.8" />)}
       </g>
@@ -438,7 +437,7 @@ function Fabric({ uid, kind, side, color, trim }: { uid: string; kind: GarmentKi
       {art.buttons?.map(([x, y]) => (
         <g key={`${x}-${y}`}>
           <circle cx={x} cy={y} r="2.6" fill={mix(trim, -0.15)} />
-          <circle cx={(x ?? 0) - 0.6} cy={(y ?? 0) - 0.7} r="0.9" fill="var(--rail-white)" fillOpacity="0.45" />
+          <circle cx={(x ?? 0) - 0.6} cy={(y ?? 0) - 0.7} r="0.9" fill="white" fillOpacity="0.45" />
         </g>
       ))}
     </svg>
@@ -454,20 +453,20 @@ function SideArt({ uid, kind, color, trim }: { uid: string; kind: GarmentKind; c
     <svg aria-hidden="true" viewBox={`0 0 ${VB_W} ${VB_H}`} preserveAspectRatio="xMidYMin meet" className="absolute inset-0 size-full overflow-visible">
       <g filter={`url(#${uid}-cloth)`}>
         {hood && <path d={hood} fill={mix(color, -0.14)} />}
-        {hood && <path d={hood} fill="none" stroke="var(--rail-black)" strokeOpacity="0.2" strokeWidth="1.2" />}
+        {hood && <path d={hood} fill="none" stroke="black" strokeOpacity="0.2" strokeWidth="1.2" />}
         <path d={body} fill={color} />
         <g clipPath={`url(#${uid}-sb-${kind})`}>
           {knitted && <rect width={VB_W} height={VB_H} fill={`url(#${uid}-knit)`} />}
           <g filter={soft} fill="none" strokeLinecap="round">
-            <path d={`M90,${cuff + 10} C87,150 92,190 88,${hem - 4}`} stroke="var(--rail-black)" strokeOpacity="0.24" strokeWidth="2.6" />
-            <path d={`M92,${cuff + 10} C89,150 94,190 90,${hem - 4}`} stroke="var(--rail-white)" strokeOpacity="0.14" strokeWidth="1.2" />
-            <path d={`M106,${cuff + 6} C109,140 104,186 108,${hem - 2}`} stroke="var(--rail-black)" strokeOpacity="0.17" strokeWidth="2.2" />
-            <path d={`M107.6,${cuff + 6} C110.6,140 105.6,186 109.6,${hem - 2}`} stroke="var(--rail-white)" strokeOpacity="0.1" strokeWidth="1" />
-            <path d={`M99,${cuff + 30} C97,170 101,205 98,${hem - 2}`} stroke="var(--rail-black)" strokeOpacity="0.1" strokeWidth="2" />
-            <path d={`M112,${cuff + 40} C113,170 111,200 113,${hem - 10}`} stroke="var(--rail-black)" strokeOpacity="0.12" strokeWidth="1.6" />
-            <path d={`M84,${cuff + 50} C86,160 85,200 86,${hem - 6}`} stroke="var(--rail-white)" strokeOpacity="0.2" strokeWidth="1.4" />
-            <path d={`M80,${cuff + 6} C90,${cuff + 12} 110,${cuff + 12} 120,${cuff + 7}`} stroke="var(--rail-black)" strokeOpacity="0.4" strokeWidth="6" />
-            <path d={`M84,${hem + 1} C92,${hem + 6} 108,${hem + 6} 116,${hem + 1}`} stroke="var(--rail-black)" strokeOpacity="0.32" strokeWidth="6" />
+            <path d={`M90,${cuff + 10} C87,150 92,190 88,${hem - 4}`} stroke="black" strokeOpacity="0.24" strokeWidth="2.6" />
+            <path d={`M92,${cuff + 10} C89,150 94,190 90,${hem - 4}`} stroke="white" strokeOpacity="0.14" strokeWidth="1.2" />
+            <path d={`M106,${cuff + 6} C109,140 104,186 108,${hem - 2}`} stroke="black" strokeOpacity="0.17" strokeWidth="2.2" />
+            <path d={`M107.6,${cuff + 6} C110.6,140 105.6,186 109.6,${hem - 2}`} stroke="white" strokeOpacity="0.1" strokeWidth="1" />
+            <path d={`M99,${cuff + 30} C97,170 101,205 98,${hem - 2}`} stroke="black" strokeOpacity="0.1" strokeWidth="2" />
+            <path d={`M112,${cuff + 40} C113,170 111,200 113,${hem - 10}`} stroke="black" strokeOpacity="0.12" strokeWidth="1.6" />
+            <path d={`M84,${cuff + 50} C86,160 85,200 86,${hem - 6}`} stroke="white" strokeOpacity="0.2" strokeWidth="1.4" />
+            <path d={`M80,${cuff + 6} C90,${cuff + 12} 110,${cuff + 12} 120,${cuff + 7}`} stroke="black" strokeOpacity="0.4" strokeWidth="6" />
+            <path d={`M84,${hem + 1} C92,${hem + 6} 108,${hem + 6} 116,${hem + 1}`} stroke="black" strokeOpacity="0.32" strokeWidth="6" />
           </g>
           <rect width={VB_W} height={VB_H} fill={`url(#${uid}-sidevol)`} />
           <rect width={VB_W} height={VB_H} fill={`url(#${uid}-drape)`} />
@@ -477,14 +476,14 @@ function SideArt({ uid, kind, color, trim }: { uid: string; kind: GarmentKind; c
         <g clipPath={`url(#${uid}-ss-${kind})`}>
           {knitted && <rect width={VB_W} height={VB_H} fill={`url(#${uid}-knit)`} />}
           <g filter={soft} fill="none" strokeLinecap="round">
-            <path d={`M91,62 C88,78 90,${cuff - 14} 91,${cuff}`} stroke="var(--rail-black)" strokeOpacity="0.16" strokeWidth="2.6" />
-            <path d={`M92.6,62 C89.6,78 91.6,${cuff - 14} 92.6,${cuff}`} stroke="var(--rail-white)" strokeOpacity="0.12" strokeWidth="1.1" />
-            <path d={`M109,58 C112,76 110,${cuff - 14} 109,${cuff}`} stroke="var(--rail-black)" strokeOpacity="0.2" strokeWidth="2.6" />
-            <path d={`M86,72 C94,80 104,86 115,${cuff - 10}`} stroke="var(--rail-black)" strokeOpacity="0.1" strokeWidth="2.4" />
-            <path d="M84,53 C92,49 108,49 116,53" stroke="var(--rail-black)" strokeOpacity="0.24" strokeWidth="3.6" />
-            <path d={`M81,${cuff - 2} C92,${cuff + 4} 108,${cuff + 5} 119,${cuff + 2}`} stroke="var(--rail-black)" strokeOpacity="0.34" strokeWidth="3.2" />
-            <path d={`M85,60 C84,80 85,${cuff - 20} 85,${cuff - 4}`} stroke="var(--rail-white)" strokeOpacity="0.22" strokeWidth="1.4" />
-            <ellipse cx="94" cy="47.5" rx="6" ry="2.4" fill="var(--rail-white)" fillOpacity="0.22" stroke="none" />
+            <path d={`M91,62 C88,78 90,${cuff - 14} 91,${cuff}`} stroke="black" strokeOpacity="0.16" strokeWidth="2.6" />
+            <path d={`M92.6,62 C89.6,78 91.6,${cuff - 14} 92.6,${cuff}`} stroke="white" strokeOpacity="0.12" strokeWidth="1.1" />
+            <path d={`M109,58 C112,76 110,${cuff - 14} 109,${cuff}`} stroke="black" strokeOpacity="0.2" strokeWidth="2.6" />
+            <path d={`M86,72 C94,80 104,86 115,${cuff - 10}`} stroke="black" strokeOpacity="0.1" strokeWidth="2.4" />
+            <path d="M84,53 C92,49 108,49 116,53" stroke="black" strokeOpacity="0.24" strokeWidth="3.6" />
+            <path d={`M81,${cuff - 2} C92,${cuff + 4} 108,${cuff + 5} 119,${cuff + 2}`} stroke="black" strokeOpacity="0.34" strokeWidth="3.2" />
+            <path d={`M85,60 C84,80 85,${cuff - 20} 85,${cuff - 4}`} stroke="white" strokeOpacity="0.22" strokeWidth="1.4" />
+            <ellipse cx="94" cy="47.5" rx="6" ry="2.4" fill="white" fillOpacity="0.22" stroke="none" />
           </g>
           <rect width={VB_W} height={VB_H} fill={`url(#${uid}-sidevol)`} />
           <rect width={VB_W} height={VB_H} fill={`url(#${uid}-drape)`} />
@@ -495,7 +494,7 @@ function SideArt({ uid, kind, color, trim }: { uid: string; kind: GarmentKind; c
       </g>
       <ellipse cx="100" cy="46" rx="10" ry="3.2" fill={trim} />
       <ellipse cx="100" cy="46" rx="10" ry="3.2" fill={`url(#${uid}-rib)`} />
-      <ellipse cx="100" cy="46" rx="10" ry="3.2" fill="none" stroke="var(--rail-black)" strokeOpacity="0.2" strokeWidth="0.6" />
+      <ellipse cx="100" cy="46" rx="10" ry="3.2" fill="none" stroke="black" strokeOpacity="0.2" strokeWidth="0.6" />
     </svg>
   );
 }
@@ -925,14 +924,14 @@ export function ClothingRailHero({
       data-mode={size.carousel ? "carousel" : "rail"}
       data-active={active ?? ""}
       aria-roledescription="clothing rail"
-      className={`product-rail relative isolate w-full overflow-hidden bg-background text-foreground ${className ?? ""}`}
+      className={`relative isolate w-full overflow-hidden bg-background text-foreground ${className ?? ""}`}
     >
       <Defs uid={uid} />
-
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10" style={{ background: "radial-gradient(120% 70% at 18% 0%, color-mix(in oklab, var(--color-foreground) 7%, transparent), transparent 62%), linear-gradient(to bottom, transparent 55%, color-mix(in oklab, var(--color-foreground) 5%, transparent))" }} />
       {(eyebrow || heading) && (
         <header className="relative z-10 flex flex-col items-center gap-2 px-6 pt-8 text-center">
-          {eyebrow && <p className="text-[11px] font-medium uppercase tracking-normal text-muted-foreground">{eyebrow}</p>}
-          {heading && <h2 className="text-balance text-2xl font-medium tracking-normal sm:text-3xl">{heading}</h2>}
+          {eyebrow && <p className="text-[11px] font-medium uppercase tracking-[0.28em] text-muted-foreground">{eyebrow}</p>}
+          {heading && <h2 className="text-balance text-2xl font-medium tracking-tight sm:text-3xl">{heading}</h2>}
         </header>
       )}
 
@@ -952,10 +951,10 @@ export function ClothingRailHero({
       >
         <div aria-hidden="true" data-rail className="pointer-events-none absolute inset-x-0 z-0" style={{ top: railY - railR, height: railR * 2 }}>
           <div className="absolute inset-x-0 h-3 rounded-full bg-foreground/10 blur-[5px]" style={{ top: railR * 2 + 1 }} />
-          <div className="absolute inset-0 rounded-full" style={{ background: "linear-gradient(to bottom, color-mix(in oklab, var(--color-muted-foreground) 35%, var(--rail-white)) 0%, var(--rail-white) 18%, color-mix(in oklab, var(--color-muted-foreground) 70%, var(--rail-white)) 38%, var(--color-muted-foreground) 62%, color-mix(in oklab, var(--color-muted-foreground) 55%, var(--rail-black)) 100%)", boxShadow: "0 1px 0 color-mix(in oklab, var(--color-foreground) 18%, transparent)" }} />
-          <div className="absolute inset-0 rounded-full opacity-40 mix-blend-overlay" style={{ background: "repeating-linear-gradient(90deg, transparent 0 2px, color-mix(in oklab, var(--rail-white) 40%, transparent) 2px 3px, transparent 3px 7px)" }} />
+          <div className="absolute inset-0 rounded-full" style={{ background: "linear-gradient(to bottom, color-mix(in oklab, var(--color-muted-foreground) 35%, white) 0%, white 18%, color-mix(in oklab, var(--color-muted-foreground) 70%, white) 38%, var(--color-muted-foreground) 62%, color-mix(in oklab, var(--color-muted-foreground) 55%, black) 100%)", boxShadow: "0 1px 0 color-mix(in oklab, var(--color-foreground) 18%, transparent)" }} />
+          <div className="absolute inset-0 rounded-full opacity-40 mix-blend-overlay" style={{ background: "repeating-linear-gradient(90deg, transparent 0 2px, color-mix(in oklab, white 40%, transparent) 2px 3px, transparent 3px 7px)" }} />
           {[0, 1].map((side) => (
-            <div key={side} className="absolute top-1/2 h-7 w-4 -translate-y-1/2 rounded-[3px]" style={{ [side ? "right" : "left"]: 6, background: "linear-gradient(to right, color-mix(in oklab, var(--color-muted-foreground) 60%, var(--rail-white)), var(--color-muted-foreground) 55%, color-mix(in oklab, var(--color-muted-foreground) 60%, var(--rail-black)))", boxShadow: "0 3px 6px color-mix(in oklab, var(--color-foreground) 18%, transparent)" }}>
+            <div key={side} className="absolute top-1/2 h-7 w-4 -translate-y-1/2 rounded-[3px]" style={{ [side ? "right" : "left"]: 6, background: "linear-gradient(to right, color-mix(in oklab, var(--color-muted-foreground) 60%, white), var(--color-muted-foreground) 55%, color-mix(in oklab, var(--color-muted-foreground) 60%, black))", boxShadow: "0 3px 6px color-mix(in oklab, var(--color-foreground) 18%, transparent)" }}>
               <span className="absolute left-1/2 top-1 size-1 -translate-x-1/2 rounded-full bg-foreground/35" />
               <span className="absolute bottom-1 left-1/2 size-1 -translate-x-1/2 rounded-full bg-foreground/35" />
             </div>
@@ -970,7 +969,7 @@ export function ClothingRailHero({
           const mask = item.image ? `url("${item.image}")` : silhouetteMask(kind, "front");
           const photoBox = hanger === "none" ? "inset-0" : "inset-x-0 bottom-0 top-[8%]";
           return (
-            <Button variant="ghost"
+            <button
               key={item.id}
               ref={(node) => { slots.current[i] = node; }}
               type="button"
@@ -980,15 +979,14 @@ export function ClothingRailHero({
               aria-label={item.name}
               aria-describedby={`${uid}-caption`}
               aria-pressed={turned}
-              aria-haspopup="dialog"
-              className="product-rail__garment absolute left-0 cursor-pointer rounded-sm outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ring"
+              className="absolute left-0 cursor-pointer rounded-xl outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ring"
               style={{ top: railY - (HOOK_TOP / VB_H) * h, width: boxW, height: h, zIndex: turned ? 30 : 10 + i, visibility: lifted === i ? "hidden" : undefined, transform: `translate3d(${((sim.current.x[i] ?? 0) - boxW / 2).toFixed(2)}px,0,0)` }}
               onFocus={() => { setFocusIndex(i); if (pointer.current.id < 0) { stop(); choose(i); } }}
               onClick={(event) => { const pending = pendingOpen.current; pendingOpen.current = -1; if (event.detail === 0 || pending === i) open(i); }}
             >
               <span ref={(node) => { swings.current[i] = node; }} className="absolute inset-0" style={{ transformOrigin: `50% ${(HOOK_TOP / VB_H) * 100}%` }}>
                 <span aria-hidden="true" className="pointer-events-none absolute inset-0" style={{ filter: `blur(${Math.max(3, h * 0.022).toFixed(1)}px)` }}>
-                  <span ref={(node) => { shadows.current[i] = node; }} className={`product-rail__shade absolute block opacity-[0.16] ${item.image ? photoBox : "inset-0"}`} style={{ WebkitMask: `${mask} top center / contain no-repeat`, mask: `${mask} top center / contain no-repeat` }} />
+                  <span ref={(node) => { shadows.current[i] = node; }} className={`absolute block bg-black opacity-[0.16] dark:opacity-60 ${item.image ? photoBox : "inset-0"}`} style={{ WebkitMask: `${mask} top center / contain no-repeat`, mask: `${mask} top center / contain no-repeat` }} />
                 </span>
                 {(item.sideImage || !item.image) && (
                   <span ref={(node) => { sides.current[i] = node; }} data-face="side" className="absolute inset-0" style={{ transform: `perspective(${PERSPECTIVE}px) rotateY(0deg)` }}>
@@ -1004,7 +1002,7 @@ export function ClothingRailHero({
                         {item.image
                           ? <Photo src={(side === "back" ? item.backImage : undefined) ?? item.image} alt="" full={hanger === "none"} />
                           : <Fabric uid={uid} kind={kind} side={side} color={color} trim={trim} />}
-                        <span ref={side === "front" ? (node) => { shades.current[i] = node; } : undefined} className={`product-rail__shade pointer-events-none absolute ${item.image ? photoBox : "inset-0"}`} style={{ opacity: "var(--shade, 0.2)", WebkitMask: `${item.image ? `url("${(side === "back" ? item.backImage : undefined) ?? item.image}")` : silhouetteMask(kind, side)} top center / contain no-repeat`, mask: `${item.image ? `url("${(side === "back" ? item.backImage : undefined) ?? item.image}")` : silhouetteMask(kind, side)} top center / contain no-repeat` }} />
+                        <span ref={side === "front" ? (node) => { shades.current[i] = node; } : undefined} className={`pointer-events-none absolute bg-black ${item.image ? photoBox : "inset-0"}`} style={{ opacity: "var(--shade, 0.2)", WebkitMask: `${item.image ? `url("${(side === "back" ? item.backImage : undefined) ?? item.image}")` : silhouetteMask(kind, side)} top center / contain no-repeat`, mask: `${item.image ? `url("${(side === "back" ? item.backImage : undefined) ?? item.image}")` : silhouetteMask(kind, side)} top center / contain no-repeat` }} />
                       </span>
                     </span>
                   ))}
@@ -1012,14 +1010,14 @@ export function ClothingRailHero({
                 {item.tag && (
                   <span ref={(node) => { tags.current[i] = node; }} aria-hidden="true" className="pointer-events-none absolute left-1/2 origin-top" style={{ top: (32 / VB_H) * h, transform: "rotate(-12deg)" }}>
                     <span className="block h-[14px] w-px translate-x-[3px] bg-foreground/35" />
-                    <span className="block -translate-x-1/2 translate-x-[3px] whitespace-nowrap rounded-[3px] border border-foreground/10 bg-card px-1.5 pb-1 pt-2 text-[9px] font-semibold leading-none tracking-normal text-card-foreground shadow-[0_2px_6px_color-mix(in_oklab,var(--color-foreground)_18%,transparent)]">
+                    <span className="block -translate-x-1/2 translate-x-[3px] whitespace-nowrap rounded-[3px] border border-foreground/10 bg-card px-1.5 pb-1 pt-2 text-[9px] font-semibold leading-none tracking-wide text-card-foreground shadow-[0_2px_6px_color-mix(in_oklab,var(--color-foreground)_18%,transparent)]">
                       <span className="absolute left-1/2 top-[3px] size-[3px] -translate-x-1/2 rounded-full bg-foreground/30" />
                       {item.tag}
                     </span>
                   </span>
                 )}
               </span>
-            </Button>
+            </button>
           );
         })}
       </div>
@@ -1027,7 +1025,7 @@ export function ClothingRailHero({
       {size.carousel && count > 1 && (
         <div className="relative z-10 mt-1 flex justify-center gap-1.5" role="group" aria-label={labels.show}>
           {items.map((item, i) => (
-            <Button variant="ghost" key={item.id} type="button" aria-label={`${labels.show} ${item.name}`} aria-current={carouselIndex === i} onClick={() => { stop(); choose(i); }} className="product-rail__dot rounded-full focus-visible:ring-2 focus-visible:ring-ring" />
+            <button key={item.id} type="button" aria-label={`${labels.show} ${item.name}`} aria-current={carouselIndex === i} onClick={() => { stop(); choose(i); }} className={`h-1.5 rounded-full outline-none transition-[width,background-color] duration-300 focus-visible:ring-2 focus-visible:ring-ring ${carouselIndex === i ? "w-6 bg-foreground" : "w-1.5 bg-foreground/25 hover:bg-foreground/45"}`} />
           ))}
         </div>
       )}
@@ -1082,8 +1080,6 @@ function Detail({ uid, item, index, total, hanger, labels, reduced, source, onLi
   const color = item.color ?? "var(--color-muted-foreground)";
   const trim = item.trim ?? mix(color, -0.12);
   const titleId = `${uid}-detail-title`;
-  const lifecycle = React.useRef({ source, onLift });
-  lifecycle.current = { source, onLift };
 
   const spin = React.useCallback(() => {
     const a = angle.current;
@@ -1113,7 +1109,7 @@ function Detail({ uid, item, index, total, hanger, labels, reduced, source, onLi
 
   React.useLayoutEffect(() => {
     const figure = figureRef.current;
-    const from = lifecycle.current.source();
+    const from = source();
     closeRef.current?.focus({ preventScroll: true });
     const overflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
@@ -1124,7 +1120,7 @@ function Detail({ uid, item, index, total, hanger, labels, reduced, source, onLi
       const dx = from.left + from.width / 2 - (to.left + to.width / 2);
       const dy = from.top - to.top;
       const lift = Math.min(90, Math.abs(dy) * 0.25 + 30);
-      lifecycle.current.onLift(true);
+      onLift(true);
       animation = figure.animate([
         { transform: `translate(${dx}px, ${dy}px) scale(${scale})` },
         { transform: `translate(${dx * 0.4}px, ${dy * 0.4 - lift}px) scale(${(scale + 1) / 2 * 1.03}) rotate(${dx > 0 ? -2.5 : 2.5}deg)`, offset: 0.5 },
@@ -1132,8 +1128,8 @@ function Detail({ uid, item, index, total, hanger, labels, reduced, source, onLi
       ], { duration: 680, easing: "cubic-bezier(.22,.85,.3,1)" });
     }
     const raf = requestAnimationFrame(() => setShown(true));
-    return () => { cancelAnimationFrame(raf); animation?.cancel(); document.body.style.overflow = overflow; cancelAnimationFrame(angle.current.raf); lifecycle.current.onLift(false); };
-  }, [reduced]);
+    return () => { cancelAnimationFrame(raf); animation?.cancel(); document.body.style.overflow = overflow; cancelAnimationFrame(angle.current.raf); onLift(false); };
+  }, [source, reduced, onLift]);
 
   const dismiss = React.useCallback(() => {
     if (closing.current) return;
@@ -1180,7 +1176,7 @@ function Detail({ uid, item, index, total, hanger, labels, reduced, source, onLi
 
   const stage = (
     <div ref={figureRef} className="relative mx-auto aspect-[200/310] h-[min(62vh,560px)] max-h-full origin-top">
-      <div aria-hidden="true" className="absolute left-1/2 top-[-40vh] h-[40vh] w-[3px] -translate-x-1/2 rounded-full" style={{ background: "linear-gradient(to right, color-mix(in oklab, var(--color-muted-foreground) 50%, var(--rail-white)), var(--color-muted-foreground), color-mix(in oklab, var(--color-muted-foreground) 50%, var(--rail-black)))", top: `calc(-40vh + ${(HOOK_TOP / VB_H) * 100}%)` }} />
+      <div aria-hidden="true" className="absolute left-1/2 top-[-40vh] h-[40vh] w-[3px] -translate-x-1/2 rounded-full" style={{ background: "linear-gradient(to right, color-mix(in oklab, var(--color-muted-foreground) 50%, white), var(--color-muted-foreground), color-mix(in oklab, var(--color-muted-foreground) 50%, black))", top: `calc(-40vh + ${(HOOK_TOP / VB_H) * 100}%)` }} />
       <div
         className="absolute inset-0 cursor-grab touch-pan-y active:cursor-grabbing"
         style={{ perspective: "1400px" }}
@@ -1204,17 +1200,17 @@ function Detail({ uid, item, index, total, hanger, labels, reduced, source, onLi
   );
 
   return createPortal(
-    <div ref={dialogRef} role="dialog" aria-modal="true" aria-labelledby={titleId} className="product-rail product-rail__dialog fixed inset-0 z-50 flex items-center justify-center overflow-y-auto p-6 text-foreground" onKeyDown={onKeyDown}>
+    <div ref={dialogRef} role="dialog" aria-modal="true" aria-labelledby={titleId} className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto p-6 text-foreground" onKeyDown={onKeyDown}>
       <div aria-hidden="true" className={`absolute inset-0 bg-background/90 backdrop-blur-xl transition-opacity duration-300 motion-reduce:transition-none ${shown ? "opacity-100" : "opacity-0"}`} onClick={dismiss} />
-      <Button variant="ghost" ref={closeRef} type="button" onClick={dismiss} className={`absolute right-5 top-5 z-10 inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-xs font-medium tracking-normal text-muted-foreground outline-none transition-[opacity,color] duration-300 hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring motion-reduce:transition-none ${shown ? "opacity-100" : "opacity-0"}`}>
+      <button ref={closeRef} type="button" onClick={dismiss} className={`absolute right-5 top-5 z-10 inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-xs font-medium tracking-wide text-muted-foreground outline-none transition-[opacity,color] duration-300 hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring motion-reduce:transition-none ${shown ? "opacity-100" : "opacity-0"}`}>
         {labels.close}
         <svg aria-hidden="true" viewBox="0 0 16 16" className="size-3.5" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round"><path d="M3 3l10 10M13 3L3 13" /></svg>
-      </Button>
+      </button>
       <div className="relative grid w-full max-w-5xl items-center gap-10 pt-10 md:grid-cols-[minmax(0,1fr)_minmax(0,22rem)]">
         {stage}
         <div className={`flex flex-col gap-4 text-center transition-[opacity,transform] delay-150 duration-500 motion-reduce:transition-none md:text-left ${shown ? "translate-y-0 opacity-100" : "translate-y-2 opacity-0"}`}>
-          <p className="font-mono text-[11px] tracking-normal text-muted-foreground">{String(index + 1).padStart(2, "0")} / {String(total).padStart(2, "0")}</p>
-          <h3 id={titleId} className="text-2xl font-medium tracking-normal sm:text-3xl">{item.name}</h3>
+          <p className="font-mono text-[11px] tracking-[0.2em] text-muted-foreground">{String(index + 1).padStart(2, "0")} / {String(total).padStart(2, "0")}</p>
+          <h3 id={titleId} className="text-2xl font-medium tracking-tight sm:text-3xl">{item.name}</h3>
           {item.description && <p className="text-sm leading-relaxed text-muted-foreground">{item.description}</p>}
           {item.details && item.details.length > 0 && (
             <ul className="flex flex-wrap justify-center gap-2 md:justify-start">
@@ -1223,10 +1219,10 @@ function Detail({ uid, item, index, total, hanger, labels, reduced, source, onLi
           )}
           <div role="group" aria-label={`${labels.front} / ${labels.back}`} className="mt-2 inline-flex justify-center gap-6 md:justify-start">
             {(["front", "back"] as const).map((face) => (
-              <Button variant="ghost" key={face} type="button" aria-pressed={side === face} onClick={() => turnTo(face)} className={`relative pb-1.5 text-sm outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring ${side === face ? "text-foreground" : "text-muted-foreground hover:text-foreground"}`}>
+              <button key={face} type="button" aria-pressed={side === face} onClick={() => turnTo(face)} className={`relative pb-1.5 text-sm outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring ${side === face ? "text-foreground" : "text-muted-foreground hover:text-foreground"}`}>
                 {face === "front" ? labels.front : labels.back}
                 <span aria-hidden="true" className={`absolute inset-x-0 bottom-0 h-px origin-left bg-foreground transition-transform duration-300 motion-reduce:transition-none ${side === face ? "scale-x-100" : "scale-x-0"}`} />
-              </Button>
+              </button>
             ))}
           </div>
         </div>
@@ -1237,4 +1233,3 @@ function Detail({ uid, item, index, total, hanger, labels, reduced, source, onLi
 }
 
 export default ClothingRailHero;
-

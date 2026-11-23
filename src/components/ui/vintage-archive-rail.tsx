@@ -14,7 +14,7 @@ export default function VintageArchiveRail() {
     { id: "coat", kind: "coat", color: "var(--rail-taupe)", name: es ? "Abrigo · Piedra" : "Long coat · Stone", tag: "06 / OUTERWEAR", description: es ? "Largo, estructurado y listo para las calles de Nueva York." : "Long, structured and made for a New York state of mind.", details: es ? ["Silueta larga", "Solapas clásicas"] : ["Long silhouette", "Classic lapels"] },
   ];
   return (
-    <section id="new-arrivals" className="archive-rail" aria-labelledby="archive-rail-title">
+    <section id="new-arrivals" className="archive-rail dark" aria-labelledby="archive-rail-title">
       <header className="archive-rail__header">
         <p>AVNYC / ARCHIVE STUDIES — 002</p>
         <div><h2 id="archive-rail-title">{es ? "EL ARCHIVO." : "ON THE RAIL."}</h2><span>{es ? "SILUETAS CON HISTORIA" : "SILHOUETTES WITH A STORY"}</span></div>

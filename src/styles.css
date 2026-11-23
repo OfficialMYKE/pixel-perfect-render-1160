@@ -3472,3 +3472,9 @@ body {
     gap: 6px;
   }
 }
+
+/* Garment rail is always dark, tinted to the store's ink. */
+.archive-rail.dark {
+  --background: var(--vintage-ink);
+  --foreground: var(--vintage-paper);
+}
