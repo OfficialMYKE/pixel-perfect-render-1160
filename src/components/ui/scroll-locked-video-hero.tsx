@@ -4,7 +4,6 @@ import { ArrowUpRight, Globe, RotateCcw, ShieldCheck, Truck } from "lucide-react
 import AnnouncementBar from "@/components/ui/announcement-bar";
 import VintageNavbar from "@/components/ui/vintage-navbar";
 import Footer from "@/components/ui/footer";
-import VintageArchiveRail from "@/components/ui/vintage-archive-rail";
 import ProductCard from "@/components/ui/product-card";
 import { useLanguage } from "@/lib/i18n";
 import { getFeatured } from "@/lib/products";
@@ -478,7 +477,6 @@ export default function MetroHero({ videoSrc = DEFAULT_VIDEO, className }: Metro
           </ul>
         </div>
 
-        <VintageArchiveRail />
       </main>
 
       <Footer />

@@ -3473,8 +3473,20 @@ body {
   }
 }
 
-/* Garment rail is always dark, tinted to the store's ink. */
-.archive-rail.dark {
-  --background: var(--vintage-ink);
-  --foreground: var(--vintage-paper);
+
+/* -- Mobile experience ---------------------------------- */
+@media (max-width: 640px) {
+  .product-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px 10px; }
+  .pcard__name, .pcard h3 { font-size: 13px; line-height: 1.3; }
+  .shop-toolbar__filters, .chip-row {
+    flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none;
+    margin-inline: -20px; padding-inline: 20px; scroll-snap-type: x proximity;
+  }
+  .shop-toolbar__filters::-webkit-scrollbar, .chip-row::-webkit-scrollbar { display: none; }
+  .shop-toolbar__filters > *, .chip-row > * { flex: 0 0 auto; scroll-snap-align: start; min-height: 44px; }
+  .ck__inner { padding: 14px 16px calc(14px + env(safe-area-inset-bottom)); gap: 12px; }
+  .ck__eyebrow, .ck__desc--long { display: none; }
+  .ck__title { font-size: 13px; margin: 0; }
+  .ck__actions { gap: 8px; }
+  .ck__actions button { min-height: 44px; padding-block: 10px; }
 }
