@@ -1,4 +1,6 @@
 # Current work
-- [x] Finish the uploaded clothing rail below the home lookbook in dark mode only, preserving the vintage identity.
-- [x] Verify garment selection, detail rotation, closing and narrow-screen layout.
-- [x] Apply the required package security update and save the changes.
+- [ ] Remove the home garment rail and simplify repetitive sections and disruptive motion.
+- [ ] Add shop search and browser-local favorites, shared by product cards and garment details.
+- [ ] Improve product details and desktop/mobile layouts.
+- [ ] Add a branded share preview and complete route metadata.
+- [ ] Verify shopping flows and responsive screens, then save changes.

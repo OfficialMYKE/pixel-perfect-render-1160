@@ -1,0 +1,25 @@
+import { describe, test } from "node:test";
+import { deepStrictEqual } from "node:assert";
+import { filterArchive } from "./shop-filter";
+import type { Product } from "./products";
+
+const items: Product[] = [
+  { slug: "jacket", name: { en: "Varsity jacket", es: "Chaqueta varsity" }, category: "hombre", sub: "jackets", tags: [], price: 189, sizes: ["S", "M"], condition: "Excellent", brand: "Archive", images: [], description: { en: "", es: "" } },
+  { slug: "tee", name: { en: "Graphic tee", es: "Camiseta gráfica" }, category: "mujer", sub: "tees", tags: [], price: 38, sizes: ["XS"], condition: "Good", brand: "Screen Stars", images: [], description: { en: "", es: "" } },
+];
+const base = { query: "", category: "all", favoritesOnly: false, favorites: [], sort: "featured" as const };
+describe("archive search and favorites", () => {
+  test("search matches Spanish garment names and ignores spaces and case", () => {
+    deepStrictEqual(filterArchive(items, { ...base, query: " CHAQUETA " }).map(p => p.slug), ["jacket"]);
+  });
+  test("favorites view only returns saved garments", () => {
+    deepStrictEqual(filterArchive(items, { ...base, favoritesOnly: true, favorites: ["tee"] }).map(p => p.slug), ["tee"]);
+  });
+  test("search and category apply together", () => {
+    deepStrictEqual(filterArchive(items, { ...base, query: "tee", category: "hombre" }), []);
+  });
+  test("price sorting preserves the original catalog", () => {
+    deepStrictEqual(filterArchive(items, { ...base, sort: "price-asc" }).map(p => p.price), [38, 189]);
+    deepStrictEqual(items.map(p => p.price), [189, 38]);
+  });
+});

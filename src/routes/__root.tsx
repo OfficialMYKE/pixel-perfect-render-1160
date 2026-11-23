@@ -14,6 +14,7 @@ import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { LanguageProvider } from "../lib/i18n";
 import { CartProvider } from "../lib/cart";
+import { FavoritesProvider } from "../lib/favorites";
 import CookieBanner from "../components/ui/cookie-banner";
 
 function NotFoundComponent() {
@@ -119,7 +120,6 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           "One-of-one vintage streetwear curated in New York. Authentic pieces, restored and ready.",
       },
       { property: "og:type", content: "website" },
-      { property: "og:image", content: "/og-image.jpg" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
     links: [
@@ -157,9 +157,11 @@ function RootComponent() {
     <QueryClientProvider client={queryClient}>
       <LanguageProvider>
         <CartProvider>
+          <FavoritesProvider>
           {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
           <Outlet />
           <CookieBanner />
+          </FavoritesProvider>
         </CartProvider>
       </LanguageProvider>
     </QueryClientProvider>
