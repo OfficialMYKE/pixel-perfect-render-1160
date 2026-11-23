@@ -1,11 +1,17 @@
 import { useEffect, useRef, useState } from "react";
-import { ChevronDown, RefreshCw } from "lucide-react";
+import { Link } from "@tanstack/react-router";
+import { ChevronDown } from "lucide-react";
 import { useLanguage } from "@/lib/i18n";
 
 const LANGUAGES = [
   { code: "en" as const, label: "English" },
   { code: "es" as const, label: "Español" },
 ];
+
+function splitHref(href: string): { to: string; hash?: string } {
+  const [path, hash] = href.split("#");
+  return hash ? { to: path || "/", hash } : { to: path || "/" };
+}
 
 export default function AnnouncementBar() {
   const { lang, setLang, t } = useLanguage();
@@ -47,22 +53,22 @@ export default function AnnouncementBar() {
   return (
     <div className="announcement-bar">
       <div className="announcement-bar__left">
-        <a href="/" className="announcement-bar__item announcement-bar__brand">
-          <RefreshCw size={12} strokeWidth={1.5} />
+        <Link to="/" className="announcement-bar__item announcement-bar__brand">
           AVNYC
-        </a>
+        </Link>
       </div>
 
       <div className="announcement-bar__center">
         <span
           className="announcement-bar__message"
           style={{ opacity, transition: "opacity 0.4s ease-in-out" }}
+          aria-live="polite"
         >
           {msg?.text}{" "}
           {msg?.links.map((link) => (
-            <a key={link.label} href={link.href} className="announcement-bar__link">
+            <Link key={link.label} {...splitHref(link.href)} className="announcement-bar__link">
               {link.label}
-            </a>
+            </Link>
           ))}
         </span>
       </div>
@@ -71,6 +77,8 @@ export default function AnnouncementBar() {
         <div className="announcement-bar__dropdown-wrap" ref={langRef}>
           <button
             className="announcement-bar__item announcement-bar__btn"
+            aria-expanded={langOpen}
+            aria-haspopup="true"
             onClick={() => {
               setLangOpen(!langOpen);
               setHelpOpen(false);
@@ -82,18 +90,16 @@ export default function AnnouncementBar() {
           {langOpen && (
             <div className="announcement-bar__dropdown">
               {LANGUAGES.map((l) => (
-                <a
+                <button
                   key={l.code}
-                  href="#"
                   className={`announcement-bar__dropdown-item ${l.code === lang ? "is-active" : ""}`}
-                  onClick={(e) => {
-                    e.preventDefault();
+                  onClick={() => {
                     setLang(l.code);
                     setLangOpen(false);
                   }}
                 >
                   {l.label}
-                </a>
+                </button>
               ))}
             </div>
           )}
@@ -102,6 +108,8 @@ export default function AnnouncementBar() {
         <div className="announcement-bar__dropdown-wrap" ref={helpRef}>
           <button
             className="announcement-bar__item announcement-bar__btn"
+            aria-expanded={helpOpen}
+            aria-haspopup="true"
             onClick={() => {
               setHelpOpen(!helpOpen);
               setLangOpen(false);
@@ -113,9 +121,14 @@ export default function AnnouncementBar() {
           {helpOpen && (
             <div className="announcement-bar__dropdown">
               {t.helpOptions.map((opt) => (
-                <a key={opt.label} href={opt.href} className="announcement-bar__dropdown-item">
+                <Link
+                  key={opt.label}
+                  {...splitHref(opt.href)}
+                  className="announcement-bar__dropdown-item"
+                  onClick={() => setHelpOpen(false)}
+                >
                   {opt.label}
-                </a>
+                </Link>
               ))}
             </div>
           )}

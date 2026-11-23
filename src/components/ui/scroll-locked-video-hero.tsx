@@ -1,14 +1,21 @@
 import { useEffect, useRef, useState } from "react";
-import { ArrowUpRight } from "lucide-react";
+import { Link } from "@tanstack/react-router";
+import { ArrowUpRight, Globe, RotateCcw, ShieldCheck, Truck } from "lucide-react";
 import AnnouncementBar from "@/components/ui/announcement-bar";
 import VintageNavbar from "@/components/ui/vintage-navbar";
 import Footer from "@/components/ui/footer";
 import VintageArchiveRail from "@/components/ui/vintage-archive-rail";
+import ProductCard from "@/components/ui/product-card";
 import { useLanguage } from "@/lib/i18n";
+import { getFeatured } from "@/lib/products";
 import streetwearOne from "@/assets/vintage-streetwear-01.jpg";
 import streetwearTwo from "@/assets/vintage-streetwear-02.jpg";
 import streetwearThree from "@/assets/vintage-streetwear-03.jpg";
 import streetwearFour from "@/assets/vintage-streetwear-04.jpg";
+import archiveJacket from "@/assets/archive-jacket.jpg";
+import archiveStore from "@/assets/archive-store-interior.jpg";
+import archiveSweatshirt from "@/assets/archive-sweatshirt.jpg";
+import vintageStore from "@/assets/vintage-store.jpg";
 
 export interface MetroHeroProps {
   videoSrc?: string;
@@ -25,28 +32,46 @@ const LOOKBOOK = [
   { src: streetwearFour, alt: "Archive graphic tees, workwear and faded denim" },
 ];
 
+const CATEGORY_TILES = [
+  { key: "hombre", img: archiveJacket },
+  { key: "mujer", img: streetwearThree },
+  { key: "ninos", img: archiveSweatshirt },
+  { key: "accesorios", img: archiveStore },
+] as const;
+
+const TRUST_ITEMS = [
+  { icon: Truck, key: "shipping" },
+  { icon: ShieldCheck, key: "authenticity" },
+  { icon: RotateCcw, key: "returns" },
+  { icon: Globe, key: "worldwide" },
+] as const;
+
 function clamp(v: number, min: number, max: number) {
   return Math.min(max, Math.max(min, v));
 }
 
 export default function MetroHero({ videoSrc = DEFAULT_VIDEO, className }: MetroHeroProps) {
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
   const videoRef = useRef<HTMLVideoElement>(null);
   const textARef = useRef<HTMLDivElement>(null);
   const textBRef = useRef<HTMLDivElement>(null);
   const progressBarRef = useRef<HTMLDivElement>(null);
-  const lookbookRef = useRef<HTMLElement>(null);
   const announcementRef = useRef<HTMLDivElement>(null);
   const heroRef = useRef<HTMLElement>(null);
   const [ready, setReady] = useState(false);
   const [poster, setPoster] = useState<string | null>(null);
   const transitioned = useRef(false);
 
+  const featured = getFeatured(5);
+
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
 
-    let fallbackTimer: ReturnType<typeof setTimeout>;
+    // Keep the streetwear photo visible if the video takes too long to load.
+    const fallbackTimer = setTimeout(() => {
+      setReady(false);
+    }, 8000);
 
     const extractFrame = () => {
       try {
@@ -77,17 +102,11 @@ export default function MetroHero({ videoSrc = DEFAULT_VIDEO, className }: Metro
       setReady(false); // keep the streetwear photo visible if the video fails
     };
 
-    // Keep the streetwear photo visible if the video takes too long to load.
-    fallbackTimer = setTimeout(() => {
-      setReady(false);
-    }, 8000);
-
     video.addEventListener("loadeddata", onLoaded);
     video.addEventListener("error", onError);
     if (video.readyState >= 2) onLoaded();
 
     let frameId = 0;
-    let lastVideoT = -1;
     let lastA = -1;
     let lastB = -1;
 
@@ -96,12 +115,6 @@ export default function MetroHero({ videoSrc = DEFAULT_VIDEO, className }: Metro
       const t = video.currentTime;
       const p = dur > 0 ? clamp(t / dur, 0, 1) : 0;
 
-      // Video zoom — only update on meaningful change
-      if (Math.abs(t - lastVideoT) > 0.05) {
-        lastVideoT = t;
-        video.style.transform = `scale(${1 + p * 0.08})`;
-      }
-
       // Text A: visible 0→35%, fades out 30→45%
       if (textARef.current) {
         const a = Math.round((1 - clamp((p - 0.3) / 0.15, 0, 1)) * 100) / 100;
@@ -109,7 +122,6 @@ export default function MetroHero({ videoSrc = DEFAULT_VIDEO, className }: Metro
           lastA = a;
           textARef.current.style.opacity = String(a);
           textARef.current.style.transform = `translateY(${(1 - a) * -16}px)`;
-          textARef.current.style.filter = `blur(${(1 - a) * 3}px)`;
         }
       }
 
@@ -120,7 +132,6 @@ export default function MetroHero({ videoSrc = DEFAULT_VIDEO, className }: Metro
           lastB = b;
           textBRef.current.style.opacity = String(b);
           textBRef.current.style.transform = `translateY(${(1 - b) * 14}px)`;
-          textBRef.current.style.filter = `blur(${(1 - b) * 3}px)`;
         }
       }
 
@@ -187,9 +198,26 @@ export default function MetroHero({ videoSrc = DEFAULT_VIDEO, className }: Metro
     };
   }, []);
 
+  const es = lang === "es";
+
+  const trustCopy = {
+    shipping: es ? "Envío gratis +$150" : "Free shipping over $150",
+    authenticity: es ? "Autenticidad garantizada" : "Authenticated pieces",
+    returns: es ? "Devoluciones 14 días" : "14-day returns",
+    worldwide: es ? "Envío mundial" : "Worldwide shipping",
+  };
+
   return (
-    <main className={className}>
-      <section ref={heroRef} className="vintage-hero" aria-label="Vintage streetwear introduction">
+    <>
+      <a href="#main-content" className="skip-link">
+        {es ? "Saltar al contenido" : "Skip to content"}
+      </a>
+
+      <section
+        ref={heroRef}
+        className={className ? `${className} vintage-hero` : "vintage-hero"}
+        aria-label={es ? "Introducción streetwear vintage" : "Vintage streetwear introduction"}
+      >
         <img
           src={poster ?? streetwearOne}
           alt=""
@@ -224,54 +252,236 @@ export default function MetroHero({ videoSrc = DEFAULT_VIDEO, className }: Metro
         </div>
       </section>
 
-      <div ref={announcementRef}>
-        <AnnouncementBar />
-      </div>
-
-      <VintageNavbar />
-
-      <section ref={lookbookRef} className="vintage-lookbook" aria-labelledby="lookbook-title">
-        <div className="vintage-lookbook__copy">
-          <p>{t.lookbookEdit}</p>
-          <h2 id="lookbook-title">
-            {t.lookbookTitle1}
-            <br />
-            {t.lookbookTitle2}
-          </h2>
-          <div className="vintage-lookbook__details">
-            <p>{t.lookbookDesc}</p>
-            <a href="#new-arrivals">
-              {t.lookbookCta} <ArrowUpRight aria-hidden="true" size={17} />
-            </a>
-          </div>
+      <header>
+        <div ref={announcementRef}>
+          <AnnouncementBar />
         </div>
+        <VintageNavbar />
+      </header>
 
-        <div
-          id="archive"
-          className="vintage-lookbook__rail"
-          aria-label="Vintage streetwear collection"
-        >
-          <div className="vintage-lookbook__track">
-            {[...LOOKBOOK, ...LOOKBOOK].map((image, index) => (
-              <figure key={`${image.src}-${index}`}>
-                <img
-                  src={image.src}
-                  alt={index < LOOKBOOK.length ? image.alt : ""}
-                  loading="lazy"
-                  width={768}
-                  height={1024}
-                />
-                <figcaption>
-                  {String((index % LOOKBOOK.length) + 1).padStart(2, "0")} / NYC ARCHIVE
-                </figcaption>
-              </figure>
+      <main id="main-content">
+        {/* Lookbook */}
+        <section className="vintage-lookbook" aria-labelledby="lookbook-title">
+          <div className="vintage-lookbook__copy">
+            <p>{t.lookbookEdit}</p>
+            <h2 id="lookbook-title">
+              {t.lookbookTitle1}
+              <br />
+              {t.lookbookTitle2}
+            </h2>
+            <div className="vintage-lookbook__details">
+              <p>{t.lookbookDesc}</p>
+              <Link to="/shop" className="btn btn--primary vintage-lookbook__cta">
+                {t.lookbookCta} <ArrowUpRight aria-hidden="true" size={16} />
+              </Link>
+            </div>
+          </div>
+
+          <div
+            id="archive"
+            className="vintage-lookbook__rail"
+            aria-label={es ? "Colección streetwear vintage" : "Vintage streetwear collection"}
+          >
+            <div className="vintage-lookbook__track">
+              {[...LOOKBOOK, ...LOOKBOOK].map((image, index) => (
+                <figure key={`${image.src}-${index}`}>
+                  <img
+                    src={image.src}
+                    alt={index < LOOKBOOK.length ? image.alt : ""}
+                    loading="lazy"
+                    width={768}
+                    height={1024}
+                  />
+                  <figcaption>
+                    {String((index % LOOKBOOK.length) + 1).padStart(2, "0")} / NYC ARCHIVE
+                  </figcaption>
+                </figure>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Manifesto — brand statement, not product */}
+        <section className="manifesto" aria-labelledby="manifesto-title">
+          <div className="manifesto__inner">
+            <p id="manifesto-title" className="manifesto__text">
+              <span>{t.manifesto.line1}</span>
+              <span>{t.manifesto.line2}</span>
+              <span className="manifesto__accent">{t.manifesto.line3}</span>
+            </p>
+            <Link to="/about" hash="our-story" className="manifesto__link">
+              {t.manifesto.link} <ArrowUpRight aria-hidden="true" size={15} />
+            </Link>
+          </div>
+        </section>
+
+        {/* New arrivals */}
+        <section className="home-section" aria-labelledby="new-arrivals-title">
+          <div className="home-section__head">
+            <div>
+              <p className="home-section__eyebrow">AVNYC / {es ? "NUEVOS" : "NEW"}</p>
+              <h2 id="new-arrivals-title" className="home-section__title">
+                {es ? "Nuevos ingresos" : "New arrivals"}
+              </h2>
+            </div>
+            <Link
+              to="/shop/$category"
+              params={{ category: "nuevos" }}
+              className="home-section__link"
+            >
+              {es ? "Ver todos" : "View all"} <ArrowUpRight aria-hidden="true" size={15} />
+            </Link>
+          </div>
+          <div className="product-grid">
+            {featured.map((p) => (
+              <ProductCard key={p.slug} product={p} />
             ))}
           </div>
-        </div>
-      </section>
+        </section>
 
-      <VintageArchiveRail />
+        {/* Process — how we curate (editorial, no prices) */}
+        <section className="process" aria-labelledby="process-title">
+          <div className="process__inner">
+            <h2 id="process-title" className="process__title">
+              {t.process.title}
+            </h2>
+            <ol className="process__steps">
+              {t.process.steps.map((step) => (
+                <li key={step.num} className="process__step">
+                  <span className="process__num" aria-hidden="true">
+                    {step.num}
+                  </span>
+                  <h3 className="process__step-title">{step.title}</h3>
+                  <p className="process__step-body">{step.body}</p>
+                </li>
+              ))}
+            </ol>
+          </div>
+        </section>
+
+        {/* Field notes — editorial sourcing strip */}
+        <section className="field-notes" aria-labelledby="field-notes-title">
+          <div className="field-notes__inner">
+            <div className="field-notes__head">
+              <h2 id="field-notes-title" className="field-notes__title">
+                {t.sourcing.title}
+              </h2>
+              <Link to="/about" hash="our-story" className="home-section__link">
+                {t.sourcing.link} <ArrowUpRight aria-hidden="true" size={15} />
+              </Link>
+            </div>
+            <div className="field-notes__grid">
+              {t.sourcing.notes.map((note) => (
+                <article key={note.num} className="field-notes__card">
+                  <div className="field-notes__media">
+                    <img
+                      src={note.img === "brooklyn" ? streetwearTwo : streetwearFour}
+                      alt=""
+                      aria-hidden="true"
+                      loading="lazy"
+                      width={800}
+                      height={600}
+                    />
+                  </div>
+                  <div className="field-notes__copy">
+                    <span className="field-notes__num" aria-hidden="true">
+                      {note.num}
+                    </span>
+                    <p className="field-notes__label">{note.label}</p>
+                    <p className="field-notes__body">{note.body}</p>
+                  </div>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Category tiles */}
+        <section className="home-section home-section--tiles" aria-labelledby="categories-title">
+          <div className="home-section__head">
+            <div>
+              <p className="home-section__eyebrow">AVNYC / {es ? "CATEGORÍAS" : "CATEGORIES"}</p>
+              <h2 id="categories-title" className="home-section__title">
+                {es ? "Explorar" : "Browse"}
+              </h2>
+            </div>
+          </div>
+          <div className="category-tiles">
+            {CATEGORY_TILES.map(({ key, img }) => (
+              <Link
+                key={key}
+                to="/shop/$category"
+                params={{ category: key }}
+                className="category-tile"
+              >
+                <img src={img} alt="" loading="lazy" width={600} height={750} />
+                <span className="category-tile__label">
+                  {t.footer.shop[key]} <ArrowUpRight aria-hidden="true" size={16} />
+                </span>
+              </Link>
+            ))}
+          </div>
+        </section>
+
+        {/* Showroom — physical place, not checkout */}
+        <section className="showroom" aria-labelledby="showroom-title">
+          <div className="showroom__media">
+            <img
+              src={vintageStore}
+              alt={
+                es ? "Showroom AVNYC en Nolita, Nueva York" : "AVNYC showroom in Nolita, New York"
+              }
+              loading="lazy"
+              width={1200}
+              height={900}
+            />
+          </div>
+          <div className="showroom__copy">
+            <h2 id="showroom-title" className="showroom__title">
+              {t.showroom.title}
+            </h2>
+            <p className="showroom__body">{t.showroom.body}</p>
+            <dl className="showroom__meta">
+              <div>
+                <dt className="visually-hidden">{es ? "Ubicación" : "Location"}</dt>
+                <dd>{t.showroom.meta1}</dd>
+              </div>
+              <div>
+                <dt className="visually-hidden">{es ? "Horario" : "Hours"}</dt>
+                <dd>{t.showroom.meta2}</dd>
+              </div>
+            </dl>
+            <Link to="/about" hash="stores" className="btn btn--outline showroom__cta">
+              {t.showroom.cta} <ArrowUpRight aria-hidden="true" size={16} />
+            </Link>
+          </div>
+        </section>
+
+        {/* Trust badges */}
+        <section className="trust" aria-label={es ? "Nuestros compromisos" : "Our promises"}>
+          <ul className="trust__list">
+            {TRUST_ITEMS.map(({ icon: Icon, key }) => (
+              <li key={key} className="trust__item">
+                <Icon size={22} strokeWidth={1.5} aria-hidden="true" />
+                <span>{trustCopy[key]}</span>
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        {/* Archive facts — operational mono rule */}
+        <div className="archive-facts" aria-label={es ? "Datos del archivo" : "Archive facts"}>
+          <ul className="archive-facts__list">
+            {t.archiveFacts.map((fact) => (
+              <li key={fact}>{fact}</li>
+            ))}
+          </ul>
+        </div>
+
+        <VintageArchiveRail />
+      </main>
+
       <Footer />
-    </main>
+    </>
   );
 }

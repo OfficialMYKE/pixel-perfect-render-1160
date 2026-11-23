@@ -11,11 +11,41 @@ import vintage03 from "@/assets/vintage-streetwear-03.jpg";
 import vintage04 from "@/assets/vintage-streetwear-04.jpg";
 
 const slides = [
-  { src: vintageStore, caption: { en: "Every piece is hand-selected from vintage markets and private collections across NYC. We authenticate, restore, and curate each garment to ensure timeless quality.", es: "Cada pieza es seleccionada a mano de mercados vintage y colecciones privadas en NYC. Autenticamos, restauramos y curamos cada prenda para garantizar calidad atemporal." } },
-  { src: vintage01, caption: { en: "Our sourcing team travels to find one-of-one streetwear that tells a story. From rare deadstock to original graphic tees, each item chosen for craftsmanship.", es: "Nuestro equipo viaja para encontrar streetwear único que cuenta una historia. Desde deadstock raro hasta camisetas gráficas originales, cada pieza elegida por su artesanía." } },
-  { src: vintage02, caption: { en: "We believe in sustainable fashion through preservation. By giving new life to vintage garments, we reduce waste while offering pieces that can't be replicated.", es: "Creemos en la moda sostenible a través de la preservación. Al dar nueva vida a prendas vintage, reducimos desperdicio y ofrecemos piezas irrepetibles." } },
-  { src: vintage03, caption: { en: "From Brooklyn flea markets to estate sales, our network of trusted suppliers helps us discover hidden gems. We inspect every stitch and verify every label.", es: "Desde mercados de pulgas en Brooklyn hasta ventas de estate, nuestra red de proveedores nos ayuda a descubrir joyas ocultas. Inspeccionamos cada costura y verificamos cada etiqueta." } },
-  { src: vintage04, caption: { en: "The AVNYC curation process combines expertise with passion. We study fashion history and maintain relationships with collectors worldwide.", es: "El proceso de curaduría de AVNYC combina experiencia con pasión. Estudiamos historia de la moda y mantenemos relaciones con coleccionistas de todo el mundo." } },
+  {
+    src: vintageStore,
+    caption: {
+      en: "Every piece is hand-selected from vintage markets and private collections across NYC. We authenticate, restore, and curate each garment to ensure timeless quality.",
+      es: "Cada pieza es seleccionada a mano de mercados vintage y colecciones privadas en NYC. Autenticamos, restauramos y curamos cada prenda para garantizar calidad atemporal.",
+    },
+  },
+  {
+    src: vintage01,
+    caption: {
+      en: "Our sourcing team travels to find one-of-one streetwear that tells a story. From rare deadstock to original graphic tees, each item chosen for craftsmanship.",
+      es: "Nuestro equipo viaja para encontrar streetwear único que cuenta una historia. Desde deadstock raro hasta camisetas gráficas originales, cada pieza elegida por su artesanía.",
+    },
+  },
+  {
+    src: vintage02,
+    caption: {
+      en: "We believe in sustainable fashion through preservation. By giving new life to vintage garments, we reduce waste while offering pieces that can't be replicated.",
+      es: "Creemos en la moda sostenible a través de la preservación. Al dar nueva vida a prendas vintage, reducimos desperdicio y ofrecemos piezas irrepetibles.",
+    },
+  },
+  {
+    src: vintage03,
+    caption: {
+      en: "From Brooklyn flea markets to estate sales, our network of trusted suppliers helps us discover hidden gems. We inspect every stitch and verify every label.",
+      es: "Desde mercados de pulgas en Brooklyn hasta ventas de estate, nuestra red de proveedores nos ayuda a descubrir joyas ocultas. Inspeccionamos cada costura y verificamos cada etiqueta.",
+    },
+  },
+  {
+    src: vintage04,
+    caption: {
+      en: "The AVNYC curation process combines expertise with passion. We study fashion history and maintain relationships with collectors worldwide.",
+      es: "El proceso de curaduría de AVNYC combina experiencia con pasión. Estudiamos historia de la moda y mantenemos relaciones con coleccionistas de todo el mundo.",
+    },
+  },
 ];
 
 const FONT = "system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif";
@@ -71,8 +101,11 @@ export default function AuthSectionTwo({ mode = "signup" }: { mode?: "login" | "
         <div className="absolute bottom-14 left-6 right-6 z-20 max-w-[420px]">
           <div className="flex items-start gap-3">
             <p
-              className="line-clamp-3 flex-1 text-[11px] leading-[1.6]"
-              style={{ color: "#e0e0e0", textShadow: "0 1px 6px rgba(0,0,0,0.9), 0 2px 12px rgba(0,0,0,0.6)" }}
+              className="line-clamp-3 h-[53px] flex-1 text-[11px] leading-[1.6]"
+              style={{
+                color: "#e0e0e0",
+                textShadow: "0 1px 6px rgba(0,0,0,0.9), 0 2px 12px rgba(0,0,0,0.6)",
+              }}
             >
               {slides[activeIndex]?.caption[lang]}
             </p>
@@ -109,7 +142,11 @@ export default function AuthSectionTwo({ mode = "signup" }: { mode?: "login" | "
       <div className="w-full md:w-1/2 h-full flex items-center justify-center overflow-hidden px-8 py-10 sm:px-12 md:p-12 lg:p-20">
         <div className="mx-auto w-full max-w-[440px]">
           {/* Back */}
-          <a href="/" className="mb-8 inline-flex items-center gap-2 text-xs uppercase tracking-widest hover:opacity-70 transition-opacity" style={{ color: "#999" }}>
+          <a
+            href="/"
+            className="mb-8 inline-flex items-center gap-2 text-xs uppercase tracking-widest hover:opacity-70 transition-opacity"
+            style={{ color: "#999" }}
+          >
             <ArrowLeft className="size-3.5" />
             {lang === "es" ? "Volver a la tienda" : "Back to store"}
           </a>
@@ -120,12 +157,18 @@ export default function AuthSectionTwo({ mode = "signup" }: { mode?: "login" | "
           </p>
 
           {/* Title */}
-          <h1 className="mb-4 text-[32px] leading-tight font-extrabold uppercase tracking-tight" style={{ color: "#f5f5f5" }}>
+          <h1
+            className="mb-4 text-[32px] leading-tight font-extrabold uppercase tracking-tight"
+            style={{ color: "#f5f5f5" }}
+          >
             {title}
           </h1>
 
           {/* Subtitle */}
-          <p className="mb-6 text-[11px] uppercase tracking-[0.06em] leading-relaxed" style={{ color: "#777" }}>
+          <p
+            className="mb-6 text-[11px] uppercase tracking-[0.06em] leading-relaxed"
+            style={{ color: "#777" }}
+          >
             {subtitle}
           </p>
 
@@ -138,7 +181,9 @@ export default function AuthSectionTwo({ mode = "signup" }: { mode?: "login" | "
           {/* Divider */}
           <div className="my-5 flex items-center gap-4">
             <div className="h-px flex-1" style={{ background: "#333" }} />
-            <span className="text-xs" style={{ color: "#666" }}>{t.login.or}</span>
+            <span className="text-xs" style={{ color: "#666" }}>
+              {t.login.or}
+            </span>
             <div className="h-px flex-1" style={{ background: "#333" }} />
           </div>
 
@@ -155,7 +200,10 @@ export default function AuthSectionTwo({ mode = "signup" }: { mode?: "login" | "
 
             {/* Password with eye */}
             <div>
-              <label className="mb-1.5 block text-[11px] font-medium tracking-wide" style={{ color: "#888" }}>
+              <label
+                className="mb-1.5 block text-[11px] font-medium tracking-wide"
+                style={{ color: "#888" }}
+              >
                 {isSignup ? t.signup.password : t.login.password}
               </label>
               <div className="relative">
@@ -182,7 +230,11 @@ export default function AuthSectionTwo({ mode = "signup" }: { mode?: "login" | "
             {!isSignup && (
               <div className="flex items-center justify-between text-xs" style={{ color: "#888" }}>
                 <Check>{t.login.remember}</Check>
-                <a href="#" className="underline underline-offset-2 hover:opacity-80" style={{ color: "#f5f5f5" }}>
+                <a
+                  href="/help#contact"
+                  className="underline underline-offset-2 hover:opacity-80"
+                  style={{ color: "#f5f5f5" }}
+                >
                   {t.login.forgot}
                 </a>
               </div>
@@ -192,9 +244,23 @@ export default function AuthSectionTwo({ mode = "signup" }: { mode?: "login" | "
               <div className="pt-1 text-xs leading-5" style={{ color: "#888" }}>
                 <Check>
                   {t.signup.agree}{" "}
-                  <button type="button" onClick={() => openLegal("terms")} className="font-medium underline underline-offset-2 hover:opacity-80" style={{ color: "#f5f5f5" }}>{t.signup.terms}</button>{" "}
+                  <button
+                    type="button"
+                    onClick={() => openLegal("terms")}
+                    className="font-medium underline underline-offset-2 hover:opacity-80"
+                    style={{ color: "#f5f5f5" }}
+                  >
+                    {t.signup.terms}
+                  </button>{" "}
                   {t.signup.and}{" "}
-                  <button type="button" onClick={() => openLegal("privacy")} className="font-medium underline underline-offset-2 hover:opacity-80" style={{ color: "#f5f5f5" }}>{t.signup.privacy}</button>
+                  <button
+                    type="button"
+                    onClick={() => openLegal("privacy")}
+                    className="font-medium underline underline-offset-2 hover:opacity-80"
+                    style={{ color: "#f5f5f5" }}
+                  >
+                    {t.signup.privacy}
+                  </button>
                 </Check>
               </div>
             )}
@@ -202,9 +268,14 @@ export default function AuthSectionTwo({ mode = "signup" }: { mode?: "login" | "
             <button
               type="submit"
               className="mt-4 flex h-12 w-full items-center justify-center rounded-lg text-base font-semibold transition-colors duration-300"
-              style={{ background: "#8b1a1a", color: "#f5f5f5" }}
-              onMouseEnter={(e) => { e.currentTarget.style.background = "#c0392b"; }}
-              onMouseLeave={(e) => { e.currentTarget.style.background = "#8b1a1a"; }}
+              style={{ background: "var(--vintage-red)", color: "#f5f5f5" }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background =
+                  "color-mix(in oklab, var(--vintage-red), #fff 18%)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = "var(--vintage-red)";
+              }}
             >
               {isSignup ? t.signup.cta : t.login.cta}
             </button>
@@ -213,7 +284,11 @@ export default function AuthSectionTwo({ mode = "signup" }: { mode?: "login" | "
           {/* Switch */}
           <p className="mt-6 text-center text-xs" style={{ color: "#888" }}>
             {isSignup ? t.signup.hasAccount : t.login.noAccount}{" "}
-            <a href={isSignup ? "/login" : "/signup"} className="font-bold underline underline-offset-2 hover:opacity-80" style={{ color: "#f5f5f5" }}>
+            <a
+              href={isSignup ? "/login" : "/signup"}
+              className="font-bold underline underline-offset-2 hover:opacity-80"
+              style={{ color: "#f5f5f5" }}
+            >
               {isSignup ? t.signup.loginLink : t.login.signupLink}
             </a>
           </p>
@@ -241,7 +316,10 @@ function SocialBtn({ icon, label }: { icon: ReactNode; label: string }) {
 function Field({ label, type = "text" }: { label: string; type?: string }) {
   return (
     <div>
-      <label className="mb-1.5 block text-[11px] font-medium tracking-wide" style={{ color: "#888" }}>
+      <label
+        className="mb-1.5 block text-[11px] font-medium tracking-wide"
+        style={{ color: "#888" }}
+      >
         {label}
       </label>
       <input
@@ -262,8 +340,18 @@ function Check({ children }: { children: ReactNode }) {
           className="peer size-full appearance-none rounded-[3px] border checked:bg-current"
           style={{ borderColor: "#666", background: "transparent" }}
         />
-        <svg viewBox="0 0 12 12" className="pointer-events-none absolute inset-0 hidden size-full p-px text-white peer-checked:block" fill="none">
-          <path d="M3 6.2 5 8.1 9 3.9" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+        <svg
+          viewBox="0 0 12 12"
+          className="pointer-events-none absolute inset-0 hidden size-full p-px text-white peer-checked:block"
+          fill="none"
+        >
+          <path
+            d="M3 6.2 5 8.1 9 3.9"
+            stroke="currentColor"
+            strokeWidth="1.6"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
         </svg>
       </span>
       <span style={{ color: "#999" }}>{children}</span>
@@ -274,10 +362,22 @@ function Check({ children }: { children: ReactNode }) {
 function GoogleIcon() {
   return (
     <svg width="15" height="15" viewBox="0 0 24 24" aria-hidden="true">
-      <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09Z" fill="#4285F4" />
-      <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23Z" fill="#34A853" />
-      <path d="M5.84 14.1c-.22-.66-.35-1.36-.35-2.1s.13-1.44.35-2.1V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l3.66-2.84Z" fill="#FBBC05" />
-      <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84C6.71 7.3 9.14 5.38 12 5.38Z" fill="#EB4335" />
+      <path
+        d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09Z"
+        fill="#4285F4"
+      />
+      <path
+        d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23Z"
+        fill="#34A853"
+      />
+      <path
+        d="M5.84 14.1c-.22-.66-.35-1.36-.35-2.1s.13-1.44.35-2.1V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l3.66-2.84Z"
+        fill="#FBBC05"
+      />
+      <path
+        d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84C6.71 7.3 9.14 5.38 12 5.38Z"
+        fill="#EB4335"
+      />
     </svg>
   );
 }

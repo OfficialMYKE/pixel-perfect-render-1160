@@ -10,12 +10,34 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AboutRouteImport } from './routes/about'
+import { Route as CartRouteImport } from './routes/cart'
+import { Route as HelpRouteImport } from './routes/help'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as SignupRouteImport } from './routes/signup'
+import { Route as ProductSlugRouteImport } from './routes/product.$slug'
+import { Route as ShopIndexRouteImport } from './routes/shop.index'
+import { Route as ShopCategoryRouteImport } from './routes/shop.$category'
+import { Route as ShopCategorySubRouteImport } from './routes/shop.$category.$sub'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AboutRoute = AboutRouteImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CartRoute = CartRouteImport.update({
+  id: '/cart',
+  path: '/cart',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HelpRoute = HelpRouteImport.update({
+  id: '/help',
+  path: '/help',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LoginRoute = LoginRouteImport.update({
@@ -28,35 +50,113 @@ const SignupRoute = SignupRouteImport.update({
   path: '/signup',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ProductSlugRoute = ProductSlugRouteImport.update({
+  id: '/product/$slug',
+  path: '/product/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ShopIndexRoute = ShopIndexRouteImport.update({
+  id: '/shop/',
+  path: '/shop/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ShopCategoryRoute = ShopCategoryRouteImport.update({
+  id: '/shop/$category',
+  path: '/shop/$category',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ShopCategorySubRoute = ShopCategorySubRouteImport.update({
+  id: '/$sub',
+  path: '/$sub',
+  getParentRoute: () => ShopCategoryRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/cart': typeof CartRoute
+  '/help': typeof HelpRoute
   '/login': typeof LoginRoute
   '/signup': typeof SignupRoute
+  '/product/$slug': typeof ProductSlugRoute
+  '/shop/$category': typeof ShopCategoryRouteWithChildren
+  '/shop/': typeof ShopIndexRoute
+  '/shop/$category/$sub': typeof ShopCategorySubRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/cart': typeof CartRoute
+  '/help': typeof HelpRoute
   '/login': typeof LoginRoute
   '/signup': typeof SignupRoute
+  '/product/$slug': typeof ProductSlugRoute
+  '/shop/$category': typeof ShopCategoryRouteWithChildren
+  '/shop': typeof ShopIndexRoute
+  '/shop/$category/$sub': typeof ShopCategorySubRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/cart': typeof CartRoute
+  '/help': typeof HelpRoute
   '/login': typeof LoginRoute
   '/signup': typeof SignupRoute
+  '/product/$slug': typeof ProductSlugRoute
+  '/shop/$category': typeof ShopCategoryRouteWithChildren
+  '/shop/': typeof ShopIndexRoute
+  '/shop/$category/$sub': typeof ShopCategorySubRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/login' | '/signup'
+  fullPaths:
+    | '/'
+    | '/about'
+    | '/cart'
+    | '/help'
+    | '/login'
+    | '/signup'
+    | '/product/$slug'
+    | '/shop/$category'
+    | '/shop/'
+    | '/shop/$category/$sub'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/login' | '/signup'
-  id: '__root__' | '/' | '/login' | '/signup'
+  to:
+    | '/'
+    | '/about'
+    | '/cart'
+    | '/help'
+    | '/login'
+    | '/signup'
+    | '/product/$slug'
+    | '/shop/$category'
+    | '/shop'
+    | '/shop/$category/$sub'
+  id:
+    | '__root__'
+    | '/'
+    | '/about'
+    | '/cart'
+    | '/help'
+    | '/login'
+    | '/signup'
+    | '/product/$slug'
+    | '/shop/$category'
+    | '/shop/'
+    | '/shop/$category/$sub'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AboutRoute: typeof AboutRoute
+  CartRoute: typeof CartRoute
+  HelpRoute: typeof HelpRoute
   LoginRoute: typeof LoginRoute
   SignupRoute: typeof SignupRoute
+  ProductSlugRoute: typeof ProductSlugRoute
+  ShopCategoryRoute: typeof ShopCategoryRouteWithChildren
+  ShopIndexRoute: typeof ShopIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -66,6 +166,27 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/cart': {
+      id: '/cart'
+      path: '/cart'
+      fullPath: '/cart'
+      preLoaderRoute: typeof CartRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/help': {
+      id: '/help'
+      path: '/help'
+      fullPath: '/help'
+      preLoaderRoute: typeof HelpRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/login': {
@@ -82,13 +203,59 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SignupRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/product/$slug': {
+      id: '/product/$slug'
+      path: '/product/$slug'
+      fullPath: '/product/$slug'
+      preLoaderRoute: typeof ProductSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/shop/': {
+      id: '/shop/'
+      path: '/shop'
+      fullPath: '/shop/'
+      preLoaderRoute: typeof ShopIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/shop/$category': {
+      id: '/shop/$category'
+      path: '/shop/$category'
+      fullPath: '/shop/$category'
+      preLoaderRoute: typeof ShopCategoryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/shop/$category/$sub': {
+      id: '/shop/$category/$sub'
+      path: '/$sub'
+      fullPath: '/shop/$category/$sub'
+      preLoaderRoute: typeof ShopCategorySubRouteImport
+      parentRoute: typeof ShopCategoryRoute
+    }
   }
 }
 
+interface ShopCategoryRouteChildren {
+  ShopCategorySubRoute: typeof ShopCategorySubRoute
+}
+
+const ShopCategoryRouteChildren: ShopCategoryRouteChildren = {
+  ShopCategorySubRoute: ShopCategorySubRoute,
+}
+
+const ShopCategoryRouteWithChildren = ShopCategoryRoute._addFileChildren(
+  ShopCategoryRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AboutRoute: AboutRoute,
+  CartRoute: CartRoute,
+  HelpRoute: HelpRoute,
   LoginRoute: LoginRoute,
   SignupRoute: SignupRoute,
+  ProductSlugRoute: ProductSlugRoute,
+  ShopCategoryRoute: ShopCategoryRouteWithChildren,
+  ShopIndexRoute: ShopIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
