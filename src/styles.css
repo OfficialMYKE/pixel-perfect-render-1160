@@ -3490,3 +3490,15 @@ body {
   .ck__actions { gap: 8px; }
   .ck__actions button { min-height: 44px; padding-block: 10px; }
 }
+
+/* -- Desktop experience --------------------------------- */
+@media (min-width: 641px) {
+  .ck__inner { padding-block: 16px; align-items: center; }
+  .ck__eyebrow { display: none; }
+  .ck__title { margin: 0 0 4px; }
+  .ck__actions { flex-direction: row; align-items: center; min-width: 0; }
+  .ck__actions button { white-space: nowrap; padding-inline: 22px; }
+}
+@media (min-width: 1024px) {
+  .product-grid { grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 40px 24px; }
+}
