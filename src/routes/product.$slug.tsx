@@ -6,6 +6,7 @@ import { getProduct, getRelated } from "@/lib/products";
 import { getCategoryLabel, getSubLabel } from "@/lib/catalog";
 import { useCart } from "@/lib/cart";
 import { useLanguage } from "@/lib/i18n";
+import FavoriteButton from "@/components/ui/favorite-button";
 
 export const Route = createFileRoute("/product/$slug")({
   beforeLoad: ({ params }) => {
@@ -15,11 +16,15 @@ export const Route = createFileRoute("/product/$slug")({
     const product = getProduct(params.slug);
     return {
       meta: [
-        { title: product ? `${product.name.en} — AVNYC` : "AVNYC" },
-        product
-          ? { name: "description", content: product.description.en }
-          : { name: "description", content: "AVNYC vintage streetwear." },
+        { title: product ? `${product.name.en} — $${product.price} | AVNYC` : "AVNYC" },
+        { name: "description", content: product?.description.en ?? "AVNYC vintage streetwear." },
+        { property: "og:title", content: product ? `${product.name.en} — AVNYC` : "AVNYC" },
+        { property: "og:description", content: product ? `$${product.price} · ${product.condition} · Sizes ${product.sizes.join(", ")}` : "AVNYC vintage streetwear." },
+        { property: "og:type", content: "product" },
+        { name: "twitter:card", content: "summary_large_image" },
+        { property: "og:url", content: `https://pixel-perfect-render-1160.lovable.app/product/${params.slug}` },
       ],
+      links: [{ rel: "canonical", href: `https://pixel-perfect-render-1160.lovable.app/product/${params.slug}` }],
     };
   },
   component: ProductPage,
@@ -101,8 +106,13 @@ function ProductPage() {
           </div>
 
           <div className="pdp__info">
-            <p className="pdp__brand">{product.brand}</p>
-            <h1 className="pdp__name">{product.name[lang]}</h1>
+            <div className="pdp__title-row">
+              <div>
+                <p className="pdp__brand">{product.brand}</p>
+                <h1 className="pdp__name">{product.name[lang]}</h1>
+              </div>
+              <FavoriteButton slug={product.slug} name={product.name[lang]} />
+            </div>
             <p className="pdp__price">
               <span>${product.price}</span>
               {product.compareAt && <s>${product.compareAt}</s>}
@@ -114,6 +124,10 @@ function ProductPage() {
                 <dd>{product.condition}</dd>
               </div>
               <div>
+                <dt>{lang === "es" ? "Tallas" : "Sizes"}</dt>
+                <dd>{product.sizes.join(", ")}</dd>
+              </div>
+              <div>
                 <dt>{lang === "es" ? "Categoría" : "Category"}</dt>
                 <dd>{getCategoryLabel(product.category, lang)}</dd>
               </div>
@@ -123,7 +137,7 @@ function ProductPage() {
 
             <div className="pdp__sizes">
               <p className="pdp__sizes-label" id="size-label">
-                {lang === "es" ? "Talla" : "Size"}
+                {lang === "es" ? "Elige tu talla" : "Choose your size"}
                 {needsSize && <span aria-hidden="true"> *</span>}
               </p>
               <div className="pdp__size-list" role="group" aria-labelledby="size-label">
