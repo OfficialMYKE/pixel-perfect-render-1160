@@ -62,7 +62,7 @@
 }
 
 :root {
-  --radius: 0.625rem;
+  --radius: 0rem;
   --background: oklch(1 0 0);
   --foreground: oklch(0.129 0.042 264.695);
   --card: oklch(1 0 0);
@@ -192,10 +192,14 @@ body {
   opacity: 0;
   background: #000;
   transform-origin: center;
-  transition: opacity 300ms ease-out;
+  transition: opacity 300ms ease-out, transform 300ms ease-out;
   pointer-events: none;
-  will-change: transform, opacity;
+  will-change: opacity;
   transform: translateZ(0) scale(1);
+}
+
+.vintage-hero__video.is-intro-active {
+  will-change: transform, opacity;
   animation: vintage-hero-zoom 8s linear forwards;
 }
 
@@ -216,6 +220,10 @@ body {
   .vintage-hero__video {
     animation: none;
     transform: none;
+    transition: none;
+  }
+  .vintage-hero__text {
+    transition: none;
   }
 }
 
@@ -258,6 +266,7 @@ body {
   padding: 0 6vw;
   text-align: center;
   pointer-events: none;
+  transition: opacity 280ms ease-in-out;
 }
 
 .vintage-hero__text--a {
@@ -3477,3 +3486,36 @@ body {
 }
 @media (max-width: 380px) { .shop-toolbar__sort > span { display: none; } }
 @media (prefers-reduced-motion: reduce) { .category-index a, .fav-btn { transition: none; } }
+
+@media (max-width: 640px) {
+  .ck__inner { padding: 14px 16px calc(14px + env(safe-area-inset-bottom)); gap: 12px; }
+  .ck__eyebrow, .ck__desc--long { display: none; }
+  .ck__title { font-size: 13px; margin: 0; }
+  .ck__actions { gap: 8px; }
+  .ck__actions button { min-height: 44px; padding-block: 10px; }
+}
+
+@media (min-width: 801px) {
+  .ck__inner { padding-block: 16px; align-items: center; }
+  .ck__eyebrow { display: none; }
+  .ck__title { margin: 0 0 4px; }
+  .ck__actions { flex-direction: row; align-items: center; min-width: 0; }
+  .ck__actions button { white-space: nowrap; padding-inline: 22px; }
+}
+
+@media (min-width: 1024px) {
+  .product-grid { grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 40px 24px; }
+}
+
+.btn, .auth__btn, .showroom__cta, .footer__newsletter-btn {
+  min-height: 54px;
+  padding: 0 2rem;
+  font-size: 0.875rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-weight: 800;
+}
+
+@media (max-width: 640px) {
+  .btn, .auth__btn, .showroom__cta { min-height: 52px; padding: 0 1.5rem; }
+}

@@ -21,6 +21,7 @@ export interface MetroHeroProps {
 
 const DEFAULT_VIDEO =
   "https://cdn.21st.dev/assets/mirror/21/21a77eac28eacbb7e142016eefeaa0b4a766619e51113629a3bc6df6af066c0f.mp4";
+const HERO_INTRO_STORAGE_KEY = "avnyc-home-hero-intro-played";
 
 const LOOKBOOK = [
   { src: streetwearOne, alt: "Vintage varsity jacket and loose denim on a New York street" },
@@ -51,6 +52,7 @@ export default function MetroHero({ videoSrc = DEFAULT_VIDEO, className }: Metro
 
   const [ready, setReady] = useState(false);
   const [playing, setPlaying] = useState(false);
+  const [introActive, setIntroActive] = useState(false);
 
   const featured = getFeatured(4);
 
@@ -60,7 +62,14 @@ export default function MetroHero({ videoSrc = DEFAULT_VIDEO, className }: Metro
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const onLoaded = () => {
       setReady(true);
-      if (!reducedMotion) video.play().catch(() => setPlaying(false));
+      if (reducedMotion || sessionStorage.getItem(HERO_INTRO_STORAGE_KEY)) return;
+      sessionStorage.setItem(HERO_INTRO_STORAGE_KEY, "true");
+      setIntroActive(true);
+      video.play().catch(() => {
+        sessionStorage.removeItem(HERO_INTRO_STORAGE_KEY);
+        setIntroActive(false);
+        setPlaying(false);
+      });
     };
     const onError = () => { setReady(false); setPlaying(false); };
     const onPlay = () => setPlaying(true);
@@ -135,7 +144,7 @@ export default function MetroHero({ videoSrc = DEFAULT_VIDEO, className }: Metro
           playsInline
           preload="metadata"
           poster={streetwearOne}
-          className={`vintage-hero__video ${ready ? "is-ready" : ""}`}
+          className={`vintage-hero__video ${ready ? "is-ready" : ""} ${introActive ? "is-intro-active" : ""}`}
         />
         <div className="vintage-hero__shade" />
 
