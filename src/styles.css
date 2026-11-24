@@ -664,7 +664,7 @@ body {
   display: none;
   padding: 5px 14px;
   min-height: 0;
-  border-radius: 4px;
+  border-radius: 0;
   text-decoration: none;
   font:
     600 11px/1 Arial,
@@ -1272,7 +1272,7 @@ body {
   background: color-mix(in oklab, var(--vintage-paper) 6%, transparent);
   border: 1px solid var(--vintage-line);
   border-right: none;
-  border-radius: 4px 0 0 4px;
+  border-radius: 0;
   padding: 12px 16px;
   font:
     400 13px/1 Arial,
@@ -1295,7 +1295,7 @@ body {
   background: var(--vintage-red);
   color: var(--vintage-paper);
   border: 1px solid var(--vintage-red);
-  border-radius: 0 4px 4px 0;
+  border-radius: 0;
   padding: 12px 24px;
   font:
     600 11px/1 Arial,
@@ -3602,4 +3602,33 @@ body {
     height: 44px;
     min-width: 44px;
   }
+}
+
+:root {
+  --font-ui: Arial, Helvetica, sans-serif;
+}
+
+@utility btn-editorial {
+  font-family: var(--font-ui);
+  font-weight: 600;
+  font-size: 11px;
+  line-height: 1;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.btn,
+.vn__auth-btn,
+.auth__btn,
+.footer__newsletter-btn,
+.announcement-bar__btn {
+  font-family: var(--font-ui);
+  font-weight: 600;
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  border-radius: 0;
+}
+
+.auth__btn {
+  border-width: 1px;
 }
