@@ -25,6 +25,12 @@ import photoCanvasTote from "@/assets/products/canvas-tote.jpg";
 import photoAviatorSunglasses from "@/assets/products/aviator-sunglasses.jpg";
 import photoRibbedBeanie from "@/assets/products/ribbed-beanie.jpg";
 import photoSilkScarf from "@/assets/products/silk-scarf.jpg";
+import photoFlannel from "@/assets/products/flannel-shirt-90s.jpg";
+import photoCollegeHoodie from "@/assets/products/college-hoodie-grey.jpg";
+import photoCargoPants from "@/assets/products/cargo-pants-khaki.jpg";
+import photoHoundstoothBlazer from "@/assets/products/houndstooth-blazer.jpg";
+import photoMomJeans from "@/assets/products/mom-jeans-light.jpg";
+import photoShoulderBag from "@/assets/products/leather-shoulder-bag.jpg";
 import { NAV_SUBS, slugify } from "@/lib/catalog";
 
 export type Category = "hombre" | "mujer" | "ninos" | "accesorios";
@@ -356,6 +362,104 @@ export const products: Product[] = [
     description: {
       en: "Printed silk scarf with hand-rolled edges. Wear it on your neck, hair, or bag.",
       es: "Bufanda de seda estampada con bordes enrollados a mano. Úsala en el cuello, el pelo o el bolso.",
+    },
+  },
+  {
+    slug: "flannel-shirt-90s",
+    name: { en: "1990s Buffalo Check Flannel", es: "Franela Buffalo Check años 90" },
+    category: "hombre",
+    sub: "shirts-flannels",
+    tags: ["new"],
+    price: 78,
+    sizes: ["M", "L", "XL"],
+    condition: "Very Good",
+    brand: "L.L.Bean Archive",
+    images: [photoFlannel],
+    description: {
+      en: "Heavy brushed cotton flannel with twin flap pockets. Soft from decades of wear.",
+      es: "Franela de algodón cepillado con dos bolsillos de solapa. Suave tras décadas de uso.",
+    },
+  },
+  {
+    slug: "college-hoodie-grey",
+    name: { en: "Faded University Hoodie", es: "Sudadera Universitaria Desgastada" },
+    category: "hombre",
+    sub: "hoodies",
+    tags: ["new"],
+    price: 96,
+    sizes: ["L", "XL"],
+    condition: "Good",
+    brand: "Champion Archive",
+    images: [photoCollegeHoodie],
+    description: {
+      en: "Sun-faded heather grey hoodie with cracked collegiate print and kangaroo pocket.",
+      es: "Sudadera gris jaspeado desgastada por el sol con estampado universitario craquelado.",
+    },
+  },
+  {
+    slug: "cargo-pants-khaki",
+    name: { en: "Khaki Work Cargo Pants", es: "Pantalón Cargo Caqui" },
+    category: "hombre",
+    sub: "cargo-work-pants",
+    tags: ["sale"],
+    price: 64,
+    compareAt: 88,
+    sizes: ["30", "32", "34"],
+    condition: "Excellent",
+    brand: "Carhartt Archive",
+    images: [photoCargoPants],
+    description: {
+      en: "Durable cotton twill cargo pants with flap side pockets. Broken-in fit.",
+      es: "Pantalón cargo de sarga de algodón resistente con bolsillos laterales de solapa.",
+    },
+  },
+  {
+    slug: "houndstooth-blazer",
+    name: { en: "Oversized Houndstooth Blazer", es: "Blazer Pata de Gallo Oversize" },
+    category: "mujer",
+    sub: "jackets-coats",
+    tags: ["new"],
+    price: 142,
+    sizes: ["S", "M"],
+    condition: "Excellent",
+    brand: "Max Mara Archive",
+    images: [photoHoundstoothBlazer],
+    description: {
+      en: "Wool houndstooth blazer with strong shoulders and a relaxed 90s cut.",
+      es: "Blazer de lana pata de gallo con hombros marcados y corte relajado de los 90.",
+    },
+  },
+  {
+    slug: "mom-jeans-light",
+    name: { en: "Light Wash Mom Jeans", es: "Mom Jeans Lavado Claro" },
+    category: "mujer",
+    sub: "jeans-pants",
+    tags: ["new"],
+    price: 84,
+    sizes: ["26", "28", "30"],
+    condition: "Very Good",
+    brand: "Levi's Archive",
+    images: [photoMomJeans],
+    description: {
+      en: "High-rise tapered jeans in a naturally faded light wash. Rigid denim.",
+      es: "Jeans de tiro alto y pierna cónica en lavado claro natural. Denim rígido.",
+    },
+  },
+  {
+    slug: "leather-shoulder-bag",
+    name: { en: "Saddle Leather Shoulder Bag", es: "Bolso de Cuero Saddle" },
+    category: "accesorios",
+    sub: "bags-totes",
+    tags: ["sale"],
+    price: 110,
+    compareAt: 145,
+    sizes: ["One size"],
+    condition: "Very Good",
+    brand: "Coach Archive",
+    images: [photoShoulderBag],
+    description: {
+      en: "Full-grain leather saddle bag with brass buckle and adjustable strap.",
+      es: "Bolso saddle de cuero plena flor con hebilla de latón y correa ajustable.",
     },
   },
 ];

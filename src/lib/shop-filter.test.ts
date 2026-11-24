@@ -1,6 +1,6 @@
 import { describe, test } from "node:test";
 import { deepStrictEqual } from "node:assert";
-import { filterArchive } from "./shop-filter";
+import { filterArchive, availableSizes } from "./shop-filter";
 import type { Product } from "./products";
 
 const items: Product[] = [
@@ -21,5 +21,16 @@ describe("archive search and favorites", () => {
   test("price sorting preserves the original catalog", () => {
     deepStrictEqual(filterArchive(items, { ...base, sort: "price-asc" }).map(p => p.price), [38, 189]);
     deepStrictEqual(items.map(p => p.price), [189, 38]);
+  });
+  test("size filter matches any selected size without case sensitivity", () => {
+    deepStrictEqual(filterArchive(items, { ...base, sizes: ["m"] }).map(p => p.slug), ["jacket"]);
+    deepStrictEqual(filterArchive(items, { ...base, sizes: ["M", "XS"] }).map(p => p.slug), ["jacket", "tee"]);
+  });
+  test("price range includes both boundaries", () => {
+    deepStrictEqual(filterArchive(items, { ...base, minPrice: 38, maxPrice: 100 }).map(p => p.slug), ["tee"]);
+    deepStrictEqual(filterArchive(items, { ...base, minPrice: 39 }).map(p => p.slug), ["jacket"]);
+  });
+  test("available sizes are unique and sorted by garment size", () => {
+    deepStrictEqual(availableSizes(items), ["XS", "S", "M"]);
   });
 });

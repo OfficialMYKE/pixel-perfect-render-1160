@@ -7,9 +7,16 @@ import { products, CATEGORIES, type Category } from "@/lib/products";
 import { getCategoryLabel } from "@/lib/catalog";
 import { useLanguage } from "@/lib/i18n";
 import { useFavorites } from "@/lib/favorites";
-import { filterArchive, type ShopSort } from "@/lib/shop-filter";
+import { filterArchive, availableSizes, type ShopSort } from "@/lib/shop-filter";
 
 const DESC = "Search one-of-one vintage streetwear, save favorites and compare prices and available sizes.";
+
+function parsePrice(value: string) {
+  if (value.trim() === "") return null;
+  const price = Number(value);
+  return Number.isFinite(price) ? price : null;
+}
+
 export const Route = createFileRoute("/shop/")({
   head: () => ({
     meta: [
@@ -32,11 +39,36 @@ function ShopPage() {
   const [sort, setSort] = useState<ShopSort>("featured");
   const [query, setQuery] = useState("");
   const [favoritesOnly, setFavoritesOnly] = useState(false);
+  const [sizes, setSizes] = useState<string[]>([]);
+  const [minPrice, setMinPrice] = useState("");
+  const [maxPrice, setMaxPrice] = useState("");
+  const sizeOptions = useMemo(() => availableSizes(products), []);
   const visible = useMemo(
-    () => filterArchive(products, { query, category, favoritesOnly, favorites: slugs, sort }),
-    [query, category, favoritesOnly, slugs, sort],
+    () => filterArchive(products, {
+      query,
+      category,
+      favoritesOnly,
+      favorites: slugs,
+      sort,
+      sizes,
+      minPrice: parsePrice(minPrice),
+      maxPrice: parsePrice(maxPrice),
+    }),
+    [query, category, favoritesOnly, slugs, sort, sizes, minPrice, maxPrice],
   );
-  const reset = () => { setQuery(""); setCategory("all"); setFavoritesOnly(false); };
+  const toggleSize = (size: string) =>
+    setSizes((current) =>
+      current.includes(size) ? current.filter((value) => value !== size) : [...current, size],
+    );
+  const hasExtraFilters = sizes.length > 0 || minPrice !== "" || maxPrice !== "";
+  const reset = () => {
+    setQuery("");
+    setCategory("all");
+    setFavoritesOnly(false);
+    setSizes([]);
+    setMinPrice("");
+    setMaxPrice("");
+  };
 
   return (
     <SiteChrome>
@@ -72,6 +104,66 @@ function ShopPage() {
               {c === "all" ? (es ? "Todo" : "All") : getCategoryLabel(c, lang)}
             </button>
           ))}
+        </div>
+
+        <div className="shop-filters">
+          <div className="shop-filters__group" role="group" aria-label={es ? "Filtrar por talla" : "Filter by size"}>
+            <span className="shop-filters__label">{es ? "Talla" : "Size"}</span>
+            <div className="shop-filters__chips">
+              {sizeOptions.map((size) => (
+                <button
+                  key={size}
+                  type="button"
+                  className={`chip chip--size ${sizes.includes(size) ? "is-active" : ""}`}
+                  aria-pressed={sizes.includes(size)}
+                  onClick={() => toggleSize(size)}
+                >
+                  {size === "One size" ? (es ? "Única" : "One size") : size}
+                </button>
+              ))}
+            </div>
+          </div>
+          <div className="shop-filters__group">
+            <span className="shop-filters__label">{es ? "Precio (USD)" : "Price (USD)"}</span>
+            <div className="shop-filters__price">
+              <label>
+                <span className="visually-hidden">{es ? "Precio mínimo" : "Minimum price"}</span>
+                <input
+                  type="number"
+                  min={0}
+                  inputMode="numeric"
+                  placeholder={es ? "Mín" : "Min"}
+                  value={minPrice}
+                  onChange={(event) => setMinPrice(event.target.value)}
+                />
+              </label>
+              <span aria-hidden="true">-</span>
+              <label>
+                <span className="visually-hidden">{es ? "Precio máximo" : "Maximum price"}</span>
+                <input
+                  type="number"
+                  min={0}
+                  inputMode="numeric"
+                  placeholder={es ? "Máx" : "Max"}
+                  value={maxPrice}
+                  onChange={(event) => setMaxPrice(event.target.value)}
+                />
+              </label>
+            </div>
+          </div>
+          {hasExtraFilters && (
+            <button
+              type="button"
+              className="shop-filters__clear"
+              onClick={() => {
+                setSizes([]);
+                setMinPrice("");
+                setMaxPrice("");
+              }}
+            >
+              {es ? "Limpiar filtros" : "Clear filters"}
+            </button>
+          )}
         </div>
 
         <p className="shop-count" aria-live="polite">{visible.length} {visible.length === 1 ? (es ? "pieza" : "piece") : (es ? "piezas" : "pieces")}</p>
