@@ -1,11 +1,22 @@
-import vintageStreetwear01 from "@/assets/vintage-streetwear-01.jpg";
-import vintageStreetwear02 from "@/assets/vintage-streetwear-02.jpg";
-import vintageStreetwear03 from "@/assets/vintage-streetwear-03.jpg";
-import vintageStreetwear04 from "@/assets/vintage-streetwear-04.jpg";
-import archiveDenim from "@/assets/archive-denim.jpg";
-import archiveJacket from "@/assets/archive-jacket.jpg";
-import archiveStoreInterior from "@/assets/archive-store-interior.jpg";
-import archiveSweatshirt from "@/assets/archive-sweatshirt.jpg";
+import photo_varsity_jacket_ny from "@/assets/products/varsity-jacket-ny.jpg";
+import photo_racing_jacket_01 from "@/assets/products/racing-jacket-01.jpg";
+import photo_leather_bomber from "@/assets/products/leather-bomber.jpg";
+import photo_graphic_tee_archive from "@/assets/products/graphic-tee-archive.jpg";
+import photo_selvedge_jeans_501 from "@/assets/products/selvedge-jeans-501.jpg";
+import photo_workwear_chore_coat from "@/assets/products/workwear-chore-coat.jpg";
+import photo_cropped_cardigan from "@/assets/products/cropped-cardigan.jpg";
+import photo_leather_skirt_90s from "@/assets/products/leather-skirt-90s.jpg";
+import photo_graphic_tee_womens from "@/assets/products/graphic-tee-womens.jpg";
+import photo_nylon_track_jacket from "@/assets/products/nylon-track-jacket.jpg";
+import photo_floral_midi_dress from "@/assets/products/floral-midi-dress.jpg";
+import photo_kids_denim_jacket from "@/assets/products/kids-denim-jacket.jpg";
+import photo_kids_crewneck from "@/assets/products/kids-crewneck.jpg";
+import photo_trucker_cap_red from "@/assets/products/trucker-cap-red.jpg";
+import photo_leather_belt_01 from "@/assets/products/leather-belt-01.jpg";
+import photo_canvas_tote from "@/assets/products/canvas-tote.jpg";
+import photo_aviator_sunglasses from "@/assets/products/aviator-sunglasses.jpg";
+import photo_ribbed_beanie from "@/assets/products/ribbed-beanie.jpg";
+import photo_silk_scarf from "@/assets/products/silk-scarf.jpg";
 import { NAV_SUBS, slugify } from "@/lib/catalog";
 
 export type Category = "hombre" | "mujer" | "ninos" | "accesorios";
@@ -38,7 +49,7 @@ export const products: Product[] = [
     sizes: ["S", "M", "L", "XL"],
     condition: "Excellent",
     brand: "Ralph Lauren Archive",
-    images: [vintageStreetwear01, archiveJacket],
+    images: [photo_varsity_jacket_ny],
     description: {
       en: "Hand-selected varsity jacket from a private NYC collection. Wool body, leather sleeves, chain-stitched letters. One of one.",
       es: "Chaqueta varsity seleccionada a mano de una colección privada en NYC. Cuerpo de lana, mangas de cuero, letras bordadas. Única.",
@@ -54,7 +65,7 @@ export const products: Product[] = [
     sizes: ["M", "L"],
     condition: "Very Good",
     brand: "Private Label",
-    images: [vintageStreetwear02, archiveStoreInterior],
+    images: [photo_racing_jacket_01],
     description: {
       en: "Motorsport-inspired racing jacket with embroidered patches. Fully lined, zip front, boxy fit.",
       es: "Chaqueta de carreras inspirada en motorsport con parches bordados. Forrada, cierre frontal, corte amplio.",
@@ -71,7 +82,7 @@ export const products: Product[] = [
     sizes: ["M", "L", "XL"],
     condition: "Good",
     brand: "Schott NYC",
-    images: [vintageStreetwear03, archiveJacket],
+    images: [photo_leather_bomber],
     description: {
       en: "Genuine leather bomber with a broken-in patina. Ribbed cuffs and hem, two front pockets.",
       es: "Bomber de cuero genuino con pátina natural. Puños y dobladillo acanalados, dos bolsillos frontales.",
@@ -88,7 +99,7 @@ export const products: Product[] = [
     sizes: ["S", "M", "L", "XL"],
     condition: "Very Good",
     brand: "Screen Stars",
-    images: [vintageStreetwear04, archiveSweatshirt],
+    images: [photo_graphic_tee_archive],
     description: {
       en: "Faded single-stitch graphic tee from the early 90s. Soft hand, original print in excellent condition.",
       es: "Camiseta gráfica desvanecida de costura única, principios de los 90. Tacto suave, estampa original en excelente estado.",
@@ -104,7 +115,7 @@ export const products: Product[] = [
     sizes: ["30", "32", "34", "36"],
     condition: "Good",
     brand: "Levi's Archive",
-    images: [archiveDenim, vintageStreetwear04],
+    images: [photo_selvedge_jeans_501],
     description: {
       en: "Redline selvedge denim, straight leg, honest wear at the hem. Made in USA.",
       es: "Denim selvedge redline, corte recto, desgaste honesto en el dobladillo. Hecho en EE.UU.",
@@ -121,7 +132,7 @@ export const products: Product[] = [
     sizes: ["M", "L"],
     condition: "Very Good",
     brand: "Carhartt WIP",
-    images: [archiveJacket, vintageStreetwear02],
+    images: [photo_workwear_chore_coat],
     description: {
       en: "Triple-stitched cotton canvas chore coat with corduroy collar. Triple chest pocket.",
       es: "Chaqueta de trabajo en lona de algodón con costura triple y cuello de corduroy. Tres bolsillos de pecho.",
@@ -137,7 +148,7 @@ export const products: Product[] = [
     sizes: ["XS", "S", "M"],
     condition: "Excellent",
     brand: "Hand Knit",
-    images: [vintageStreetwear04, archiveSweatshirt],
+    images: [photo_cropped_cardigan],
     description: {
       en: "Hand-knit cropped cardigan with mother-of-pearl buttons. Perfect layering piece.",
       es: "Cardigan cropped tejido a mano con botones de nácar. Perfecta capa intermedia.",
@@ -153,7 +164,7 @@ export const products: Product[] = [
     sizes: ["XS", "S", "M"],
     condition: "Very Good",
     brand: "Private Label",
-    images: [vintageStreetwear03, archiveJacket],
+    images: [photo_leather_skirt_90s],
     description: {
       en: "High-waisted leather skirt with side zip. Sits just above the knee.",
       es: "Falda de cuero de cintura alta con cierre lateral. Llega justo sobre la rodilla.",
@@ -170,7 +181,7 @@ export const products: Product[] = [
     sizes: ["XS", "S", "M"],
     condition: "Good",
     brand: "Fruit of the Loom",
-    images: [vintageStreetwear01, vintageStreetwear04],
+    images: [photo_graphic_tee_womens],
     description: {
       en: "Fitted baby tee with a faded 90s print. Slightly cropped body.",
       es: "Baby tee ajustada con estampa desvanecida de los 90. Cuerpo ligeramente cortado.",
@@ -186,7 +197,7 @@ export const products: Product[] = [
     sizes: ["S", "M", "L"],
     condition: "Excellent",
     brand: "Nike Vintage",
-    images: [vintageStreetwear02, archiveStoreInterior],
+    images: [photo_nylon_track_jacket],
     description: {
       en: "Color-blocked nylon track jacket with full zip and stand collar.",
       es: "Chaqueta deportiva de nylon en bloques de color con cierre completo y cuello alto.",
@@ -203,7 +214,7 @@ export const products: Product[] = [
     sizes: ["XS", "S", "M"],
     condition: "Very Good",
     brand: "Private Label",
-    images: [vintageStreetwear03, archiveSweatshirt],
+    images: [photo_floral_midi_dress],
     description: {
       en: "Flowing floral midi with adjustable straps and a smocked bodice.",
       es: "Midi floral fluido con tirantes ajustables y cuerpo escarchado.",
@@ -219,7 +230,7 @@ export const products: Product[] = [
     sizes: ["4Y", "6Y", "8Y", "10Y"],
     condition: "Excellent",
     brand: "Levi's Kids",
-    images: [archiveDenim, vintageStreetwear01],
+    images: [photo_kids_denim_jacket],
     description: {
       en: "Classic trucker jacket in faded indigo, sized for kids 4–10.",
       es: "Chaqueta trucker clásica en índigo desvanecido, tallas 4–10 años.",
@@ -235,7 +246,7 @@ export const products: Product[] = [
     sizes: ["4Y", "6Y", "8Y"],
     condition: "Good",
     brand: "Gap Kids",
-    images: [archiveSweatshirt, vintageStreetwear04],
+    images: [photo_kids_crewneck],
     description: {
       en: "Soft cotton crewneck with a vintage college print.",
       es: "Sudadera de algodón suave con estampa vintage universitaria.",
@@ -251,7 +262,7 @@ export const products: Product[] = [
     sizes: ["One size"],
     condition: "Excellent",
     brand: "Vintage Deadstock",
-    images: [archiveStoreInterior, vintageStreetwear02],
+    images: [photo_trucker_cap_red],
     description: {
       en: "Deadstock mesh trucker cap with a flat brim and snap closure.",
       es: "Gorra trucker deadstock con malla, visera plana y cierre snap.",
@@ -267,7 +278,7 @@ export const products: Product[] = [
     sizes: ["32", "34", "36"],
     condition: "Good",
     brand: "Timberland",
-    images: [archiveJacket, archiveDenim],
+    images: [photo_leather_belt_01],
     description: {
       en: "Full-grain leather belt with a brushed brass buckle. Honest patina.",
       es: "Cinturón de cuero de grano completo con hebilla de latón cepillado. Pátina honesta.",
@@ -284,7 +295,7 @@ export const products: Product[] = [
     sizes: ["One size"],
     condition: "Very Good",
     brand: "Manhattan Portage",
-    images: [archiveStoreInterior, vintageStreetwear01],
+    images: [photo_canvas_tote],
     description: {
       en: "Heavy-duty canvas tote with interior pocket and shoulder strap.",
       es: "Tote de lona resistente con bolsillo interior y correa de hombro.",
@@ -300,7 +311,7 @@ export const products: Product[] = [
     sizes: ["One size"],
     condition: "Excellent",
     brand: "Ray-Ban Archive",
-    images: [vintageStreetwear02, archiveStoreInterior],
+    images: [photo_aviator_sunglasses],
     description: {
       en: "Vintage aviators with gold frames and gradient lenses. Original case included.",
       es: "Aviador vintage con montura dorada y lentes degradadas. Estuche original incluido.",
@@ -316,7 +327,7 @@ export const products: Product[] = [
     sizes: ["One size"],
     condition: "Good",
     brand: "Vintage Deadstock",
-    images: [archiveSweatshirt, vintageStreetwear04],
+    images: [photo_ribbed_beanie],
     description: {
       en: "Fine-gauge ribbed beanie with a folded cuff. Soft, warm, no branding.",
       es: "Gorro de punto acanalado con vuelta fina. Suave, cálido, sin marca.",
@@ -333,7 +344,7 @@ export const products: Product[] = [
     sizes: ["One size"],
     condition: "Excellent",
     brand: "Private Label",
-    images: [vintageStreetwear01, archiveSweatshirt],
+    images: [photo_silk_scarf],
     description: {
       en: "Printed silk scarf with hand-rolled edges. Wear it on your neck, hair, or bag.",
       es: "Bufanda de seda estampada con bordes enrollados a mano. Úsala en el cuello, el pelo o el bolso.",
