@@ -62,7 +62,7 @@
 }
 
 :root {
-  --radius: 0.625rem;
+  --radius: 0rem;
   --background: oklch(1 0 0);
   --foreground: oklch(0.129 0.042 264.695);
   --card: oklch(1 0 0);
@@ -3501,4 +3501,21 @@ body {
 }
 @media (min-width: 1024px) {
   .product-grid { grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 40px 24px; }
+}
+
+/* Editorial buttons: square corners, larger primary actions */
+button, .btn, [class*="-btn"], [class*="__btn"], [class*="__cta"], input, select, textarea {
+  border-radius: 0 !important;
+}
+.product-rail__dot::after { border-radius: 50% !important; }
+.btn, .auth__btn, .showroom__cta, .footer__newsletter-btn {
+  min-height: 54px;
+  padding: 0 2rem;
+  font-size: 0.875rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-weight: 800;
+}
+@media (max-width: 640px) {
+  .btn, .auth__btn, .showroom__cta { min-height: 52px; padding: 0 1.5rem; }
 }
