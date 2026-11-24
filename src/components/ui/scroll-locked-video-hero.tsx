@@ -65,6 +65,18 @@ export default function MetroHero({ videoSrc = DEFAULT_VIDEO, className }: Metro
     const onError = () => { setReady(false); setPlaying(false); };
     const onPlay = () => setPlaying(true);
     const onPause = () => setPlaying(false);
+    const onEnded = () => {
+      setPlaying(false);
+      const hero = document.querySelector(".vintage-hero");
+      if (hero) {
+        const rect = hero.getBoundingClientRect();
+        if (rect.bottom < window.innerHeight * 0.5) return;
+      }
+      const target = document.getElementById("main-content");
+      if (!target) return;
+      const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      target.scrollIntoView({ behavior: reducedMotion ? "auto" : "smooth", block: "start" });
+    };
     const update = () => {
       const p = Number.isFinite(video.duration) && video.duration > 0
         ? clamp(video.currentTime / video.duration, 0, 1) : 0;
@@ -76,6 +88,7 @@ export default function MetroHero({ videoSrc = DEFAULT_VIDEO, className }: Metro
     video.addEventListener("error", onError);
     video.addEventListener("play", onPlay);
     video.addEventListener("pause", onPause);
+    video.addEventListener("ended", onEnded);
     video.addEventListener("timeupdate", update);
     if (video.readyState >= 2) onLoaded();
     return () => {
@@ -84,6 +97,7 @@ export default function MetroHero({ videoSrc = DEFAULT_VIDEO, className }: Metro
       video.removeEventListener("error", onError);
       video.removeEventListener("play", onPlay);
       video.removeEventListener("pause", onPause);
+      video.removeEventListener("ended", onEnded);
       video.removeEventListener("timeupdate", update);
     };
   }, [videoSrc]);
@@ -141,7 +155,7 @@ export default function MetroHero({ videoSrc = DEFAULT_VIDEO, className }: Metro
           {ready && <Button variant="ghost" size="icon" className="hero-play" title={playing ? (es ? "Pausar vídeo" : "Pause video") : (es ? "Reproducir vídeo" : "Play video")} aria-label={playing ? (es ? "Pausar vídeo" : "Pause video") : (es ? "Reproducir vídeo" : "Play video")} onClick={() => {
             const video = videoRef.current;
             if (!video) return;
-            if (video.paused) { if (video.ended) video.currentTime = 0; video.play().catch(() => undefined); } else video.pause();
+            if (video.paused || video.ended) { if (video.ended) video.currentTime = 0; video.play().catch(() => undefined); } else video.pause();
           }}>{playing ? <Pause /> : <Play />}</Button>}
         </div>
         <div className="vintage-hero__progress" aria-hidden="true">
@@ -149,10 +163,8 @@ export default function MetroHero({ videoSrc = DEFAULT_VIDEO, className }: Metro
         </div>
       </section>
 
-      <header>
-        <div>
-          <AnnouncementBar />
-        </div>
+      <header className="site-header">
+        <AnnouncementBar />
         <VintageNavbar />
       </header>
 

@@ -486,10 +486,18 @@ body {
 
 /* ── Navbar ─────────────────────────────────────────── */
 
-.vn {
+.site-header {
   position: sticky;
   top: 0;
   z-index: 40;
+}
+
+#main-content {
+  scroll-margin-top: 96px;
+}
+
+.vn {
+  position: relative;
 }
 
 .vn__bar {
