@@ -205,7 +205,7 @@ export const products: Product[] = [
     slug: "nylon-track-jacket",
     name: { en: "Nylon Track Jacket", es: "Chaqueta Deportiva de Nylon" },
     category: "mujer",
-    sub: "hoodies-sweatshirts",
+    sub: "jackets-coats",
     tags: [],
     price: 68,
     sizes: ["S", "M", "L"],
@@ -488,9 +488,7 @@ export function getBySub(category: string, sub: string): Product[] {
   const inCategory = getByCategory(category);
   const direct = inCategory.filter((p) => p.sub === key);
   if (direct.length > 0) return direct;
-  const brandLocal = inCategory.filter((p) => slugify(p.brand) === key);
-  if (brandLocal.length > 0) return brandLocal;
-  return products.filter((p) => slugify(p.brand) === key);
+  return inCategory.filter((p) => slugify(p.brand) === key);
 }
 
 export function getSubsForCategory(category: string): string[] {

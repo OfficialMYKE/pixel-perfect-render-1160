@@ -1,4 +1,4 @@
-import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import { createFileRoute, Link, notFound, Outlet, useRouterState } from "@tanstack/react-router";
 import SiteChrome from "@/components/ui/site-chrome";
 import ProductCard from "@/components/ui/product-card";
 import Recommendations from "@/components/ui/recommendations";
@@ -25,9 +25,16 @@ export const Route = createFileRoute("/shop/$category")({
 function CategoryPage() {
   const { category } = Route.useParams();
   const { lang } = useLanguage();
+  const activeRouteId = useRouterState({
+    select: (state) => state.matches[state.matches.length - 1]?.routeId,
+  });
   const items = getByCategory(category);
   const title = getCategoryLabel(category, lang);
   const subs = getSubsForCategory(category);
+
+  if (activeRouteId === "/shop/$category/$sub") {
+    return <Outlet />;
+  }
 
   return (
     <SiteChrome>

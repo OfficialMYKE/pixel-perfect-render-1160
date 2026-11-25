@@ -3,7 +3,7 @@ import { Link, useLocation, useNavigate } from "@tanstack/react-router";
 import { Menu, Search, ShoppingBag, X } from "lucide-react";
 import { useLanguage } from "@/lib/i18n";
 import { useCart } from "@/lib/cart";
-import { searchProducts } from "@/lib/products";
+import { getBySub, getSubsForCategory, searchProducts } from "@/lib/products";
 import { NAV_SUBS, slugify, type CatalogLang, type NavLabelKey } from "@/lib/catalog";
 
 interface SubLink {
@@ -31,15 +31,20 @@ function navLabel(t: NavTranslations, key: NavLabelKey): string {
 
 function getNavItems(t: NavTranslations, lang: CatalogLang): NavItem[] {
   const columnsFor = (category: string, withMarcas: boolean): SubCategory[] => {
-    const columns: SubCategory[] = (NAV_SUBS[category] ?? []).map((group) => ({
-      label: navLabel(t, group.key),
-      items: group.items.map((item) => ({ label: item[lang], slug: item.slug })),
-    }));
+    const activeSubs = new Set(getSubsForCategory(category));
+    const columns: SubCategory[] = (NAV_SUBS[category] ?? [])
+      .map((group) => ({
+        label: navLabel(t, group.key),
+        items: group.items
+          .filter((item) => activeSubs.has(item.slug))
+          .map((item) => ({ label: item[lang], slug: item.slug })),
+      }))
+      .filter((group) => group.items.length > 0);
     if (withMarcas) {
-      columns.push({
-        label: navLabel(t, "marcas"),
-        items: t.nav.subMarcas.map((brand) => ({ label: brand, slug: slugify(brand) })),
-      });
+      const brands = t.nav.subMarcas
+        .map((brand) => ({ label: brand, slug: slugify(brand) }))
+        .filter((brand) => getBySub(category, brand.slug).length > 0);
+      if (brands.length > 0) columns.push({ label: navLabel(t, "marcas"), items: brands });
     }
     return columns;
   };

@@ -4,9 +4,9 @@ import { ArrowUpRight, Globe, RotateCcw, ShieldCheck, Truck } from "lucide-react
 import AnnouncementBar from "@/components/ui/announcement-bar";
 import VintageNavbar from "@/components/ui/vintage-navbar";
 import Footer from "@/components/ui/footer";
-import ProductCard from "@/components/ui/product-card";
+import ProductCard, { ProductPreview } from "@/components/ui/product-card";
 import { useLanguage } from "@/lib/i18n";
-import { getFeatured } from "@/lib/products";
+import { getByCategory, getFeatured, getProduct } from "@/lib/products";
 import streetwearOne from "@/assets/vintage-streetwear-01.jpg";
 import streetwearTwo from "@/assets/vintage-streetwear-02.jpg";
 import streetwearThree from "@/assets/vintage-streetwear-03.jpg";
@@ -23,10 +23,26 @@ const DEFAULT_VIDEO =
 const HERO_DISMISSED_STORAGE_KEY = "avnyc-home-hero-dismissed";
 
 const LOOKBOOK = [
-  { src: streetwearOne, alt: "Vintage varsity jacket and loose denim on a New York street" },
-  { src: streetwearTwo, alt: "Curated vintage racing jackets in a New York store" },
-  { src: streetwearThree, alt: "Vintage leather bomber styled on a New York subway platform" },
-  { src: streetwearFour, alt: "Archive graphic tees, workwear and faded denim" },
+  {
+    src: streetwearOne,
+    alt: "Vintage varsity jacket and loose denim on a New York street",
+    productSlug: "varsity-jacket-ny",
+  },
+  {
+    src: streetwearTwo,
+    alt: "Curated vintage racing jackets in a New York store",
+    productSlug: "racing-jacket-01",
+  },
+  {
+    src: streetwearThree,
+    alt: "Vintage leather bomber styled on a New York subway platform",
+    productSlug: "leather-bomber",
+  },
+  {
+    src: streetwearFour,
+    alt: "Archive graphic tees, workwear and faded denim",
+    productSlug: "graphic-tee-archive",
+  },
 ];
 
 const CATEGORY_KEYS = ["hombre", "mujer", "ninos", "accesorios"] as const;
@@ -54,7 +70,7 @@ export default function MetroHero({ videoSrc = DEFAULT_VIDEO, className }: Metro
   const [introActive, setIntroActive] = useState(false);
   const [heroVisible, setHeroVisible] = useState(true);
 
-  const featured = getFeatured(5);
+  const featured = getFeatured(6);
 
   useEffect(() => {
     const hero = heroRef.current;
@@ -226,20 +242,27 @@ export default function MetroHero({ videoSrc = DEFAULT_VIDEO, className }: Metro
             aria-label={es ? "Colección streetwear vintage" : "Vintage streetwear collection"}
           >
             <div className="vintage-lookbook__track">
-              {[...LOOKBOOK, ...LOOKBOOK].map((image, index) => (
-                <figure key={`${image.src}-${index}`}>
-                  <img
-                    src={image.src}
-                    alt={index < LOOKBOOK.length ? image.alt : ""}
-                    loading="lazy"
-                    width={768}
-                    height={1024}
-                  />
-                  <figcaption>
-                    {String((index % LOOKBOOK.length) + 1).padStart(2, "0")} / NYC ARCHIVE
-                  </figcaption>
-                </figure>
-              ))}
+              {[...LOOKBOOK, ...LOOKBOOK].map((image, index) => {
+                const product = getProduct(image.productSlug);
+                if (!product) {
+                  throw new Error(`Missing lookbook product: ${image.productSlug}`);
+                }
+                return (
+                  <figure className="pcard--preview" key={`${image.src}-${index}`}>
+                    <img
+                      src={image.src}
+                      alt={index < LOOKBOOK.length ? image.alt : ""}
+                      loading="lazy"
+                      width={768}
+                      height={1024}
+                    />
+                    <ProductPreview product={product} archive />
+                    <figcaption>
+                      {String((index % LOOKBOOK.length) + 1).padStart(2, "0")} / NYC ARCHIVE
+                    </figcaption>
+                  </figure>
+                );
+              })}
             </div>
           </div>
         </section>
@@ -277,7 +300,7 @@ export default function MetroHero({ videoSrc = DEFAULT_VIDEO, className }: Metro
           </div>
           <div className="product-grid">
             {featured.map((p) => (
-              <ProductCard key={p.slug} product={p} showHoverPreview />
+              <ProductCard key={p.slug} product={p} />
             ))}
           </div>
         </section>
@@ -301,6 +324,9 @@ export default function MetroHero({ videoSrc = DEFAULT_VIDEO, className }: Metro
                 <span className="category-index__number">0{index + 1}</span>
                 <span>{t.footer.shop[key]}</span>
                 <ArrowUpRight aria-hidden="true" size={24} />
+                <span className="category-index__count">
+                  {getByCategory(key).length} {es ? "prendas" : "pieces"}
+                </span>
               </Link>
             ))}
           </nav>
