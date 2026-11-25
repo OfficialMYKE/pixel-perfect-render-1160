@@ -1,10 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { ArrowDown, ArrowUpRight, Globe, Pause, Play, RotateCcw, ShieldCheck, Truck } from "lucide-react";
+import { ArrowUpRight, Globe, RotateCcw, ShieldCheck, Truck } from "lucide-react";
 import AnnouncementBar from "@/components/ui/announcement-bar";
 import VintageNavbar from "@/components/ui/vintage-navbar";
 import Footer from "@/components/ui/footer";
-import { Button } from "@/components/ui/button";
 import ProductCard from "@/components/ui/product-card";
 import { useLanguage } from "@/lib/i18n";
 import { getFeatured } from "@/lib/products";
@@ -21,7 +20,7 @@ export interface MetroHeroProps {
 
 const DEFAULT_VIDEO =
   "https://cdn.21st.dev/assets/mirror/21/21a77eac28eacbb7e142016eefeaa0b4a766619e51113629a3bc6df6af066c0f.mp4";
-const HERO_INTRO_STORAGE_KEY = "avnyc-home-hero-intro-played";
+const HERO_DISMISSED_STORAGE_KEY = "avnyc-home-hero-dismissed";
 
 const LOOKBOOK = [
   { src: streetwearOne, alt: "Vintage varsity jacket and loose denim on a New York street" },
@@ -45,16 +44,54 @@ function clamp(v: number, min: number, max: number) {
 
 export default function MetroHero({ videoSrc = DEFAULT_VIDEO, className }: MetroHeroProps) {
   const { t, lang } = useLanguage();
+  const heroRef = useRef<HTMLElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const textARef = useRef<HTMLDivElement>(null);
   const textBRef = useRef<HTMLDivElement>(null);
   const progressBarRef = useRef<HTMLDivElement>(null);
 
   const [ready, setReady] = useState(false);
-  const [playing, setPlaying] = useState(false);
   const [introActive, setIntroActive] = useState(false);
+  const [heroVisible, setHeroVisible] = useState(true);
 
-  const featured = getFeatured(4);
+  const featured = getFeatured(5);
+
+  useEffect(() => {
+    const hero = heroRef.current;
+    if (!hero) return;
+
+    const navigation = performance.getEntriesByType("navigation")[0] as
+      PerformanceNavigationTiming | undefined;
+    if (navigation?.type === "reload") {
+      sessionStorage.removeItem(HERO_DISMISSED_STORAGE_KEY);
+      window.scrollTo(0, 0);
+    } else if (sessionStorage.getItem(HERO_DISMISSED_STORAGE_KEY)) {
+      videoRef.current?.pause();
+      setHeroVisible(false);
+      return;
+    }
+
+    let hasBeenVisible = false;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry) return;
+        if (entry.isIntersecting) {
+          hasBeenVisible = true;
+          return;
+        }
+        if (hasBeenVisible) {
+          sessionStorage.setItem(HERO_DISMISSED_STORAGE_KEY, "true");
+          videoRef.current?.pause();
+          setHeroVisible(false);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0 },
+    );
+
+    observer.observe(hero);
+    return () => observer.disconnect();
+  }, []);
 
   useEffect(() => {
     const video = videoRef.current;
@@ -62,20 +99,16 @@ export default function MetroHero({ videoSrc = DEFAULT_VIDEO, className }: Metro
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const onLoaded = () => {
       setReady(true);
-      if (reducedMotion || sessionStorage.getItem(HERO_INTRO_STORAGE_KEY)) return;
-      sessionStorage.setItem(HERO_INTRO_STORAGE_KEY, "true");
+      if (reducedMotion || heroRef.current?.hidden) return;
       setIntroActive(true);
       video.play().catch(() => {
-        sessionStorage.removeItem(HERO_INTRO_STORAGE_KEY);
         setIntroActive(false);
-        setPlaying(false);
       });
     };
-    const onError = () => { setReady(false); setPlaying(false); };
-    const onPlay = () => setPlaying(true);
-    const onPause = () => setPlaying(false);
+    const onError = () => {
+      setReady(false);
+    };
     const onEnded = () => {
-      setPlaying(false);
       const hero = document.querySelector(".vintage-hero");
       if (hero) {
         const rect = hero.getBoundingClientRect();
@@ -87,16 +120,17 @@ export default function MetroHero({ videoSrc = DEFAULT_VIDEO, className }: Metro
       target.scrollIntoView({ behavior: reducedMotion ? "auto" : "smooth", block: "start" });
     };
     const update = () => {
-      const p = Number.isFinite(video.duration) && video.duration > 0
-        ? clamp(video.currentTime / video.duration, 0, 1) : 0;
-      if (textARef.current) textARef.current.style.opacity = String(1 - clamp((p - 0.3) / 0.15, 0, 1));
+      const p =
+        Number.isFinite(video.duration) && video.duration > 0
+          ? clamp(video.currentTime / video.duration, 0, 1)
+          : 0;
+      if (textARef.current)
+        textARef.current.style.opacity = String(1 - clamp((p - 0.3) / 0.15, 0, 1));
       if (textBRef.current) textBRef.current.style.opacity = String(clamp((p - 0.5) / 0.15, 0, 1));
       if (progressBarRef.current) progressBarRef.current.style.transform = `scaleX(${p})`;
     };
     video.addEventListener("loadeddata", onLoaded);
     video.addEventListener("error", onError);
-    video.addEventListener("play", onPlay);
-    video.addEventListener("pause", onPause);
     video.addEventListener("ended", onEnded);
     video.addEventListener("timeupdate", update);
     if (video.readyState >= 2) onLoaded();
@@ -104,8 +138,6 @@ export default function MetroHero({ videoSrc = DEFAULT_VIDEO, className }: Metro
       video.pause();
       video.removeEventListener("loadeddata", onLoaded);
       video.removeEventListener("error", onError);
-      video.removeEventListener("play", onPlay);
-      video.removeEventListener("pause", onPause);
       video.removeEventListener("ended", onEnded);
       video.removeEventListener("timeupdate", update);
     };
@@ -127,6 +159,8 @@ export default function MetroHero({ videoSrc = DEFAULT_VIDEO, className }: Metro
       </a>
 
       <section
+        ref={heroRef}
+        hidden={!heroVisible}
         className={className ? `${className} vintage-hero` : "vintage-hero"}
         aria-label={es ? "Introducción streetwear vintage" : "Vintage streetwear introduction"}
       >
@@ -159,14 +193,6 @@ export default function MetroHero({ videoSrc = DEFAULT_VIDEO, className }: Metro
           <span>{t.heroOneOfOne}</span>
         </div>
 
-        <div className="vintage-hero__controls">
-          <a href="#main-content" className="hero-explore">{es ? "Explorar el archivo" : "Explore the archive"} <ArrowDown size={18} /></a>
-          {ready && <Button variant="ghost" size="icon" className="hero-play" title={playing ? (es ? "Pausar vídeo" : "Pause video") : (es ? "Reproducir vídeo" : "Play video")} aria-label={playing ? (es ? "Pausar vídeo" : "Pause video") : (es ? "Reproducir vídeo" : "Play video")} onClick={() => {
-            const video = videoRef.current;
-            if (!video) return;
-            if (video.paused || video.ended) { if (video.ended) video.currentTime = 0; video.play().catch(() => undefined); } else video.pause();
-          }}>{playing ? <Pause /> : <Play />}</Button>}
-        </div>
         <div className="vintage-hero__progress" aria-hidden="true">
           <div ref={progressBarRef} />
         </div>
@@ -252,7 +278,7 @@ export default function MetroHero({ videoSrc = DEFAULT_VIDEO, className }: Metro
           </div>
           <div className="product-grid">
             {featured.map((p) => (
-              <ProductCard key={p.slug} product={p} />
+              <ProductCard key={p.slug} product={p} showHoverPreview />
             ))}
           </div>
         </section>
@@ -267,11 +293,15 @@ export default function MetroHero({ videoSrc = DEFAULT_VIDEO, className }: Metro
               </h2>
             </div>
           </div>
-          <nav className="category-index" aria-label={es ? "Categorías de prendas" : "Garment categories"}>
+          <nav
+            className="category-index"
+            aria-label={es ? "Categorías de prendas" : "Garment categories"}
+          >
             {CATEGORY_KEYS.map((key, index) => (
               <Link key={key} to="/shop/$category" params={{ category: key }}>
                 <span className="category-index__number">0{index + 1}</span>
-                <span>{t.footer.shop[key]}</span><ArrowUpRight aria-hidden="true" size={24} />
+                <span>{t.footer.shop[key]}</span>
+                <ArrowUpRight aria-hidden="true" size={24} />
               </Link>
             ))}
           </nav>
@@ -322,7 +352,6 @@ export default function MetroHero({ videoSrc = DEFAULT_VIDEO, className }: Metro
             ))}
           </ul>
         </section>
-
       </main>
 
       <Footer />

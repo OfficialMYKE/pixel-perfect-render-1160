@@ -3436,11 +3436,7 @@ body {
 
 
 /* -- Calmer home, search and favorites ---------------------------- */
-.vintage-hero__controls { position: absolute; z-index: 5; left: clamp(20px, 5vw, 64px); right: clamp(20px, 5vw, 64px); bottom: 34px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
-.hero-explore { display: inline-flex; align-items: center; gap: 10px; min-height: 44px; color: var(--vintage-paper); font: 700 12px/1 Arial, Helvetica, sans-serif; letter-spacing: .1em; text-decoration: none; text-transform: uppercase; }
-.hero-explore:hover { color: var(--vintage-red); }
-.hero-play { width: 44px; height: 44px; border: 1px solid color-mix(in oklab, var(--vintage-paper) 45%, transparent); border-radius: 0; color: var(--vintage-paper); background: color-mix(in oklab, var(--vintage-ink) 55%, transparent); }
-.hero-play:hover { background: var(--vintage-paper); color: var(--vintage-ink); }
+
 .category-index { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border-top: 1px solid var(--vintage-line); }
 .category-index a { min-height: 150px; padding: 22px; display: grid; grid-template-columns: minmax(0,1fr) auto; align-content: space-between; gap: 22px; color: var(--vintage-paper); text-decoration: none; border-right: 1px solid var(--vintage-line); border-bottom: 1px solid var(--vintage-line); font: 900 clamp(24px, 3vw, 40px)/.95 Arial, Helvetica, sans-serif; text-transform: uppercase; transition: background-color .2s, color .2s; }
 .category-index a:first-child { border-left: 1px solid var(--vintage-line); }
@@ -3448,10 +3444,60 @@ body {
 .category-index__number { grid-column: 1 / -1; color: var(--vintage-red); font: 600 11px/1 ui-monospace, monospace; letter-spacing: .12em; }
 .pcard { position: relative; }
 .pcard__link { display: block; color: inherit; text-decoration: none; }
+.pcard__preview {
+  position: absolute;
+  z-index: 3;
+  inset: 0 0 auto;
+  aspect-ratio: 3 / 4;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 12px;
+  padding: clamp(16px, 2vw, 24px);
+  overflow: auto;
+  background: color-mix(in oklab, var(--vintage-ink) 94%, transparent);
+  color: var(--vintage-paper);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(8px);
+  transition: opacity 180ms ease, transform 180ms ease, visibility 180ms;
+}
+.pcard--preview:hover .pcard__preview,
+.pcard--preview:focus-within .pcard__preview {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+.pcard__preview-brand,
+.pcard__preview-meta {
+  margin: 0;
+  color: var(--vintage-fog);
+  font: 600 10px/1.4 ui-monospace, monospace;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.pcard__preview-name {
+  margin: 0;
+  font: 800 clamp(20px, 2vw, 28px)/1 Arial, Helvetica, sans-serif;
+  text-transform: uppercase;
+}
+.pcard__preview-description {
+  margin: 0;
+  font: 400 13px/1.5 Arial, Helvetica, sans-serif;
+}
+.pcard__preview-price {
+  margin: 0;
+  font: 700 18px/1 Arial, Helvetica, sans-serif;
+}
+.pcard__preview-link {
+  align-self: flex-start;
+  min-height: 44px;
+  padding-inline: 16px;
+}
 .pcard__sizes { margin: 9px 0 0; color: var(--vintage-fog); font: 600 10px/1.4 ui-monospace, monospace; letter-spacing: .06em; }
 .fav-btn { width: 44px; height: 44px; display: inline-grid; place-items: center; flex: none; border: 1px solid var(--vintage-line); background: color-mix(in oklab, var(--vintage-ink) 76%, transparent); color: var(--vintage-paper); cursor: pointer; transition: color .2s, border-color .2s, background-color .2s; }
 .fav-btn:hover, .fav-btn.is-saved { color: var(--vintage-red); border-color: var(--vintage-red); }
-.pcard__fav { position: absolute; top: 8px; right: 8px; z-index: 2; backdrop-filter: blur(5px); }
+.pcard__fav { position: absolute; top: 8px; right: 8px; z-index: 4; backdrop-filter: blur(5px); }
 .pdp__title-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 18px; }
 .pdp__title-row > div { min-width: 0; }
 .pdp__meta { flex-wrap: wrap; gap: 18px 36px; }
@@ -3482,7 +3528,6 @@ body {
   .pcard__meta { display: grid; gap: 6px; }
   .pcard__name { font-size: 13px; }
   .page { padding-top: 34px; padding-bottom: 64px; }
-  .vintage-hero__controls { bottom: 24px; }
 }
 @media (max-width: 380px) { .shop-toolbar__sort > span { display: none; } }
 @media (prefers-reduced-motion: reduce) { .category-index a, .fav-btn { transition: none; } }
@@ -3621,12 +3666,26 @@ body {
 .vn__auth-btn,
 .auth__btn,
 .footer__newsletter-btn,
-.announcement-bar__btn {
+.announcement-bar__btn,
+.ck__actions button,
+.showroom__cta,
+.shop-fav-toggle,
+.shop-filters__clear,
+.pcard__preview-link {
   font-family: var(--font-ui);
   font-weight: 600;
   font-size: 11px;
+  line-height: 1;
   letter-spacing: 0.2em;
+  text-transform: uppercase;
   border-radius: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pcard__preview {
+    transition: none;
+    transform: none;
+  }
 }
 
 .auth__btn {
