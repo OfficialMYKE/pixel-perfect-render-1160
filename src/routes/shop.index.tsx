@@ -4,7 +4,7 @@ import { Heart, Search, X } from "lucide-react";
 import SiteChrome from "@/components/ui/site-chrome";
 import ProductCard from "@/components/ui/product-card";
 import { products, CATEGORIES, type Category } from "@/lib/products";
-import { getCategoryLabel, getSubLabel } from "@/lib/catalog";
+import { getCategoryLabel, getSubLabel, NAV_SUBS } from "@/lib/catalog";
 import { useLanguage } from "@/lib/i18n";
 import { useFavorites } from "@/lib/favorites";
 import { filterArchive, availableSizes, brandCounts, brandFamily, typeCounts, type ShopSort } from "@/lib/shop-filter";
@@ -46,7 +46,19 @@ function ShopPage() {
   const [brands, setBrands] = useState<string[]>(initialBrand ? [initialBrand] : []);
   const [types, setTypes] = useState<string[]>([]);
   const inCategory = useMemo(() => products.filter((p) => category === "all" || p.category === category), [category]);
-  const typeOptions = useMemo(() => typeCounts(inCategory), [inCategory]);
+  const typeOptions = useMemo(() => {
+    const counts = typeCounts(inCategory);
+    const cats = category === "all" ? CATEGORIES : [category];
+    for (const c of cats)
+      for (const g of NAV_SUBS[c] ?? [])
+        for (const item of g.items)
+          if (!counts.some((t) => t.sub === item.slug)) counts.push({ sub: item.slug, count: 0 });
+    return counts;
+  }, [inCategory, category]);
+  const typeLabel = (sub: string) => {
+    const owner = category !== "all" ? category : (products.find((p) => p.sub === sub)?.category ?? CATEGORIES.find((c) => NAV_SUBS[c]?.some((g) => g.items.some((i) => i.slug === sub))) ?? "");
+    return getSubLabel(owner, sub, lang);
+  };
   const brandOptions = useMemo(() => brandCounts(inCategory), [inCategory]);
   const toggle = (set: typeof setTypes, value: string) =>
     set((current) => (current.includes(value) ? current.filter((v) => v !== value) : [...current, value]));
@@ -130,7 +142,7 @@ function ShopPage() {
             <div className="shop-filters__chips">
               {typeOptions.map(({ sub, count }) => (
                 <button key={sub} type="button" className={`chip chip--size ${types.includes(sub) ? "is-active" : ""}`} aria-pressed={types.includes(sub)} onClick={() => toggle(setTypes, sub)}>
-                  {getSubLabel(category === "all" ? (products.find((p) => p.sub === sub)?.category ?? "") : category, sub, lang)} <span className="chip__count">{count}</span>
+                  {typeLabel(sub)} <span className="chip__count">{count}</span>
                 </button>
               ))}
             </div>
@@ -210,7 +222,7 @@ function ShopPage() {
 
         {visible.length === 0 ? (
           <div className="empty-state">
-            <p>{favoritesOnly && slugs.length === 0 ? (es ? "Aún no guardaste favoritos. Toca el corazón de una prenda." : "No favorites yet. Tap the heart on any piece.") : (es ? "No encontramos prendas con esos filtros." : "No pieces match those filters.")}</p>
+            <p>{types.length > 0 ? (es ? `No hay elementos de ese tipo por ahora: ${types.map(typeLabel).join(", ")}.` : `No items of that type right now: ${types.map(typeLabel).join(", ")}.`) : favoritesOnly && slugs.length === 0 ? (es ? "Aún no guardaste favoritos. Toca el corazón de una prenda." : "No favorites yet. Tap the heart on any piece.") : (es ? "No encontramos prendas con esos filtros." : "No pieces match those filters.")}</p>
             <button type="button" className="btn btn--outline" onClick={reset}>{es ? "Ver todo" : "View all"}</button>
             <Link to="/" className="shop-home-link">{es ? "Volver al inicio" : "Back home"}</Link>
           </div>

@@ -1,4 +1,5 @@
 import type { Product } from "./products";
+import { getSubLabel } from "./catalog";
 
 export type ShopSort = "featured" | "price-asc" | "price-desc";
 export interface ArchiveFilters {
@@ -29,7 +30,7 @@ export function filterArchive(items: Product[], options: ArchiveFilters): Produc
     (sizes.length === 0 || product.sizes.some((size) => sizes.includes(size.toLocaleLowerCase()))) &&
     (minPrice === null || product.price >= minPrice) &&
     (maxPrice === null || product.price <= maxPrice) &&
-    (!query || [product.name.en, product.name.es, product.brand, product.sub, product.category]
+    (!query || [product.name.en, product.name.es, product.brand, product.sub, product.category, getSubLabel(product.category, product.sub, "en"), getSubLabel(product.category, product.sub, "es")]
       .join(" ").toLocaleLowerCase().includes(query)));
   if (options.sort === "price-asc") result.sort((a, b) => a.price - b.price);
   if (options.sort === "price-desc") result.sort((a, b) => b.price - a.price);
