@@ -177,7 +177,6 @@ export default function MetroHero({ videoSrc = DEFAULT_VIDEO, className }: Metro
           muted
           playsInline
           preload="metadata"
-          poster={streetwearOne}
           className={`vintage-hero__video ${ready ? "is-ready" : ""} ${introActive ? "is-intro-active" : ""}`}
         />
         <div className="vintage-hero__shade" />
