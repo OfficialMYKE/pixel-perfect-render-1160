@@ -155,8 +155,13 @@ html {
   scroll-behavior: smooth;
   scrollbar-width: none;
 }
-html::-webkit-scrollbar {
+* {
+  scrollbar-width: none;
+}
+*::-webkit-scrollbar {
   display: none;
+  width: 0;
+  height: 0;
 }
 body {
   margin: 0;
@@ -3641,7 +3646,6 @@ body {
     flex-wrap: nowrap;
     overflow-x: auto;
     padding-bottom: 6px;
-    scrollbar-width: thin;
   }
   .chip--size {
     height: 44px;
