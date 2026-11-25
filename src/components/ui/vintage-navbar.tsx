@@ -357,7 +357,7 @@ export default function VintageNavbar() {
                     ))}
                   </ul>
                   {col.label === t.nav.marcas && (
-                    <Link to="/shop" className="vn__mega-seeall">
+                    <Link to="/brands" className="vn__mega-seeall">
                       {t.nav.verMarcas}
                     </Link>
                   )}

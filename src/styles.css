@@ -3710,3 +3710,19 @@ body {
 .auth__btn {
   border-width: 1px;
 }
+
+/* Brand + garment type filters */
+.chip__count { opacity: 0.55; font-size: 0.8em; margin-left: 4px; }
+.shop-filters__more { text-decoration: underline; color: inherit; }
+.shop-filters__chips { flex-wrap: wrap; }
+.brands-letters { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 32px; }
+.brands-letters a { min-width: 40px; height: 40px; display: grid; place-items: center; border: 1px solid currentColor; color: inherit; text-decoration: none; font-family: "Space Mono", monospace; }
+.brands-letters a:hover { background: var(--foreground); color: var(--background); }
+.brands-group { scroll-margin-top: 96px; border-top: 1px solid currentColor; padding: 20px 0 28px; display: grid; grid-template-columns: 80px 1fr; gap: 16px; }
+.brands-group h2 { font-size: 40px; font-weight: 900; line-height: 1; margin: 0; }
+.brands-group ul { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 10px; }
+.brands-item { display: grid; gap: 4px; padding: 14px 16px; border: 1px solid var(--border); color: inherit; text-decoration: none; min-height: 44px; }
+.brands-item:hover { border-color: currentColor; }
+.brands-item span { font-size: 13px; opacity: 0.7; }
+.brands-item em { font-style: normal; font-family: "Space Mono", monospace; font-size: 12px; }
+@media (max-width: 640px) { .brands-group { grid-template-columns: 1fr; gap: 10px; } .brands-group h2 { font-size: 28px; } }

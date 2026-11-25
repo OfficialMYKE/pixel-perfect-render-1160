@@ -4,10 +4,10 @@ import { Heart, Search, X } from "lucide-react";
 import SiteChrome from "@/components/ui/site-chrome";
 import ProductCard from "@/components/ui/product-card";
 import { products, CATEGORIES, type Category } from "@/lib/products";
-import { getCategoryLabel } from "@/lib/catalog";
+import { getCategoryLabel, getSubLabel } from "@/lib/catalog";
 import { useLanguage } from "@/lib/i18n";
 import { useFavorites } from "@/lib/favorites";
-import { filterArchive, availableSizes, type ShopSort } from "@/lib/shop-filter";
+import { filterArchive, availableSizes, brandCounts, brandFamily, typeCounts, type ShopSort } from "@/lib/shop-filter";
 
 const DESC = "Search one-of-one vintage streetwear, save favorites and compare prices and available sizes.";
 
@@ -18,6 +18,8 @@ function parsePrice(value: string) {
 }
 
 export const Route = createFileRoute("/shop/")({
+  validateSearch: (search: Record<string, unknown>): { brand?: string } =>
+    typeof search["brand"] === "string" && search["brand"] ? { brand: search["brand"] } : {},
   head: () => ({
     meta: [
       { title: "Shop Vintage Streetwear — AVNYC" },
@@ -40,6 +42,18 @@ function ShopPage() {
   const [query, setQuery] = useState("");
   const [favoritesOnly, setFavoritesOnly] = useState(false);
   const [sizes, setSizes] = useState<string[]>([]);
+  const initialBrand = Route.useSearch().brand;
+  const [brands, setBrands] = useState<string[]>(initialBrand ? [initialBrand] : []);
+  const [types, setTypes] = useState<string[]>([]);
+  const inCategory = useMemo(() => products.filter((p) => category === "all" || p.category === category), [category]);
+  const typeOptions = useMemo(() => typeCounts(inCategory), [inCategory]);
+  const brandOptions = useMemo(() => brandCounts(inCategory), [inCategory]);
+  const toggle = (set: typeof setTypes, value: string) =>
+    set((current) => (current.includes(value) ? current.filter((v) => v !== value) : [...current, value]));
+  const pickCategory = (c: Category | "all") => {
+    setCategory(c);
+    setTypes([]);
+  };
   const [minPrice, setMinPrice] = useState("");
   const [maxPrice, setMaxPrice] = useState("");
   const sizeOptions = useMemo(() => availableSizes(products), []);
@@ -51,21 +65,25 @@ function ShopPage() {
       favorites: slugs,
       sort,
       sizes,
+      types,
+      brands,
       minPrice: parsePrice(minPrice),
       maxPrice: parsePrice(maxPrice),
     }),
-    [query, category, favoritesOnly, slugs, sort, sizes, minPrice, maxPrice],
+    [query, category, favoritesOnly, slugs, sort, sizes, types, brands, minPrice, maxPrice],
   );
   const toggleSize = (size: string) =>
     setSizes((current) =>
       current.includes(size) ? current.filter((value) => value !== size) : [...current, size],
     );
-  const hasExtraFilters = sizes.length > 0 || minPrice !== "" || maxPrice !== "";
+  const hasExtraFilters = sizes.length > 0 || types.length > 0 || brands.length > 0 || minPrice !== "" || maxPrice !== "";
   const reset = () => {
     setQuery("");
     setCategory("all");
     setFavoritesOnly(false);
     setSizes([]);
+    setTypes([]);
+    setBrands([]);
     setMinPrice("");
     setMaxPrice("");
   };
@@ -100,13 +118,33 @@ function ShopPage() {
         </div>
         <div className="shop-toolbar__filters shop-categories" role="group" aria-label={es ? "Filtrar por categoría" : "Filter by category"}>
           {(["all", ...CATEGORIES] as const).map((c) => (
-            <button key={c} className={`chip ${category === c ? "is-active" : ""}`} onClick={() => setCategory(c)} aria-pressed={category === c}>
+            <button key={c} className={`chip ${category === c ? "is-active" : ""}`} onClick={() => pickCategory(c)} aria-pressed={category === c}>
               {c === "all" ? (es ? "Todo" : "All") : getCategoryLabel(c, lang)}
             </button>
           ))}
         </div>
 
         <div className="shop-filters">
+          <div className="shop-filters__group" role="group" aria-label={es ? "Filtrar por tipo de prenda" : "Filter by garment type"}>
+            <span className="shop-filters__label">{es ? "Tipo de prenda" : "Garment type"}</span>
+            <div className="shop-filters__chips">
+              {typeOptions.map(({ sub, count }) => (
+                <button key={sub} type="button" className={`chip chip--size ${types.includes(sub) ? "is-active" : ""}`} aria-pressed={types.includes(sub)} onClick={() => toggle(setTypes, sub)}>
+                  {getSubLabel(category === "all" ? (products.find((p) => p.sub === sub)?.category ?? "") : category, sub, lang)} <span className="chip__count">{count}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+          <div className="shop-filters__group" role="group" aria-label={es ? "Filtrar por marca" : "Filter by brand"}>
+            <span className="shop-filters__label">{es ? "Marca" : "Brand"} · <Link to="/brands" className="shop-filters__more">{es ? "ver todas" : "see all"}</Link></span>
+            <div className="shop-filters__chips">
+              {[...new Set([...brandOptions.map((b) => b.brand), ...brands])].map((brand) => (
+                <button key={brand} type="button" className={`chip chip--size ${brands.includes(brand) ? "is-active" : ""}`} aria-pressed={brands.includes(brand)} onClick={() => toggle(setBrands, brand)}>
+                  {brand} <span className="chip__count">{brandOptions.find((b) => b.brand === brand)?.count ?? 0}</span>
+                </button>
+              ))}
+            </div>
+          </div>
           <div className="shop-filters__group" role="group" aria-label={es ? "Filtrar por talla" : "Filter by size"}>
             <span className="shop-filters__label">{es ? "Talla" : "Size"}</span>
             <div className="shop-filters__chips">
@@ -157,6 +195,8 @@ function ShopPage() {
               className="shop-filters__clear"
               onClick={() => {
                 setSizes([]);
+                setTypes([]);
+                setBrands([]);
                 setMinPrice("");
                 setMaxPrice("");
               }}

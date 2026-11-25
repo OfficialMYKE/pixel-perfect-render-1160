@@ -1,6 +1,6 @@
 import { describe, test } from "node:test";
 import { deepStrictEqual } from "node:assert";
-import { filterArchive, availableSizes } from "./shop-filter";
+import { filterArchive, availableSizes, brandFamily, brandCounts } from "./shop-filter";
 import type { Product } from "./products";
 
 const items: Product[] = [
@@ -32,5 +32,14 @@ describe("archive search and favorites", () => {
   });
   test("available sizes are unique and sorted by garment size", () => {
     deepStrictEqual(availableSizes(items), ["XS", "S", "M"]);
+  });
+  test("brand filter groups label variants into one family", () => {
+    deepStrictEqual(brandFamily("Levi's Archive"), "Levi's");
+    deepStrictEqual(brandFamily("Levi's Kids"), "Levi's");
+    deepStrictEqual(filterArchive(items, { ...base, brands: ["Screen Stars"] }).map(p => p.slug), ["tee"]);
+    deepStrictEqual(brandCounts(items), [{ brand: "Archive", count: 1 }, { brand: "Screen Stars", count: 1 }]);
+  });
+  test("garment type filter keeps only selected types", () => {
+    deepStrictEqual(filterArchive(items, { ...base, types: ["jackets"] }).map(p => p.slug), ["jacket"]);
   });
 });
