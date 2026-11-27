@@ -123,7 +123,7 @@ export default function CookieBanner() {
           )}
         </div>
 
-        <div className="ck__actions">
+        <div className={`ck__actions ${showPrefs ? "" : "ck__actions--consent"}`}>
           {showPrefs ? (
             <>
               <button type="button" className="ck__link" onClick={() => setShowPrefs(false)}>

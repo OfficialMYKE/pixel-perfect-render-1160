@@ -7,7 +7,7 @@ const STORAGE_KEY = "avnyc-lang";
 const translations = {
   en: {
     heroKicker: "NEW YORK — CURATED ARCHIVE",
-    heroTitle: "True Vintage, Brand New",
+    heroTitle: "TRUE VINTAGE,\nBRAND\nNEW",
     heroTagline: "AUTHENTIC VINTAGE STORE",
     heroEst: "EST. NYC",
     heroOneOfOne: "ONE OF ONE",
@@ -252,7 +252,7 @@ const translations = {
   },
   es: {
     heroKicker: "NUEVA YORK — ARCHIVO CURADO",
-    heroTitle: "Vintage Auténtico, Como Nuevo",
+    heroTitle: "VINTAGE\nAUTENTICO\nCOMO NUEVO",
     heroTagline: "AUTHENTIC VINTAGE STORE",
     heroEst: "EST. NYC",
     heroOneOfOne: "ÚNICO EN EL MUNDO",
