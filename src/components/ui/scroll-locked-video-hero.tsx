@@ -6,7 +6,9 @@ import VintageNavbar from "@/components/ui/vintage-navbar";
 import Footer from "@/components/ui/footer";
 import ProductCard from "@/components/ui/product-card";
 import { useLanguage } from "@/lib/i18n";
-import { getFeatured } from "@/lib/products";
+import { getFeatured, products } from "@/lib/products";
+import HelixRibbonHero from "@/components/ui/helix-ribbon-hero";
+import photoVarsity from "@/assets/products/varsity-jacket-ny.jpg";
 import streetwearOne from "@/assets/vintage-streetwear-01.jpg";
 import streetwearTwo from "@/assets/vintage-streetwear-02.jpg";
 import streetwearThree from "@/assets/vintage-streetwear-03.jpg";
@@ -30,6 +32,8 @@ const LOOKBOOK = [
   { src: streetwearThree, alt: "Vintage leather bomber styled on a New York subway platform" },
   { src: streetwearFour, alt: "Archive graphic tees, workwear and faded denim" },
 ];
+
+const HELIX_PROJECTS = products.slice(0, 12).map((p) => ({ src: p.images[0] ?? "", title: p.name.en }));
 
 const CATEGORY_TILES = [
   { key: "hombre", img: archiveJacket },
@@ -212,44 +216,30 @@ export default function MetroHero({ videoSrc = DEFAULT_VIDEO, className }: Metro
         {es ? "Saltar al contenido" : "Skip to content"}
       </a>
 
-      <section
-        ref={heroRef}
-        className={className ? `${className} vintage-hero` : "vintage-hero"}
-        aria-label={es ? "Introducción streetwear vintage" : "Vintage streetwear introduction"}
-      >
-        <img
-          src={poster ?? streetwearOne}
-          alt=""
-          aria-hidden="true"
-          className={`vintage-hero__poster ${ready ? "is-hidden" : ""}`}
-        />
-
-        <video
-          ref={videoRef}
-          src={videoSrc}
-          muted
-          playsInline
-          preload="auto"
-          poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1' height='1'%3E%3Crect fill='%23000'/%3E%3C/svg%3E"
-          className={`vintage-hero__video ${ready ? "is-ready" : ""}`}
-        />
-        <div className="vintage-hero__shade" />
-
-        <div ref={textARef} className="vintage-hero__text vintage-hero__text--a">
-          <p className="vintage-hero__kicker">{t.heroKicker}</p>
-          <h1>{t.heroTitle}</h1>
-        </div>
-
-        <div ref={textBRef} className="vintage-hero__text vintage-hero__text--b">
-          <span>{t.heroEst}</span>
-          <p>{t.heroTagline}</p>
-          <span>{t.heroOneOfOne}</span>
-        </div>
-
-        <div className="vintage-hero__progress" aria-hidden="true">
-          <div ref={progressBarRef} />
-        </div>
-      </section>
+      <HelixRibbonHero
+        {...(className ? { className } : {})}
+        greeting={es ? "Vintage real" : "True vintage"}
+        name="New York"
+        portrait={photoVarsity}
+        portraitAlt={es ? "Chaqueta varsity vintage" : "Vintage varsity jacket"}
+        projects={HELIX_PROJECTS}
+        brand="AVNYC"
+        links={[
+          { label: es ? "Tienda" : "Shop", href: "/shop" },
+          { label: es ? "Nuevos" : "New", href: "/shop/nuevos" },
+          { label: es ? "Ofertas" : "Sale", href: "/shop/ofertas" },
+          { label: es ? "Nosotros" : "About", href: "/about" },
+        ]}
+        cta={{ label: es ? "Comprar ahora" : "Shop now", href: "/shop" }}
+        count={es ? `( ${products.length} piezas únicas )` : `( ${products.length} one-of-ones )`}
+        bio={es
+          ? "Streetwear vintage auténtico, seleccionado a mano en Nueva York. Cada pieza es única, restaurada y lista para usar."
+          : "Authentic vintage streetwear, hand-picked in New York. Every piece is one of one, restored and ready to wear."}
+        scrollHint={es ? "Desliza" : "Scroll"}
+        background="var(--vintage-ink)"
+        foreground="var(--vintage-paper)"
+        fontHref={null}
+      />
 
       <header>
         <div ref={announcementRef}>

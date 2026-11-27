@@ -3519,3 +3519,10 @@ button, .btn, [class*="-btn"], [class*="__btn"], [class*="__cta"], input, select
 @media (max-width: 640px) {
   .btn, .auth__btn, .showroom__cta { min-height: 52px; padding: 0 1.5rem; }
 }
+
+/* Helix hero in the store's type */
+.hrh-stage { font-family: Arial, Helvetica, sans-serif !important; }
+.hrh-line { font-family: "Arial Black", Arial, Helvetica, sans-serif !important; font-weight: 900 !important; letter-spacing: -0.03em !important; }
+.hrh-nav > a:last-child { background: var(--vintage-red); color: var(--vintage-paper); padding: 12px 20px; }
+.hrh-count, .hrh-hint { color: var(--vintage-red); }
+.hrh-card-img { background: var(--vintage-ink) !important; }
