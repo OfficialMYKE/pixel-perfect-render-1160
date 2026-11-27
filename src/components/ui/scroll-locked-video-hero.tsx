@@ -1,6 +1,14 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { ArrowUpRight, Globe, RotateCcw, ShieldCheck, Truck } from "lucide-react";
+import {
+  ArrowLeft,
+  ArrowRight,
+  ArrowUpRight,
+  Globe,
+  RotateCcw,
+  ShieldCheck,
+  Truck,
+} from "lucide-react";
 import AnnouncementBar from "@/components/ui/announcement-bar";
 import VintageNavbar from "@/components/ui/vintage-navbar";
 import Footer from "@/components/ui/footer";
@@ -49,12 +57,7 @@ const HERO_MODELS = [
 // Repeat the editorial model shots to fill the helix ribbon.
 const HELIX_PROJECTS = [...HERO_MODELS, ...HERO_MODELS];
 
-const CATEGORY_TILES = [
-  { key: "hombre", img: archiveJacket },
-  { key: "mujer", img: streetwearThree },
-  { key: "ninos", img: archiveSweatshirt },
-  { key: "accesorios", img: archiveStore },
-] as const;
+const CATEGORY_TILES = ["hombre", "mujer", "ninos", "accesorios"] as const;
 
 const TRUST_ITEMS = [
   { icon: Truck, key: "shipping" },
@@ -92,7 +95,17 @@ export default function MetroHero({ videoSrc = DEFAULT_VIDEO, className }: Metro
   const [poster, setPoster] = useState<string | null>(null);
   const transitioned = useRef(false);
 
-  const featured = getFeatured(5);
+  const featured = getFeatured(8);
+
+  const newArrivalsRef = useRef<HTMLDivElement>(null);
+  const scrollNewArrivals = (direction: -1 | 1) => {
+    const rail = newArrivalsRef.current;
+    if (!rail) return;
+    rail.scrollBy({
+      left: direction * rail.clientWidth * 0.8,
+      behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth",
+    });
+  };
 
   useEffect(() => {
     const video = videoRef.current;
@@ -341,15 +354,37 @@ export default function MetroHero({ videoSrc = DEFAULT_VIDEO, className }: Metro
                 {es ? "Nuevos ingresos" : "New arrivals"}
               </h2>
             </div>
-            <Link
-              to="/shop/$category"
-              params={{ category: "nuevos" }}
-              className="home-section__link"
-            >
-              {es ? "Ver todos" : "View all"} <ArrowUpRight aria-hidden="true" size={15} />
-            </Link>
+            <div className="home-section__actions">
+              <button
+                type="button"
+                className="new-arrivals__arrow"
+                aria-label={es ? "Prendas anteriores" : "Previous items"}
+                onClick={() => scrollNewArrivals(-1)}
+              >
+                <ArrowLeft aria-hidden="true" size={18} />
+              </button>
+              <button
+                type="button"
+                className="new-arrivals__arrow"
+                aria-label={es ? "Prendas siguientes" : "Next items"}
+                onClick={() => scrollNewArrivals(1)}
+              >
+                <ArrowRight aria-hidden="true" size={18} />
+              </button>
+              <Link
+                to="/shop/$category"
+                params={{ category: "nuevos" }}
+                className="home-section__link"
+              >
+                {es ? "Ver todos" : "View all"} <ArrowUpRight aria-hidden="true" size={15} />
+              </Link>
+            </div>
           </div>
-          <div className="product-grid">
+          <div
+            ref={newArrivalsRef}
+            className="product-grid product-grid--carousel"
+            aria-label={es ? "Nuevos ingresos" : "New arrivals"}
+          >
             {featured.map((p) => (
               <ProductCard key={p.slug} product={p} />
             ))}
@@ -424,14 +459,13 @@ export default function MetroHero({ videoSrc = DEFAULT_VIDEO, className }: Metro
             </div>
           </div>
           <div className="category-tiles">
-            {CATEGORY_TILES.map(({ key, img }) => (
+            {CATEGORY_TILES.map((key) => (
               <Link
                 key={key}
                 to="/shop/$category"
                 params={{ category: key }}
                 className="category-tile"
               >
-                <img src={img} alt="" loading="lazy" width={600} height={750} />
                 <span className="category-tile__label">
                   {t.footer.shop[key]} <ArrowUpRight aria-hidden="true" size={16} />
                 </span>
