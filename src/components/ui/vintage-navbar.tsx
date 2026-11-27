@@ -147,22 +147,28 @@ export default function VintageNavbar() {
 
   useEffect(() => {
     if (!mobileOpen) return;
+    const menuButton = menuButtonRef.current;
     const previous = document.body.style.overflow;
     document.body.style.overflow = "hidden";
-    mobileRef.current?.querySelector<HTMLButtonElement>("button")?.focus();
+    mobileRef.current?.querySelector<HTMLButtonElement>("button")?.focus({ preventScroll: true });
     const onTab = (event: KeyboardEvent) => {
       if (event.key !== "Tab") return;
       const controls = Array.from(mobileRef.current?.querySelectorAll<HTMLElement>("a[href], button:not([disabled]), input") ?? []);
       const first = controls[0];
       const last = controls.at(-1);
-      if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last?.focus(); }
-      else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first?.focus(); }
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last?.focus({ preventScroll: true });
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first?.focus({ preventScroll: true });
+      }
     };
     document.addEventListener("keydown", onTab);
     return () => {
       document.body.style.overflow = previous;
       document.removeEventListener("keydown", onTab);
-      menuButtonRef.current?.focus();
+      menuButton?.focus({ preventScroll: true });
     };
   }, [mobileOpen]);
 
@@ -188,7 +194,7 @@ export default function VintageNavbar() {
   }, []);
 
   useEffect(() => {
-    if (searchOpen) searchInputRef.current?.focus();
+    if (searchOpen) searchInputRef.current?.focus({ preventScroll: true });
   }, [searchOpen]);
 
   const closeMobile = () => {

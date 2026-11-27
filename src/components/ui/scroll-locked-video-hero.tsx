@@ -6,7 +6,7 @@ import VintageNavbar from "@/components/ui/vintage-navbar";
 import Footer from "@/components/ui/footer";
 import ProductCard from "@/components/ui/product-card";
 import { useLanguage } from "@/lib/i18n";
-import { getByCategory, getFeatured, getProduct } from "@/lib/products";
+import { getByCategory, getFeatured } from "@/lib/products";
 import streetwearOne from "@/assets/vintage-streetwear-01.jpg";
 import streetwearTwo from "@/assets/vintage-streetwear-02.jpg";
 import streetwearThree from "@/assets/vintage-streetwear-03.jpg";
@@ -26,22 +26,18 @@ const LOOKBOOK = [
   {
     src: streetwearOne,
     alt: "Vintage varsity jacket and loose denim on a New York street",
-    productSlug: "varsity-jacket-ny",
   },
   {
     src: streetwearTwo,
     alt: "Curated vintage racing jackets in a New York store",
-    productSlug: "racing-jacket-01",
   },
   {
     src: streetwearThree,
     alt: "Vintage leather bomber styled on a New York subway platform",
-    productSlug: "leather-bomber",
   },
   {
     src: streetwearFour,
     alt: "Archive graphic tees, workwear and faded denim",
-    productSlug: "graphic-tee-archive",
   },
 ];
 
@@ -80,7 +76,6 @@ export default function MetroHero({ videoSrc = DEFAULT_VIDEO, className }: Metro
       PerformanceNavigationTiming | undefined;
     if (navigation?.type === "reload") {
       sessionStorage.removeItem(HERO_DISMISSED_STORAGE_KEY);
-      window.scrollTo(0, 0);
     } else if (sessionStorage.getItem(HERO_DISMISSED_STORAGE_KEY)) {
       videoRef.current?.pause();
       setHeroVisible(false);
@@ -243,25 +238,15 @@ export default function MetroHero({ videoSrc = DEFAULT_VIDEO, className }: Metro
           >
             <div className="vintage-lookbook__track">
               {LOOKBOOK.map((image, index) => {
-                const product = getProduct(image.productSlug);
-                if (!product) {
-                  throw new Error(`Missing lookbook product: ${image.productSlug}`);
-                }
                 return (
-                  <figure key={image.productSlug}>
-                    <Link
-                      to="/product/$slug"
-                      params={{ slug: product.slug }}
-                      className="vintage-lookbook__figure-link"
-                    >
-                      <img
-                        src={image.src}
-                        alt={image.alt}
-                        loading="lazy"
-                        width={768}
-                        height={1024}
-                      />
-                    </Link>
+                  <figure key={image.alt}>
+                    <img
+                      src={image.src}
+                      alt={image.alt}
+                      loading="lazy"
+                      width={768}
+                      height={1024}
+                    />
                     <figcaption>
                       {String(index + 1).padStart(2, "0")} / NYC ARCHIVE
                     </figcaption>
