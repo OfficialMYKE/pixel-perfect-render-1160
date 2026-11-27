@@ -1059,7 +1059,6 @@ body {
 .vintage-lookbook__rail {
   width: 100%;
   overflow: hidden;
-  mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
 }
 .vintage-lookbook__track {
   display: grid;
@@ -1104,12 +1103,6 @@ body {
     transform: translateY(5px);
   }
 }
-@keyframes vintage-marquee {
-  to {
-    transform: translateX(calc(-50% - 13px));
-  }
-}
-
 /* Mobile: 2-col tight grid */
 @media (min-width: 480px) {
   .vintage-lookbook__track {
@@ -1131,25 +1124,17 @@ body {
   }
 }
 
-/* Desktop: horizontal marquee */
+/* Desktop: show each lookbook image once in a four-column grid */
 @media (min-width: 1024px) {
-  .vintage-lookbook__rail {
-    overflow: hidden;
-    mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
-  }
   .vintage-lookbook__track {
-    display: flex;
-    width: max-content;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    width: 100%;
     gap: clamp(12px, 2vw, 26px);
-    animation: vintage-marquee 34s linear infinite;
-    padding: 0;
-  }
-  .vintage-lookbook__track:hover {
-    animation-play-state: paused;
+    padding: 0 5vw;
   }
   .vintage-lookbook figure {
-    width: clamp(230px, 28vw, 390px);
-    flex: 0 0 auto;
+    width: 100%;
   }
   .vintage-lookbook figure:nth-child(even) {
     transform: translateY(22px);

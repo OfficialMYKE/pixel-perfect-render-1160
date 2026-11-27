@@ -242,13 +242,13 @@ export default function MetroHero({ videoSrc = DEFAULT_VIDEO, className }: Metro
             aria-label={es ? "Colección streetwear vintage" : "Vintage streetwear collection"}
           >
             <div className="vintage-lookbook__track">
-              {[...LOOKBOOK, ...LOOKBOOK].map((image, index) => {
+              {LOOKBOOK.map((image, index) => {
                 const product = getProduct(image.productSlug);
                 if (!product) {
                   throw new Error(`Missing lookbook product: ${image.productSlug}`);
                 }
                 return (
-                  <figure key={`${image.src}-${index}`}>
+                  <figure key={image.productSlug}>
                     <Link
                       to="/product/$slug"
                       params={{ slug: product.slug }}
@@ -256,14 +256,14 @@ export default function MetroHero({ videoSrc = DEFAULT_VIDEO, className }: Metro
                     >
                       <img
                         src={image.src}
-                        alt={index < LOOKBOOK.length ? image.alt : ""}
+                        alt={image.alt}
                         loading="lazy"
                         width={768}
                         height={1024}
                       />
                     </Link>
                     <figcaption>
-                      {String((index % LOOKBOOK.length) + 1).padStart(2, "0")} / NYC ARCHIVE
+                      {String(index + 1).padStart(2, "0")} / NYC ARCHIVE
                     </figcaption>
                   </figure>
                 );
