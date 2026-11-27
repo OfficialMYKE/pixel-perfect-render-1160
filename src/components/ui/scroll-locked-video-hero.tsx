@@ -39,12 +39,12 @@ const LOOKBOOK = [
 ];
 
 const HERO_MODELS = [
-  { src: modelVarsity, title: "Varsity — Subway" },
+  { src: modelVarsity, title: "Varsity — Subway", objectPosition: "center 18%" },
   { src: modelWorkwear, title: "Workwear — Brooklyn" },
-  { src: modelGraphicTee, title: "Graphic tee — Taxi" },
-  { src: modelHoodie, title: "College hoodie — SoHo" },
-  { src: modelWindbreaker, title: "Windbreaker — Manhattan" },
-  { src: modelBomber, title: "Leather bomber — Dusk" },
+  { src: modelGraphicTee, title: "Graphic tee — Taxi", objectPosition: "center 8%" },
+  { src: modelHoodie, title: "College hoodie — SoHo", objectPosition: "center 18%" },
+  { src: modelWindbreaker, title: "Windbreaker — Manhattan", objectPosition: "center top" },
+  { src: modelBomber, title: "Leather bomber — Dusk", objectPosition: "center top" },
 ];
 // Repeat the editorial model shots to fill the helix ribbon.
 const HELIX_PROJECTS = [...HERO_MODELS, ...HERO_MODELS];

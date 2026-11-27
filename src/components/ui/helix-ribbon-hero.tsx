@@ -21,6 +21,8 @@ export type HelixProject = {
   src: string
   /** Caption under the card in the closing grid. */
   title: string
+  /** Image focal point in the closing grid. */
+  objectPosition?: string
 }
 
 export interface HelixRibbonHeroProps {
@@ -613,7 +615,15 @@ export default function HelixRibbonHero({
           {tiles.map((pr, i) => (
             <div key={i} className="hrh-card">
               <div className="hrh-card-img">
-                <img src={pr.src} alt={pr.title} width={720} height={480} style={{ maxWidth: "none" }} loading="lazy" draggable={false} />
+                <img
+                  src={pr.src}
+                  alt={pr.title}
+                  width={720}
+                  height={480}
+                  style={{ maxWidth: "none", objectPosition: pr.objectPosition }}
+                  loading="lazy"
+                  draggable={false}
+                />
               </div>
               <div className="hrh-cap" style={{ opacity: 0 }}>
                 <span>{pr.title}</span>
@@ -646,5 +656,4 @@ export default function HelixRibbonHero({
     </section>
   )
 }
-
 
