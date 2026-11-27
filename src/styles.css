@@ -306,7 +306,6 @@ body {
     sans-serif;
   letter-spacing: 0;
   text-transform: uppercase;
-  white-space: pre-line;
   text-wrap: balance;
   word-break: break-word;
   overflow-wrap: break-word;
@@ -3195,25 +3194,6 @@ body {
   }
   .ck__actions {
     min-width: 0;
-  }
-  .ck__actions--consent {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    align-items: stretch;
-  }
-  .ck__actions--consent .ck__btn-row {
-    display: contents;
-  }
-  .ck__actions--consent > button,
-  .ck__actions--consent .btn {
-    width: 100%;
-    min-width: 0;
-    height: 46px;
-    min-height: 46px;
-    padding: 10px 4px;
-    font-size: 9px;
-    letter-spacing: 0.04em;
-    white-space: nowrap;
   }
 }
 .archive-facts__list {
