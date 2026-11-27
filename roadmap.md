@@ -1,6 +1,6 @@
 # Current work
-- [x] Remove the home garment rail and simplify repetitive sections and disruptive motion.
-- [x] Add shop search and browser-local favorites, shared by product cards and garment details.
-- [x] Improve product details and desktop/mobile layouts.
-- [x] Add a branded share preview and complete route metadata.
-- [x] Verify shopping flows and responsive screens, then save changes.
+- [ ] Fix narrow-screen overflow, crowded controls and navigation accessibility.
+- [ ] Make shop filters compact and preserve search when navigating from the header.
+- [ ] Remove obstructive product hover panels and repeated mobile lookbook images.
+- [ ] Correct hero playback controls and product detail navigation state.
+- [ ] Complete page metadata and verify desktop/mobile shopping flows.

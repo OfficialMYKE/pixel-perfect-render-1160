@@ -3,41 +3,6 @@ import type { Product } from "@/lib/products";
 import { useLanguage } from "@/lib/i18n";
 import FavoriteButton from "@/components/ui/favorite-button";
 
-export function ProductPreview({
-  product,
-  archive = false,
-}: {
-  product: Product;
-  archive?: boolean;
-}) {
-  const { lang } = useLanguage();
-
-  return (
-    <div
-      className={`pcard__preview${archive ? " pcard__preview--archive" : ""}`}
-      role="dialog"
-      aria-label={
-        lang === "es" ? `Vista rápida: ${product.name[lang]}` : `Quick view: ${product.name[lang]}`
-      }
-    >
-      <p className="pcard__preview-brand">{product.brand}</p>
-      <h3 className="pcard__preview-name">{product.name[lang]}</h3>
-      <p className="pcard__preview-description">{product.description[lang]}</p>
-      <p className="pcard__preview-meta">
-        {product.condition} <span aria-hidden="true">/</span> {product.sizes.join(" · ")}
-      </p>
-      <p className="pcard__preview-price">${product.price}</p>
-      <Link
-        to="/product/$slug"
-        params={{ slug: product.slug }}
-        className="btn btn--primary pcard__preview-link"
-      >
-        {lang === "es" ? "Ver prenda" : "View item"}
-      </Link>
-    </div>
-  );
-}
-
 export default function ProductCard({ product }: { product: Product }) {
   const { lang } = useLanguage();
   const onSale = product.tags.includes("sale");
@@ -45,7 +10,7 @@ export default function ProductCard({ product }: { product: Product }) {
   const hasSecond = Boolean(product.images[1]);
 
   return (
-    <article className="pcard pcard--preview">
+    <article className="pcard">
       <Link to="/product/$slug" params={{ slug: product.slug }} className="pcard__link">
         <div className="pcard__media">
           <img
@@ -85,7 +50,6 @@ export default function ProductCard({ product }: { product: Product }) {
           <p className="pcard__sizes">{product.sizes.join(" · ")}</p>
         </div>
       </Link>
-      <ProductPreview product={product} />
       <FavoriteButton slug={product.slug} name={product.name[lang]} className="pcard__fav" />
     </article>
   );

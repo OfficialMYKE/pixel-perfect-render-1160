@@ -1,5 +1,6 @@
+import { Button } from "@/components/ui/button";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Heart, Search, X } from "lucide-react";
 import SiteChrome from "@/components/ui/site-chrome";
 import ProductCard from "@/components/ui/product-card";
@@ -11,7 +12,6 @@ import {
   filterArchive,
   availableSizes,
   brandCounts,
-  brandFamily,
   typeCounts,
   type ShopSort,
 } from "@/lib/shop-filter";
@@ -26,8 +26,10 @@ function parsePrice(value: string) {
 }
 
 export const Route = createFileRoute("/shop/")({
-  validateSearch: (search: Record<string, unknown>): { brand?: string } =>
-    typeof search["brand"] === "string" && search["brand"] ? { brand: search["brand"] } : {},
+  validateSearch: (search: Record<string, unknown>): { brand?: string; q?: string } => ({
+    ...(typeof search["brand"] === "string" && search["brand"] ? { brand: search["brand"] } : {}),
+    ...(typeof search["q"] === "string" && search["q"] ? { q: search["q"] } : {}),
+  }),
   head: () => ({
     meta: [
       { title: "Shop Vintage Streetwear — AVNYC" },
@@ -47,12 +49,17 @@ function ShopPage() {
   const { slugs } = useFavorites();
   const [category, setCategory] = useState<Category | "all">("all");
   const [sort, setSort] = useState<ShopSort>("featured");
-  const [query, setQuery] = useState("");
+  const search = Route.useSearch();
+  const [query, setQuery] = useState(search.q ?? "");
   const [favoritesOnly, setFavoritesOnly] = useState(false);
   const [sizes, setSizes] = useState<string[]>([]);
-  const initialBrand = Route.useSearch().brand;
+  const initialBrand = search.brand;
   const [brands, setBrands] = useState<string[]>(initialBrand ? [initialBrand] : []);
   const [types, setTypes] = useState<string[]>([]);
+  useEffect(() => {
+    setBrands(search.brand ? [search.brand] : []);
+    setQuery(search.q ?? "");
+  }, [search.brand, search.q]);
   const inCategory = useMemo(
     () => products.filter((p) => category === "all" || p.category === category),
     [category],
@@ -144,24 +151,23 @@ function ShopPage() {
               placeholder={es ? "Buscar chaqueta, Levi's, denim…" : "Search jacket, Levi's, denim…"}
             />
             {query && (
-              <button
+              <Button variant="editorial" size="editorial"
                 type="button"
                 onClick={() => setQuery("")}
                 aria-label={es ? "Borrar búsqueda" : "Clear search"}
               >
                 <X size={16} />
-              </button>
+              </Button>
             )}
           </label>
-          <button
-            type="button"
+          <Button variant="editorial" size="editorial" type="button"
             className={`chip shop-fav-toggle ${favoritesOnly ? "is-active" : ""}`}
             aria-pressed={favoritesOnly}
             onClick={() => setFavoritesOnly((v) => !v)}
           >
             <Heart size={14} fill={favoritesOnly ? "currentColor" : "none"} aria-hidden="true" />{" "}
             {es ? "Favoritos" : "Favorites"} ({slugs.length})
-          </button>
+          </Button>
           <label className="shop-toolbar__sort">
             <span>{es ? "Ordenar" : "Sort"}</span>
             <select value={sort} onChange={(e) => setSort(e.target.value as ShopSort)}>
@@ -177,17 +183,22 @@ function ShopPage() {
           aria-label={es ? "Filtrar por categoría" : "Filter by category"}
         >
           {(["all", ...CATEGORIES] as const).map((c) => (
-            <button
+            <Button variant="editorial" size="editorial" type="button"
               key={c}
               className={`chip ${category === c ? "is-active" : ""}`}
               onClick={() => pickCategory(c)}
               aria-pressed={category === c}
             >
               {c === "all" ? (es ? "Todo" : "All") : getCategoryLabel(c, lang)}
-            </button>
+            </Button>
           ))}
         </div>
 
+        <details className="shop-filter-disclosure">
+          <summary>
+            <span>{es ? "Filtros" : "Filters"}{hasExtraFilters ? ` (${types.length + brands.length + sizes.length + Number(minPrice !== "") + Number(maxPrice !== "")})` : ""}</span>
+            <span className="shop-filter-disclosure__hint">{es ? "Tipo · Marca · Talla · Precio" : "Type · Brand · Size · Price"}</span>
+          </summary>
         <div className="shop-filters">
           <div
             className="shop-filters__group"
@@ -197,7 +208,7 @@ function ShopPage() {
             <span className="shop-filters__label">{es ? "Tipo de prenda" : "Garment type"}</span>
             <div className="shop-filters__chips">
               {typeOptions.map(({ sub, count }) => (
-                <button
+                <Button variant="editorial" size="editorial"
                   key={sub}
                   type="button"
                   className={`chip chip--size ${types.includes(sub) ? "is-active" : ""}`}
@@ -205,7 +216,7 @@ function ShopPage() {
                   onClick={() => toggle(setTypes, sub)}
                 >
                   {typeLabel(sub)} <span className="chip__count">{count}</span>
-                </button>
+                </Button>
               ))}
             </div>
           </div>
@@ -222,7 +233,7 @@ function ShopPage() {
             </span>
             <div className="shop-filters__chips">
               {[...new Set([...brandOptions.map((b) => b.brand), ...brands])].map((brand) => (
-                <button
+                <Button variant="editorial" size="editorial"
                   key={brand}
                   type="button"
                   className={`chip chip--size ${brands.includes(brand) ? "is-active" : ""}`}
@@ -233,7 +244,7 @@ function ShopPage() {
                   <span className="chip__count">
                     {brandOptions.find((b) => b.brand === brand)?.count ?? 0}
                   </span>
-                </button>
+                </Button>
               ))}
             </div>
           </div>
@@ -245,7 +256,7 @@ function ShopPage() {
             <span className="shop-filters__label">{es ? "Talla" : "Size"}</span>
             <div className="shop-filters__chips">
               {sizeOptions.map((size) => (
-                <button
+                <Button variant="editorial" size="editorial"
                   key={size}
                   type="button"
                   className={`chip chip--size ${sizes.includes(size) ? "is-active" : ""}`}
@@ -253,7 +264,7 @@ function ShopPage() {
                   onClick={() => toggleSize(size)}
                 >
                   {size === "One size" ? (es ? "Única" : "One size") : size}
-                </button>
+                </Button>
               ))}
             </div>
           </div>
@@ -286,8 +297,7 @@ function ShopPage() {
             </div>
           </div>
           {hasExtraFilters && (
-            <button
-              type="button"
+            <Button variant="editorial" size="editorial" type="button"
               className="shop-filters__clear"
               onClick={() => {
                 setSizes([]);
@@ -298,9 +308,11 @@ function ShopPage() {
               }}
             >
               {es ? "Limpiar filtros" : "Clear filters"}
-            </button>
+            </Button>
           )}
         </div>
+
+        </details>
 
         <p className="shop-count" aria-live="polite">
           {visible.length}{" "}
@@ -322,9 +334,9 @@ function ShopPage() {
                     ? "No encontramos prendas con esos filtros."
                     : "No pieces match those filters."}
             </p>
-            <button type="button" className="btn btn--outline" onClick={reset}>
+            <Button variant="editorial" size="editorial" type="button" className="btn btn--outline" onClick={reset}>
               {es ? "Ver todo" : "View all"}
-            </button>
+            </Button>
             <Link to="/" className="shop-home-link">
               {es ? "Volver al inicio" : "Back home"}
             </Link>

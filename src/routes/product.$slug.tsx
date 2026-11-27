@@ -1,3 +1,4 @@
+import { Button } from "@/components/ui/button";
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { useState } from "react";
 import SiteChrome from "@/components/ui/site-chrome";
@@ -104,7 +105,7 @@ function ProductPage() {
             {product.images.length > 1 && (
               <div className="pdp__thumbs" role="group" aria-label="Product images">
                 {product.images.map((img, i) => (
-                  <button
+                  <Button variant="editorial" size="editorial" type="button"
                     key={i}
                     className={`pdp__thumb ${imageIdx === i ? "is-active" : ""}`}
                     onClick={() => setImageIdx(i)}
@@ -112,7 +113,7 @@ function ProductPage() {
                     aria-pressed={imageIdx === i}
                   >
                     <img src={img} alt="" width={96} height={128} />
-                  </button>
+                  </Button>
                 ))}
               </div>
             )}
@@ -155,7 +156,7 @@ function ProductPage() {
               </p>
               <div className="pdp__size-list" role="group" aria-labelledby="size-label">
                 {product.sizes.map((s) => (
-                  <button
+                  <Button variant="editorial" size="editorial" type="button"
                     key={s}
                     className={`size-btn ${size === s ? "is-active" : ""}`}
                     onClick={() => {
@@ -165,7 +166,7 @@ function ProductPage() {
                     aria-pressed={size === s}
                   >
                     {s}
-                  </button>
+                  </Button>
                 ))}
               </div>
               {error && (
@@ -175,7 +176,7 @@ function ProductPage() {
               )}
             </div>
 
-            <button className="btn btn--primary pdp__add" onClick={handleAdd}>
+            <Button variant="editorial" size="editorial" type="button" className="btn btn--primary pdp__add" onClick={handleAdd}>
               {added
                 ? lang === "es"
                   ? "Añadido ✓"
@@ -183,7 +184,7 @@ function ProductPage() {
                 : lang === "es"
                   ? "Añadir al carrito"
                   : "Add to cart"}
-            </button>
+            </Button>
 
             <ul className="pdp__notes">
               <li>
