@@ -19,12 +19,25 @@ export const Route = createFileRoute("/product/$slug")({
         { title: product ? `${product.name.en} — $${product.price} | AVNYC` : "AVNYC" },
         { name: "description", content: product?.description.en ?? "AVNYC vintage streetwear." },
         { property: "og:title", content: product ? `${product.name.en} — AVNYC` : "AVNYC" },
-        { property: "og:description", content: product ? `$${product.price} · ${product.condition} · Sizes ${product.sizes.join(", ")}` : "AVNYC vintage streetwear." },
+        {
+          property: "og:description",
+          content: product
+            ? `$${product.price} · ${product.condition} · Sizes ${product.sizes.join(", ")}`
+            : "AVNYC vintage streetwear.",
+        },
         { property: "og:type", content: "product" },
         { name: "twitter:card", content: "summary_large_image" },
-        { property: "og:url", content: `https://pixel-perfect-render-1160.lovable.app/product/${params.slug}` },
+        {
+          property: "og:url",
+          content: `https://pixel-perfect-render-1160.lovable.app/product/${params.slug}`,
+        },
       ],
-      links: [{ rel: "canonical", href: `https://pixel-perfect-render-1160.lovable.app/product/${params.slug}` }],
+      links: [
+        {
+          rel: "canonical",
+          href: `https://pixel-perfect-render-1160.lovable.app/product/${params.slug}`,
+        },
+      ],
     };
   },
   component: ProductPage,

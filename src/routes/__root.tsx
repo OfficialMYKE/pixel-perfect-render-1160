@@ -158,9 +158,9 @@ function RootComponent() {
       <LanguageProvider>
         <CartProvider>
           <FavoritesProvider>
-          {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-          <Outlet />
-          <CookieBanner />
+            {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
+            <Outlet />
+            <CookieBanner />
           </FavoritesProvider>
         </CartProvider>
       </LanguageProvider>

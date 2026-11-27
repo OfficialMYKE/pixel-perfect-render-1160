@@ -22,16 +22,30 @@ export function filterArchive(items: Product[], options: ArchiveFilters): Produc
   const maxPrice = options.maxPrice ?? null;
   const types = options.types ?? [];
   const brands = options.brands ?? [];
-  const result = items.filter((product) =>
-    (types.length === 0 || types.includes(product.sub)) &&
-    (brands.length === 0 || brands.includes(brandFamily(product.brand))) &&
-    (options.category === "all" || product.category === options.category) &&
-    (!options.favoritesOnly || options.favorites.includes(product.slug)) &&
-    (sizes.length === 0 || product.sizes.some((size) => sizes.includes(size.toLocaleLowerCase()))) &&
-    (minPrice === null || product.price >= minPrice) &&
-    (maxPrice === null || product.price <= maxPrice) &&
-    (!query || [product.name.en, product.name.es, product.brand, product.sub, product.category, getSubLabel(product.category, product.sub, "en"), getSubLabel(product.category, product.sub, "es")]
-      .join(" ").toLocaleLowerCase().includes(query)));
+  const result = items.filter(
+    (product) =>
+      (types.length === 0 || types.includes(product.sub)) &&
+      (brands.length === 0 || brands.includes(brandFamily(product.brand))) &&
+      (options.category === "all" || product.category === options.category) &&
+      (!options.favoritesOnly || options.favorites.includes(product.slug)) &&
+      (sizes.length === 0 ||
+        product.sizes.some((size) => sizes.includes(size.toLocaleLowerCase()))) &&
+      (minPrice === null || product.price >= minPrice) &&
+      (maxPrice === null || product.price <= maxPrice) &&
+      (!query ||
+        [
+          product.name.en,
+          product.name.es,
+          product.brand,
+          product.sub,
+          product.category,
+          getSubLabel(product.category, product.sub, "en"),
+          getSubLabel(product.category, product.sub, "es"),
+        ]
+          .join(" ")
+          .toLocaleLowerCase()
+          .includes(query)),
+  );
   if (options.sort === "price-asc") result.sort((a, b) => a.price - b.price);
   if (options.sort === "price-desc") result.sort((a, b) => b.price - a.price);
   return result;
@@ -57,12 +71,17 @@ export function brandFamily(brand: string): string {
 
 export function brandCounts(items: Product[]): Array<{ brand: string; count: number }> {
   const counts = new Map<string, number>();
-  for (const p of items) counts.set(brandFamily(p.brand), (counts.get(brandFamily(p.brand)) ?? 0) + 1);
-  return [...counts].map(([brand, count]) => ({ brand, count })).sort((a, b) => a.brand.localeCompare(b.brand));
+  for (const p of items)
+    counts.set(brandFamily(p.brand), (counts.get(brandFamily(p.brand)) ?? 0) + 1);
+  return [...counts]
+    .map(([brand, count]) => ({ brand, count }))
+    .sort((a, b) => a.brand.localeCompare(b.brand));
 }
 
 export function typeCounts(items: Product[]): Array<{ sub: string; count: number }> {
   const counts = new Map<string, number>();
   for (const p of items) counts.set(p.sub, (counts.get(p.sub) ?? 0) + 1);
-  return [...counts].map(([sub, count]) => ({ sub, count })).sort((a, b) => b.count - a.count || a.sub.localeCompare(b.sub));
+  return [...counts]
+    .map(([sub, count]) => ({ sub, count }))
+    .sort((a, b) => b.count - a.count || a.sub.localeCompare(b.sub));
 }
