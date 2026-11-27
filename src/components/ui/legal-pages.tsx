@@ -263,7 +263,10 @@ export default function LegalPages() {
       {/* Sheet */}
       {activePage && content && (
         <div className="legal-overlay">
-          <div ref={sheetRef} className={`legal-sheet ${activePage ? "is-open" : ""}`}>
+          <div
+            ref={sheetRef}
+            className={`legal-sheet ${activePage ? "is-open" : ""}`}
+          >
             <div className="legal-sheet__header">
               <h2 className="legal-sheet__title">{content.title}</h2>
               <button className="legal-sheet__close" onClick={close} aria-label="Close">

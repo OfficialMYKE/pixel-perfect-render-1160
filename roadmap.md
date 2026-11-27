@@ -1,6 +1,7 @@
 # Current work
-- [ ] Fix narrow-screen overflow, crowded controls and navigation accessibility.
-- [ ] Make shop filters compact and preserve search when navigating from the header.
-- [ ] Remove obstructive product hover panels and repeated mobile lookbook images.
-- [ ] Correct hero playback controls and product detail navigation state.
-- [ ] Complete page metadata and verify desktop/mobile shopping flows.
+- [x] Finish the uploaded clothing rail below the home lookbook in dark mode only, preserving the vintage identity.
+- [x] Verify garment selection, detail rotation, closing and narrow-screen layout.
+- [x] Apply the required package security update and save the changes.- [x] Botones editoriales: sin border radius y más grandes en todo el sitio
+
+- [x] Fotos propias para los 19 productos
+- [x] Reemplazar el primer hero por el componente subido, adaptado a colores y tipografías

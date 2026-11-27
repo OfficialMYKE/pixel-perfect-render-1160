@@ -154,12 +154,9 @@ export const FullScreenScrollFX = forwardRef<HTMLDivElement, FullScreenFXProps>(
       const words = text.split(/\s+/).filter(Boolean);
       return words.map((w, i) => (
         <span className="fx-word-mask" key={i}>
-          <span
-            className="fx-word"
-            ref={(el) => {
-              if (el) tempWordBucket.current.push(el);
-            }}
-          >
+          <span className="fx-word" ref={(el) => {
+            if (el) tempWordBucket.current.push(el);
+          }}>
             {w}
           </span>
           {i < words.length - 1 ? " " : null}
@@ -445,21 +442,21 @@ export const FullScreenScrollFX = forwardRef<HTMLDivElement, FullScreenFXProps>(
       measureAndCenterLists(index, false);
     }, []);
 
-    const cssVars = {
-      "--fx-font": fontFamily,
-      "--fx-text": colors.text ?? "rgba(245,245,245,0.92)",
-      "--fx-overlay": colors.overlay ?? "rgba(0,0,0,0.35)",
-      "--fx-page-bg": colors.pageBg ?? "#0d0d0d",
-      "--fx-stage-bg": colors.stageBg ?? "#000",
-      "--fx-gap": `${gap}rem`,
-      "--fx-grid-px": `${gridPaddingX}rem`,
-      "--fx-row-gap": "10px",
-    } as CSSProperties;
+    const cssVars: CSSProperties = {
+      ["--fx-font" as any]: fontFamily,
+      ["--fx-text" as any]: colors.text ?? "rgba(245,245,245,0.92)",
+      ["--fx-overlay" as any]: colors.overlay ?? "rgba(0,0,0,0.35)",
+      ["--fx-page-bg" as any]: colors.pageBg ?? "#0d0d0d",
+      ["--fx-stage-bg" as any]: colors.stageBg ?? "#000",
+      ["--fx-gap" as any]: `${gap}rem`,
+      ["--fx-grid-px" as any]: `${gridPaddingX}rem`,
+      ["--fx-row-gap" as any]: "10px",
+    };
 
     return (
       <div
         ref={(node) => {
-          (rootRef as React.MutableRefObject<HTMLDivElement | null>).current = node;
+          (rootRef as any).current = node;
           if (typeof ref === "function") ref(node);
           else if (ref) (ref as React.MutableRefObject<HTMLDivElement | null>).current = node;
         }}
@@ -480,9 +477,9 @@ export const FullScreenScrollFX = forwardRef<HTMLDivElement, FullScreenFXProps>(
                     ) : (
                       <>
                         <img
-                          ref={(el) => {
-                            if (el) bgRefs.current[i] = el;
-                          }}
+                           ref={(el) => {
+                             if (el) bgRefs.current[i] = el;
+                           }}
                           src={s.background}
                           alt=""
                           className="fx-bg-img"
@@ -504,9 +501,9 @@ export const FullScreenScrollFX = forwardRef<HTMLDivElement, FullScreenFXProps>(
                         <div
                           key={`L-${s.id ?? i}`}
                           className={`fx-item fx-left-item ${i === index ? "active" : ""}`}
-                          ref={(el) => {
-                            if (el) leftItemRefs.current[i] = el;
-                          }}
+                           ref={(el) => {
+                             if (el) leftItemRefs.current[i] = el;
+                           }}
                           onClick={() => handleJump(i)}
                           role="button"
                           tabIndex={0}
@@ -549,9 +546,9 @@ export const FullScreenScrollFX = forwardRef<HTMLDivElement, FullScreenFXProps>(
                         <div
                           key={`R-${s.id ?? i}`}
                           className={`fx-item fx-right-item ${i === index ? "active" : ""}`}
-                          ref={(el) => {
-                            if (el) rightItemRefs.current[i] = el;
-                          }}
+                           ref={(el) => {
+                             if (el) rightItemRefs.current[i] = el;
+                           }}
                           onClick={() => handleJump(i)}
                           role="button"
                           tabIndex={0}

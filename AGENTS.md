@@ -11,5 +11,4 @@
 
 <!-- LOVABLE:END -->
 
-- Keep shop search/sort/favorite filtering in pure `src/lib/shop-filter.ts`, so archive rules stay testable apart from UI.
-- Favorites are browser-local (localStorage) until accounts are backed by Cloud; no server needed for a static catalog.
+- Keep the interactive garment rail in its own UI module and compose its translated archive content separately, so animation logic stays independent of store copy.

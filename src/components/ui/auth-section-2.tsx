@@ -48,7 +48,7 @@ const slides = [
   },
 ];
 
-const FONT = "var(--font-ui)";
+const FONT = "system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif";
 
 export default function AuthSectionTwo({ mode = "signup" }: { mode?: "login" | "signup" }) {
   const { t, lang } = useLanguage();
@@ -110,7 +110,7 @@ export default function AuthSectionTwo({ mode = "signup" }: { mode?: "login" | "
               {slides[activeIndex]?.caption[lang]}
             </p>
             <button
-              className="grid size-8 shrink-0 place-items-center rounded-none border border-white/40 transition-colors hover:bg-white/10"
+              className="grid size-8 shrink-0 place-items-center rounded-full transition-colors hover:bg-white/30"
               style={{ background: "rgba(255,255,255,0.15)", color: "#f5f5f5" }}
               onClick={() => setActiveIndex((c) => (c + 1) % slides.length)}
             >
@@ -126,7 +126,7 @@ export default function AuthSectionTwo({ mode = "signup" }: { mode?: "login" | "
               key={i}
               type="button"
               onClick={() => setActiveIndex(i)}
-              className="rounded-none transition-all duration-300"
+              className="rounded-full transition-all duration-300"
               style={{
                 height: "3px",
                 width: activeIndex === i ? "32px" : "12px",
@@ -209,7 +209,7 @@ export default function AuthSectionTwo({ mode = "signup" }: { mode?: "login" | "
               <div className="relative">
                 <input
                   type={showPassword ? "text" : "password"}
-                  className="h-11 w-full rounded-none border px-4 pr-11 text-sm outline-none transition-colors focus:border-[#666]"
+                  className="h-11 w-full rounded-lg border px-4 pr-11 text-sm outline-none transition-colors focus:border-[#666]"
                   style={{ borderColor: "#333", background: "transparent", color: "#f5f5f5" }}
                 />
                 <button
@@ -267,7 +267,7 @@ export default function AuthSectionTwo({ mode = "signup" }: { mode?: "login" | "
 
             <button
               type="submit"
-              className="mt-4 flex h-12 w-full items-center justify-center rounded-none btn-editorial transition-colors duration-300"
+              className="mt-4 flex h-12 w-full items-center justify-center rounded-lg text-base font-semibold transition-colors duration-300"
               style={{ background: "var(--vintage-red)", color: "#f5f5f5" }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.background =
@@ -304,7 +304,7 @@ function SocialBtn({ icon, label }: { icon: ReactNode; label: string }) {
   return (
     <button
       type="button"
-      className="flex h-11 items-center justify-center gap-2.5 rounded-none border btn-editorial tracking-[0.1em] transition-colors hover:bg-white/5"
+      className="flex h-11 items-center justify-center gap-2.5 rounded-lg border text-sm transition-colors hover:bg-white/5"
       style={{ borderColor: "#333", background: "transparent", color: "#f5f5f5" }}
     >
       <span className="shrink-0">{icon}</span>
@@ -324,7 +324,7 @@ function Field({ label, type = "text" }: { label: string; type?: string }) {
       </label>
       <input
         type={type}
-        className="h-11 w-full rounded-none border px-4 text-sm outline-none transition-colors focus:border-[#666]"
+        className="h-11 w-full rounded-lg border px-4 text-sm outline-none transition-colors focus:border-[#666]"
         style={{ borderColor: "#333", background: "transparent", color: "#f5f5f5" }}
       />
     </div>
@@ -337,7 +337,7 @@ function Check({ children }: { children: ReactNode }) {
       <span className="relative size-3.5 shrink-0">
         <input
           type="checkbox"
-          className="peer size-full appearance-none rounded-none border checked:bg-current"
+          className="peer size-full appearance-none rounded-[3px] border checked:bg-current"
           style={{ borderColor: "#666", background: "transparent" }}
         />
         <svg

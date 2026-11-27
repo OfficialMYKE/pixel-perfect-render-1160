@@ -63,11 +63,7 @@ export default function AuthShell({ children, issue }: AuthShellProps) {
           </div>
           <div className="auth__editorial-copy">
             <p>{t.heroKicker}</p>
-            <h2>
-              STREET
-              <br />
-              ARCHIVE
-            </h2>
+            <h2>STREET<br />ARCHIVE</h2>
           </div>
           <div className="auth__editorial-foot">
             <span>{t.heroOneOfOne}</span>
@@ -77,9 +73,7 @@ export default function AuthShell({ children, issue }: AuthShellProps) {
 
         <div className="auth__panel">
           <div className="auth__stamp">AUTHENTIC GOODS</div>
-          <Link to="/" className="auth__logo" aria-label="AVNYC home">
-            AVNYC
-          </Link>
+          <Link to="/" className="auth__logo" aria-label="AVNYC home">AVNYC</Link>
           {children}
           <div className="auth__edition" aria-hidden="true">
             <span />

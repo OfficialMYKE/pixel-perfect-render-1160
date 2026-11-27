@@ -1,10 +1,9 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "@tanstack/react-router";
-import { Button } from "@/components/ui/button";
 import { Menu, Search, ShoppingBag, X } from "lucide-react";
 import { useLanguage } from "@/lib/i18n";
 import { useCart } from "@/lib/cart";
-import { getBySub, getSubsForCategory, searchProducts } from "@/lib/products";
+import { searchProducts } from "@/lib/products";
 import { NAV_SUBS, slugify, type CatalogLang, type NavLabelKey } from "@/lib/catalog";
 
 interface SubLink {
@@ -32,20 +31,15 @@ function navLabel(t: NavTranslations, key: NavLabelKey): string {
 
 function getNavItems(t: NavTranslations, lang: CatalogLang): NavItem[] {
   const columnsFor = (category: string, withMarcas: boolean): SubCategory[] => {
-    const activeSubs = new Set(getSubsForCategory(category));
-    const columns: SubCategory[] = (NAV_SUBS[category] ?? [])
-      .map((group) => ({
-        label: navLabel(t, group.key),
-        items: group.items
-          .filter((item) => activeSubs.has(item.slug))
-          .map((item) => ({ label: item[lang], slug: item.slug })),
-      }))
-      .filter((group) => group.items.length > 0);
+    const columns: SubCategory[] = (NAV_SUBS[category] ?? []).map((group) => ({
+      label: navLabel(t, group.key),
+      items: group.items.map((item) => ({ label: item[lang], slug: item.slug })),
+    }));
     if (withMarcas) {
-      const brands = t.nav.subMarcas
-        .map((brand) => ({ label: brand, slug: slugify(brand) }))
-        .filter((brand) => getBySub(category, brand.slug).length > 0);
-      if (brands.length > 0) columns.push({ label: navLabel(t, "marcas"), items: brands });
+      columns.push({
+        label: navLabel(t, "marcas"),
+        items: t.nav.subMarcas.map((brand) => ({ label: brand, slug: slugify(brand) })),
+      });
     }
     return columns;
   };
@@ -94,8 +88,6 @@ export default function VintageNavbar() {
   const [mobileExpanded, setMobileExpanded] = useState<number | null>(null);
   const [searchOpen, setSearchOpen] = useState(false);
   const [query, setQuery] = useState("");
-  const mobileRef = useRef<HTMLDivElement>(null);
-  const menuButtonRef = useRef<HTMLButtonElement>(null);
   const navRef = useRef<HTMLDivElement>(null);
   const searchRef = useRef<HTMLDivElement>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
@@ -146,29 +138,9 @@ export default function VintageNavbar() {
   }, []);
 
   useEffect(() => {
-    if (!mobileOpen) return;
-    const menuButton = menuButtonRef.current;
-    const previous = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    mobileRef.current?.querySelector<HTMLButtonElement>("button")?.focus({ preventScroll: true });
-    const onTab = (event: KeyboardEvent) => {
-      if (event.key !== "Tab") return;
-      const controls = Array.from(mobileRef.current?.querySelectorAll<HTMLElement>("a[href], button:not([disabled]), input") ?? []);
-      const first = controls[0];
-      const last = controls.at(-1);
-      if (event.shiftKey && document.activeElement === first) {
-        event.preventDefault();
-        last?.focus({ preventScroll: true });
-      } else if (!event.shiftKey && document.activeElement === last) {
-        event.preventDefault();
-        first?.focus({ preventScroll: true });
-      }
-    };
-    document.addEventListener("keydown", onTab);
+    document.body.style.overflow = mobileOpen ? "hidden" : "";
     return () => {
-      document.body.style.overflow = previous;
-      document.removeEventListener("keydown", onTab);
-      menuButton?.focus({ preventScroll: true });
+      document.body.style.overflow = "";
     };
   }, [mobileOpen]);
 
@@ -180,21 +152,7 @@ export default function VintageNavbar() {
   }, [t]);
 
   useEffect(() => {
-    setActiveDropdown(null);
-    setMobileOpen(false);
-    setMobileExpanded(null);
-    setSearchOpen(false);
-    return () => clearTimeout(timeoutRef.current);
-  }, [pathname]);
-
-  useEffect(() => {
-    const onResize = () => { if (window.innerWidth >= 1100) setMobileOpen(false); };
-    window.addEventListener("resize", onResize);
-    return () => window.removeEventListener("resize", onResize);
-  }, []);
-
-  useEffect(() => {
-    if (searchOpen) searchInputRef.current?.focus({ preventScroll: true });
+    if (searchOpen) searchInputRef.current?.focus();
   }, [searchOpen]);
 
   const closeMobile = () => {
@@ -219,14 +177,13 @@ export default function VintageNavbar() {
             AVNYC
           </Link>
 
-          <nav className="vn__nav" onMouseLeave={closeDropdown} aria-label={lang === "es" ? "Menú principal" : "Main menu"}>
+          <nav className="vn__nav" onMouseLeave={closeDropdown} aria-label="Main">
             {navItems.map((item, i) =>
               item.columns ? (
-                <Button variant="editorial" size="editorial" type="button"
+                <button
                   key={i}
                   className={`vn__item ${activeDropdown === i || isItemActive(item) ? "is-active" : ""} ${item.highlight ? "vn__item--highlight" : ""}`}
                   onMouseEnter={() => openDropdown(i)}
-                  onFocus={() => openDropdown(i)}
                   onClick={() => (activeDropdown === i ? setActiveDropdown(null) : openDropdown(i))}
                   aria-expanded={activeDropdown === i}
                   aria-haspopup="true"
@@ -248,7 +205,7 @@ export default function VintageNavbar() {
                       strokeLinejoin="round"
                     />
                   </svg>
-                </Button>
+                </button>
               ) : (
                 <Link
                   key={i}
@@ -263,14 +220,14 @@ export default function VintageNavbar() {
           </nav>
 
           <div className="vn__actions">
-            <Button variant="editorial" size="editorial" type="button"
+            <button
               className="vn__icon"
               aria-label={lang === "es" ? "Buscar" : "Search"}
               aria-expanded={searchOpen}
               onClick={() => setSearchOpen((v) => !v)}
             >
               <Search size={18} strokeWidth={1.5} />
-            </Button>
+            </button>
             <Link
               to="/cart"
               className="vn__icon vn__cart"
@@ -285,29 +242,21 @@ export default function VintageNavbar() {
             <Link to="/signup" className="vn__auth-btn vn__auth-btn--primary">
               {t.signupBtn}
             </Link>
-            <Button variant="editorial" size="editorial" type="button"
-              ref={menuButtonRef}
+            <button
               className="vn__icon vn__menu-btn"
               onClick={() => setMobileOpen(true)}
               aria-label={lang === "es" ? "Menú" : "Menu"}
               aria-expanded={mobileOpen}
-              aria-controls="mobile-navigation"
             >
               <Menu size={20} strokeWidth={1.5} />
-            </Button>
+            </button>
           </div>
         </div>
       </div>
 
       {/* Search panel */}
       {searchOpen && (
-        <form className="vn__search" ref={undefined} role="search" onSubmit={(event) => {
-          event.preventDefault();
-          if (!query.trim()) return;
-          setSearchOpen(false);
-          navigate({ to: "/shop", search: { q: query.trim() } });
-        }}>
-        <div ref={searchRef}>
+        <div className="vn__search" ref={searchRef} role="search">
           <div className="vn__search-inner">
             <Search size={16} strokeWidth={1.5} aria-hidden="true" />
             <input
@@ -319,13 +268,13 @@ export default function VintageNavbar() {
               aria-label={lang === "es" ? "Buscar productos" : "Search products"}
               className="vn__search-input"
             />
-            <Button variant="editorial" size="editorial" type="button"
+            <button
               className="vn__icon"
               onClick={() => setSearchOpen(false)}
               aria-label={lang === "es" ? "Cerrar búsqueda" : "Close search"}
             >
               <X size={16} strokeWidth={1.5} />
-            </Button>
+            </button>
           </div>
           {query.trim() !== "" && (
             <div className="vn__search-results">
@@ -337,7 +286,7 @@ export default function VintageNavbar() {
                 <ul>
                   {results.slice(0, 6).map((p) => (
                     <li key={p.slug}>
-                      <Button variant="editorial" size="editorial" type="button" className="vn__search-item" onClick={() => goSearch(p.slug)}>
+                      <button className="vn__search-item" onClick={() => goSearch(p.slug)}>
                         <img src={p.images[0]} alt="" width={40} height={53} />
                         <span>
                           <strong>{p.name[lang]}</strong>
@@ -345,7 +294,7 @@ export default function VintageNavbar() {
                             {p.brand} · ${p.price}
                           </small>
                         </span>
-                      </Button>
+                      </button>
                     </li>
                   ))}
                 </ul>
@@ -353,7 +302,6 @@ export default function VintageNavbar() {
               {results.length > 6 && (
                 <Link
                   to="/shop"
-                  search={{ q: query.trim() }}
                   className="vn__search-all"
                   onClick={() => {
                     setSearchOpen(false);
@@ -366,7 +314,6 @@ export default function VintageNavbar() {
             </div>
           )}
         </div>
-        </form>
       )}
 
       {/* Desktop mega dropdown */}
@@ -405,7 +352,7 @@ export default function VintageNavbar() {
                     ))}
                   </ul>
                   {col.label === t.nav.marcas && (
-                    <Link to="/brands" className="vn__mega-seeall">
+                    <Link to="/shop" className="vn__mega-seeall">
                       {t.nav.verMarcas}
                     </Link>
                   )}
@@ -419,36 +366,26 @@ export default function VintageNavbar() {
       {/* Mobile */}
       {mobileOpen && <div className="vn__overlay" onClick={closeMobile} />}
       <div
-        ref={mobileRef}
-        id="mobile-navigation"
-        role="dialog"
-        aria-modal={mobileOpen ? true : undefined}
-        aria-label={lang === "es" ? "Menú principal" : "Main menu"}
         className={`vn__mobile ${mobileOpen ? "is-open" : ""}`}
         aria-hidden={!mobileOpen}
         inert={!mobileOpen}
       >
         <div className="vn__mobile-header">
           <span className="vn__logo">AVNYC</span>
-          <Button variant="editorial" size="editorial" type="button"
+          <button
             className="vn__icon"
             onClick={closeMobile}
             aria-label={lang === "es" ? "Cerrar" : "Close"}
           >
             <X size={20} strokeWidth={1.5} />
-          </Button>
+          </button>
         </div>
         <nav className="vn__mobile-nav" aria-label={lang === "es" ? "Menú principal" : "Main menu"}>
           {navItems.map((item, i) => (
             <div key={i} className="vn__mobile-group">
               {item.columns ? (
-                <Button variant="editorial" size="editorial" type="button"
-                  ref={mobileRef}
-        id="mobile-navigation"
-        role="dialog"
-        aria-modal={mobileOpen ? true : undefined}
-        aria-label={lang === "es" ? "Menú principal" : "Main menu"}
-        className={`vn__mobile-item ${item.highlight ? "vn__item--highlight" : ""}`}
+                <button
+                  className={`vn__mobile-item ${item.highlight ? "vn__item--highlight" : ""}`}
                   onClick={() => setMobileExpanded(mobileExpanded === i ? null : i)}
                   aria-expanded={mobileExpanded === i}
                 >
@@ -469,16 +406,11 @@ export default function VintageNavbar() {
                       strokeLinejoin="round"
                     />
                   </svg>
-                </Button>
+                </button>
               ) : (
                 <Link
                   to={item.url}
-                  ref={mobileRef}
-        id="mobile-navigation"
-        role="dialog"
-        aria-modal={mobileOpen ? true : undefined}
-        aria-label={lang === "es" ? "Menú principal" : "Main menu"}
-        className={`vn__mobile-item ${item.highlight ? "vn__item--highlight" : ""}`}
+                  className={`vn__mobile-item ${item.highlight ? "vn__item--highlight" : ""}`}
                   onClick={closeMobile}
                 >
                   {item.title}
@@ -519,12 +451,6 @@ export default function VintageNavbar() {
             </div>
           ))}
         </nav>
-        <div className="vn__mobile-account">
-          <Link to="/shop" onClick={closeMobile}>{lang === "es" ? "Todo el archivo" : "Full archive"}</Link>
-          <Link to="/brands" onClick={closeMobile}>{lang === "es" ? "Marcas" : "Brands"}</Link>
-          <Link to="/login" onClick={closeMobile}>{t.loginBtn}</Link>
-          <Link to="/signup" onClick={closeMobile}>{t.signupBtn}</Link>
-        </div>
       </div>
     </div>
   );

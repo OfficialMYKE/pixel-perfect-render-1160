@@ -6,11 +6,16 @@ import VintageNavbar from "@/components/ui/vintage-navbar";
 import Footer from "@/components/ui/footer";
 import ProductCard from "@/components/ui/product-card";
 import { useLanguage } from "@/lib/i18n";
-import { getByCategory, getFeatured } from "@/lib/products";
+import { getFeatured, products } from "@/lib/products";
+import HelixRibbonHero from "@/components/ui/helix-ribbon-hero";
+import photoVarsity from "@/assets/products/varsity-jacket-ny.jpg";
 import streetwearOne from "@/assets/vintage-streetwear-01.jpg";
 import streetwearTwo from "@/assets/vintage-streetwear-02.jpg";
 import streetwearThree from "@/assets/vintage-streetwear-03.jpg";
 import streetwearFour from "@/assets/vintage-streetwear-04.jpg";
+import archiveJacket from "@/assets/archive-jacket.jpg";
+import archiveStore from "@/assets/archive-store-interior.jpg";
+import archiveSweatshirt from "@/assets/archive-sweatshirt.jpg";
 import vintageStore from "@/assets/vintage-store.jpg";
 
 export interface MetroHeroProps {
@@ -20,28 +25,22 @@ export interface MetroHeroProps {
 
 const DEFAULT_VIDEO =
   "https://cdn.21st.dev/assets/mirror/21/21a77eac28eacbb7e142016eefeaa0b4a766619e51113629a3bc6df6af066c0f.mp4";
-const HERO_DISMISSED_STORAGE_KEY = "avnyc-home-hero-dismissed";
 
 const LOOKBOOK = [
-  {
-    src: streetwearOne,
-    alt: "Vintage varsity jacket and loose denim on a New York street",
-  },
-  {
-    src: streetwearTwo,
-    alt: "Curated vintage racing jackets in a New York store",
-  },
-  {
-    src: streetwearThree,
-    alt: "Vintage leather bomber styled on a New York subway platform",
-  },
-  {
-    src: streetwearFour,
-    alt: "Archive graphic tees, workwear and faded denim",
-  },
+  { src: streetwearOne, alt: "Vintage varsity jacket and loose denim on a New York street" },
+  { src: streetwearTwo, alt: "Curated vintage racing jackets in a New York store" },
+  { src: streetwearThree, alt: "Vintage leather bomber styled on a New York subway platform" },
+  { src: streetwearFour, alt: "Archive graphic tees, workwear and faded denim" },
 ];
 
-const CATEGORY_KEYS = ["hombre", "mujer", "ninos", "accesorios"] as const;
+const HELIX_PROJECTS = products.slice(0, 12).map((p) => ({ src: p.images[0] ?? "", title: p.name.en }));
+
+const CATEGORY_TILES = [
+  { key: "hombre", img: archiveJacket },
+  { key: "mujer", img: streetwearThree },
+  { key: "ninos", img: archiveSweatshirt },
+  { key: "accesorios", img: archiveStore },
+] as const;
 
 const TRUST_ITEMS = [
   { icon: Truck, key: "shipping" },
@@ -56,103 +55,151 @@ function clamp(v: number, min: number, max: number) {
 
 export default function MetroHero({ videoSrc = DEFAULT_VIDEO, className }: MetroHeroProps) {
   const { t, lang } = useLanguage();
-  const heroRef = useRef<HTMLElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const textARef = useRef<HTMLDivElement>(null);
   const textBRef = useRef<HTMLDivElement>(null);
   const progressBarRef = useRef<HTMLDivElement>(null);
-
+  const announcementRef = useRef<HTMLDivElement>(null);
+  const heroRef = useRef<HTMLElement>(null);
   const [ready, setReady] = useState(false);
-  const [introActive, setIntroActive] = useState(false);
-  const [heroVisible, setHeroVisible] = useState(true);
+  const [poster, setPoster] = useState<string | null>(null);
+  const transitioned = useRef(false);
 
-  const featured = getFeatured(6);
-
-  useEffect(() => {
-    const hero = heroRef.current;
-    if (!hero) return;
-
-    const navigation = performance.getEntriesByType("navigation")[0] as
-      PerformanceNavigationTiming | undefined;
-    if (navigation?.type === "reload") {
-      sessionStorage.removeItem(HERO_DISMISSED_STORAGE_KEY);
-    } else if (sessionStorage.getItem(HERO_DISMISSED_STORAGE_KEY)) {
-      videoRef.current?.pause();
-      setHeroVisible(false);
-      return;
-    }
-
-    let hasBeenVisible = false;
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (!entry) return;
-        if (entry.isIntersecting) {
-          hasBeenVisible = true;
-          return;
-        }
-        if (hasBeenVisible) {
-          sessionStorage.setItem(HERO_DISMISSED_STORAGE_KEY, "true");
-          videoRef.current?.pause();
-          setHeroVisible(false);
-          observer.disconnect();
-        }
-      },
-      { threshold: 0 },
-    );
-
-    observer.observe(hero);
-    return () => observer.disconnect();
-  }, []);
+  const featured = getFeatured(5);
 
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
-    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const onLoaded = () => {
-      setReady(true);
-      if (reducedMotion || heroRef.current?.hidden) return;
-      setIntroActive(true);
-      video.play().catch(() => {
-        setIntroActive(false);
-      });
-    };
-    const onError = () => {
+
+    // Keep the streetwear photo visible if the video takes too long to load.
+    const fallbackTimer = setTimeout(() => {
       setReady(false);
-    };
-    const onEnded = () => {
-      const hero = document.querySelector(".vintage-hero");
-      if (hero) {
-        const rect = hero.getBoundingClientRect();
-        if (rect.bottom < window.innerHeight * 0.5) return;
+    }, 8000);
+
+    const extractFrame = () => {
+      try {
+        const canvas = document.createElement("canvas");
+        canvas.width = video.videoWidth || 1920;
+        canvas.height = video.videoHeight || 1080;
+        const ctx = canvas.getContext("2d");
+        if (ctx) {
+          ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+          setPoster(canvas.toDataURL("image/jpeg", 0.6));
+        }
+      } catch {
+        // canvas tainted or error — ignore
       }
-      const target = document.getElementById("main-content");
-      if (!target) return;
-      const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-      target.scrollIntoView({ behavior: reducedMotion ? "auto" : "smooth", block: "start" });
     };
-    const update = () => {
-      const p =
-        Number.isFinite(video.duration) && video.duration > 0
-          ? clamp(video.currentTime / video.duration, 0, 1)
-          : 0;
-      if (textARef.current)
-        textARef.current.style.opacity = String(1 - clamp((p - 0.3) / 0.15, 0, 1));
-      if (textBRef.current) textBRef.current.style.opacity = String(clamp((p - 0.5) / 0.15, 0, 1));
-      if (progressBarRef.current) progressBarRef.current.style.transform = `scaleX(${p})`;
+
+    const onLoaded = () => {
+      clearTimeout(fallbackTimer);
+      video.currentTime = 0;
+      setReady(true);
+      video.play().catch(() => undefined);
+      // Capture first frame as fallback after a short delay
+      setTimeout(extractFrame, 200);
     };
+
+    const onError = () => {
+      clearTimeout(fallbackTimer);
+      setReady(false); // keep the streetwear photo visible if the video fails
+    };
+
     video.addEventListener("loadeddata", onLoaded);
     video.addEventListener("error", onError);
-    video.addEventListener("ended", onEnded);
-    video.addEventListener("timeupdate", update);
     if (video.readyState >= 2) onLoaded();
+
+    let frameId = 0;
+    let lastA = -1;
+    let lastB = -1;
+
+    const update = () => {
+      const dur = Number.isFinite(video.duration) ? video.duration : 0;
+      const t = video.currentTime;
+      const p = dur > 0 ? clamp(t / dur, 0, 1) : 0;
+
+      // Text A: visible 0→35%, fades out 30→45%
+      if (textARef.current) {
+        const a = Math.round((1 - clamp((p - 0.3) / 0.15, 0, 1)) * 100) / 100;
+        if (a !== lastA) {
+          lastA = a;
+          textARef.current.style.opacity = String(a);
+          textARef.current.style.transform = `translateY(${(1 - a) * -16}px)`;
+        }
+      }
+
+      // Text B: fades in 50→65%, stays
+      if (textBRef.current) {
+        const b = Math.round(clamp((p - 0.5) / 0.15, 0, 1) * 100) / 100;
+        if (b !== lastB) {
+          lastB = b;
+          textBRef.current.style.opacity = String(b);
+          textBRef.current.style.transform = `translateY(${(1 - b) * 14}px)`;
+        }
+      }
+
+      // Progress bar
+      if (progressBarRef.current) {
+        progressBarRef.current.style.transform = `scaleX(${p})`;
+      }
+
+      // Auto-transition at 80% — before video pauses
+      if (p >= 0.8 && !transitioned.current) {
+        transitioned.current = true;
+        if (heroRef.current) {
+          heroRef.current.style.transition = "opacity 2.4s ease-in-out";
+          heroRef.current.style.opacity = "0";
+        }
+        setTimeout(() => {
+          announcementRef.current?.scrollIntoView({ behavior: "smooth" });
+        }, 1600);
+        setTimeout(() => {
+          if (heroRef.current) {
+            heroRef.current.style.height = "0";
+            heroRef.current.style.minHeight = "0";
+            heroRef.current.style.overflow = "hidden";
+          }
+          window.dispatchEvent(new Event("hero-collapsed"));
+        }, 3200);
+      }
+
+      frameId = requestAnimationFrame(update);
+    };
+
+    frameId = requestAnimationFrame(update);
+
+    // Scroll listener — pause video and collapse hero on scroll down
+    let scrollTriggered = false;
+    const onScroll = () => {
+      if (scrollTriggered) return;
+      if (window.scrollY > 50) {
+        scrollTriggered = true;
+        video.pause();
+        if (heroRef.current) {
+          heroRef.current.style.transition = "opacity 0.6s ease-out, height 0.6s ease-out";
+          heroRef.current.style.opacity = "0";
+          setTimeout(() => {
+            if (heroRef.current) {
+              heroRef.current.style.height = "0";
+              heroRef.current.style.minHeight = "0";
+              heroRef.current.style.overflow = "hidden";
+            }
+            window.dispatchEvent(new Event("hero-collapsed"));
+          }, 600);
+        }
+      }
+    };
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+
     return () => {
-      video.pause();
+      clearTimeout(fallbackTimer);
       video.removeEventListener("loadeddata", onLoaded);
       video.removeEventListener("error", onError);
-      video.removeEventListener("ended", onEnded);
-      video.removeEventListener("timeupdate", update);
+      cancelAnimationFrame(frameId);
+      window.removeEventListener("scroll", onScroll);
     };
-  }, [videoSrc]);
+  }, []);
 
   const es = lang === "es";
 
@@ -169,47 +216,35 @@ export default function MetroHero({ videoSrc = DEFAULT_VIDEO, className }: Metro
         {es ? "Saltar al contenido" : "Skip to content"}
       </a>
 
-      <section
-        ref={heroRef}
-        hidden={!heroVisible}
-        className={className ? `${className} vintage-hero` : "vintage-hero"}
-        aria-label={es ? "Introducción streetwear vintage" : "Vintage streetwear introduction"}
-      >
-        <img
-          src={streetwearOne}
-          alt=""
-          aria-hidden="true"
-          className={`vintage-hero__poster ${ready ? "is-hidden" : ""}`}
-        />
+      <HelixRibbonHero
+        {...(className ? { className } : {})}
+        greeting={es ? "Vintage real" : "True vintage"}
+        name="New York"
+        portrait={photoVarsity}
+        portraitAlt={es ? "Chaqueta varsity vintage" : "Vintage varsity jacket"}
+        projects={HELIX_PROJECTS}
+        brand="AVNYC"
+        links={[
+          { label: es ? "Tienda" : "Shop", href: "/shop" },
+          { label: es ? "Nuevos" : "New", href: "/shop/nuevos" },
+          { label: es ? "Ofertas" : "Sale", href: "/shop/ofertas" },
+          { label: es ? "Nosotros" : "About", href: "/about" },
+        ]}
+        cta={{ label: es ? "Comprar ahora" : "Shop now", href: "/shop" }}
+        count={es ? `( ${products.length} piezas únicas )` : `( ${products.length} one-of-ones )`}
+        bio={es
+          ? "Streetwear vintage auténtico, seleccionado a mano en Nueva York. Cada pieza es única, restaurada y lista para usar."
+          : "Authentic vintage streetwear, hand-picked in New York. Every piece is one of one, restored and ready to wear."}
+        scrollHint={es ? "Desliza" : "Scroll"}
+        background="var(--vintage-ink)"
+        foreground="var(--vintage-paper)"
+        fontHref={null}
+      />
 
-        <video
-          ref={videoRef}
-          src={videoSrc}
-          muted
-          playsInline
-          preload="metadata"
-          className={`vintage-hero__video ${ready ? "is-ready" : ""} ${introActive ? "is-intro-active" : ""}`}
-        />
-        <div className="vintage-hero__shade" />
-
-        <div ref={textARef} className="vintage-hero__text vintage-hero__text--a">
-          <p className="vintage-hero__kicker">{t.heroKicker}</p>
-          <h1>{t.heroTitle}</h1>
+      <header>
+        <div ref={announcementRef}>
+          <AnnouncementBar />
         </div>
-
-        <div ref={textBRef} className="vintage-hero__text vintage-hero__text--b">
-          <span>{t.heroEst}</span>
-          <p>{t.heroTagline}</p>
-          <span>{t.heroOneOfOne}</span>
-        </div>
-
-        <div className="vintage-hero__progress" aria-hidden="true">
-          <div ref={progressBarRef} />
-        </div>
-      </section>
-
-      <header className="site-header">
-        <AnnouncementBar />
         <VintageNavbar />
       </header>
 
@@ -237,22 +272,20 @@ export default function MetroHero({ videoSrc = DEFAULT_VIDEO, className }: Metro
             aria-label={es ? "Colección streetwear vintage" : "Vintage streetwear collection"}
           >
             <div className="vintage-lookbook__track">
-              {LOOKBOOK.map((image, index) => {
-                return (
-                  <figure key={image.alt}>
-                    <img
-                      src={image.src}
-                      alt={image.alt}
-                      loading="lazy"
-                      width={768}
-                      height={1024}
-                    />
-                    <figcaption>
-                      {String(index + 1).padStart(2, "0")} / NYC ARCHIVE
-                    </figcaption>
-                  </figure>
-                );
-              })}
+              {[...LOOKBOOK, ...LOOKBOOK].map((image, index) => (
+                <figure key={`${image.src}-${index}`}>
+                  <img
+                    src={image.src}
+                    alt={index < LOOKBOOK.length ? image.alt : ""}
+                    loading="lazy"
+                    width={768}
+                    height={1024}
+                  />
+                  <figcaption>
+                    {String((index % LOOKBOOK.length) + 1).padStart(2, "0")} / NYC ARCHIVE
+                  </figcaption>
+                </figure>
+              ))}
             </div>
           </div>
         </section>
@@ -288,12 +321,67 @@ export default function MetroHero({ videoSrc = DEFAULT_VIDEO, className }: Metro
               {es ? "Ver todos" : "View all"} <ArrowUpRight aria-hidden="true" size={15} />
             </Link>
           </div>
-          <div className="product-rail" role="list">
+          <div className="product-grid">
             {featured.map((p) => (
-              <div className="product-rail__item" role="listitem" key={p.slug}>
-                <ProductCard product={p} />
-              </div>
+              <ProductCard key={p.slug} product={p} />
             ))}
+          </div>
+        </section>
+
+        {/* Process — how we curate (editorial, no prices) */}
+        <section className="process" aria-labelledby="process-title">
+          <div className="process__inner">
+            <h2 id="process-title" className="process__title">
+              {t.process.title}
+            </h2>
+            <ol className="process__steps">
+              {t.process.steps.map((step) => (
+                <li key={step.num} className="process__step">
+                  <span className="process__num" aria-hidden="true">
+                    {step.num}
+                  </span>
+                  <h3 className="process__step-title">{step.title}</h3>
+                  <p className="process__step-body">{step.body}</p>
+                </li>
+              ))}
+            </ol>
+          </div>
+        </section>
+
+        {/* Field notes — editorial sourcing strip */}
+        <section className="field-notes" aria-labelledby="field-notes-title">
+          <div className="field-notes__inner">
+            <div className="field-notes__head">
+              <h2 id="field-notes-title" className="field-notes__title">
+                {t.sourcing.title}
+              </h2>
+              <Link to="/about" hash="our-story" className="home-section__link">
+                {t.sourcing.link} <ArrowUpRight aria-hidden="true" size={15} />
+              </Link>
+            </div>
+            <div className="field-notes__grid">
+              {t.sourcing.notes.map((note) => (
+                <article key={note.num} className="field-notes__card">
+                  <div className="field-notes__media">
+                    <img
+                      src={note.img === "brooklyn" ? streetwearTwo : streetwearFour}
+                      alt=""
+                      aria-hidden="true"
+                      loading="lazy"
+                      width={800}
+                      height={600}
+                    />
+                  </div>
+                  <div className="field-notes__copy">
+                    <span className="field-notes__num" aria-hidden="true">
+                      {note.num}
+                    </span>
+                    <p className="field-notes__label">{note.label}</p>
+                    <p className="field-notes__body">{note.body}</p>
+                  </div>
+                </article>
+              ))}
+            </div>
           </div>
         </section>
 
@@ -307,21 +395,21 @@ export default function MetroHero({ videoSrc = DEFAULT_VIDEO, className }: Metro
               </h2>
             </div>
           </div>
-          <nav
-            className="category-index"
-            aria-label={es ? "Categorías de prendas" : "Garment categories"}
-          >
-            {CATEGORY_KEYS.map((key, index) => (
-              <Link key={key} to="/shop/$category" params={{ category: key }}>
-                <span className="category-index__number">0{index + 1}</span>
-                <span>{t.footer.shop[key]}</span>
-                <ArrowUpRight aria-hidden="true" size={24} />
-                <span className="category-index__count">
-                  {getByCategory(key).length} {es ? "prendas" : "pieces"}
+          <div className="category-tiles">
+            {CATEGORY_TILES.map(({ key, img }) => (
+              <Link
+                key={key}
+                to="/shop/$category"
+                params={{ category: key }}
+                className="category-tile"
+              >
+                <img src={img} alt="" loading="lazy" width={600} height={750} />
+                <span className="category-tile__label">
+                  {t.footer.shop[key]} <ArrowUpRight aria-hidden="true" size={16} />
                 </span>
               </Link>
             ))}
-          </nav>
+          </div>
         </section>
 
         {/* Showroom — physical place, not checkout */}
@@ -369,6 +457,16 @@ export default function MetroHero({ videoSrc = DEFAULT_VIDEO, className }: Metro
             ))}
           </ul>
         </section>
+
+        {/* Archive facts — operational mono rule */}
+        <div className="archive-facts" aria-label={es ? "Datos del archivo" : "Archive facts"}>
+          <ul className="archive-facts__list">
+            {t.archiveFacts.map((fact) => (
+              <li key={fact}>{fact}</li>
+            ))}
+          </ul>
+        </div>
+
       </main>
 
       <Footer />
