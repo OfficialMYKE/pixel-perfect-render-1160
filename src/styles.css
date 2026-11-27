@@ -1074,8 +1074,10 @@ body {
   width: 100%;
   margin: 0;
 }
-.vintage-lookbook figure.pcard--preview {
-  position: relative;
+.vintage-lookbook__figure-link {
+  display: block;
+  color: inherit;
+  text-decoration: none;
 }
 .vintage-lookbook figure:nth-child(even) {
   transform: none;
@@ -3727,3 +3729,32 @@ body {
 .brands-item em { font-style: normal; font-family: "Space Mono", monospace; font-size: 12px; }
 @media (max-width: 640px) { .brands-group { grid-template-columns: 1fr; gap: 10px; } .brands-group h2 { font-size: 28px; } }
 .chip--size:has(.chip__count:empty) { opacity: 1; }
+
+/* New arrivals: one horizontal row only */
+.product-rail {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: stretch;
+  gap: clamp(12px, 2vw, 22px);
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: thin;
+  scrollbar-color: var(--vintage-line) transparent;
+  margin-inline: calc(clamp(20px, 5vw, 64px) * -1);
+  padding: 2px clamp(20px, 5vw, 64px) 14px;
+}
+.product-rail__item {
+  flex: 0 0 auto;
+  width: clamp(190px, 22vw, 250px);
+  scroll-snap-align: start;
+}
+.product-rail::-webkit-scrollbar { height: 6px; }
+.product-rail::-webkit-scrollbar-track { background: transparent; }
+.product-rail::-webkit-scrollbar-thumb { background: var(--vintage-line); }
+@media (max-width: 760px) {
+  .product-rail__item { width: clamp(160px, 46vw, 200px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .product-rail { scroll-snap-type: none; }
+}

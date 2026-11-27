@@ -4,7 +4,7 @@ import { ArrowUpRight, Globe, RotateCcw, ShieldCheck, Truck } from "lucide-react
 import AnnouncementBar from "@/components/ui/announcement-bar";
 import VintageNavbar from "@/components/ui/vintage-navbar";
 import Footer from "@/components/ui/footer";
-import ProductCard, { ProductPreview } from "@/components/ui/product-card";
+import ProductCard from "@/components/ui/product-card";
 import { useLanguage } from "@/lib/i18n";
 import { getByCategory, getFeatured, getProduct } from "@/lib/products";
 import streetwearOne from "@/assets/vintage-streetwear-01.jpg";
@@ -248,15 +248,20 @@ export default function MetroHero({ videoSrc = DEFAULT_VIDEO, className }: Metro
                   throw new Error(`Missing lookbook product: ${image.productSlug}`);
                 }
                 return (
-                  <figure className="pcard--preview" key={`${image.src}-${index}`}>
-                    <img
-                      src={image.src}
-                      alt={index < LOOKBOOK.length ? image.alt : ""}
-                      loading="lazy"
-                      width={768}
-                      height={1024}
-                    />
-                    <ProductPreview product={product} archive />
+                  <figure key={`${image.src}-${index}`}>
+                    <Link
+                      to="/product/$slug"
+                      params={{ slug: product.slug }}
+                      className="vintage-lookbook__figure-link"
+                    >
+                      <img
+                        src={image.src}
+                        alt={index < LOOKBOOK.length ? image.alt : ""}
+                        loading="lazy"
+                        width={768}
+                        height={1024}
+                      />
+                    </Link>
                     <figcaption>
                       {String((index % LOOKBOOK.length) + 1).padStart(2, "0")} / NYC ARCHIVE
                     </figcaption>
@@ -298,9 +303,11 @@ export default function MetroHero({ videoSrc = DEFAULT_VIDEO, className }: Metro
               {es ? "Ver todos" : "View all"} <ArrowUpRight aria-hidden="true" size={15} />
             </Link>
           </div>
-          <div className="product-grid">
+          <div className="product-rail" role="list">
             {featured.map((p) => (
-              <ProductCard key={p.slug} product={p} />
+              <div className="product-rail__item" role="listitem" key={p.slug}>
+                <ProductCard product={p} />
+              </div>
             ))}
           </div>
         </section>
