@@ -15,7 +15,7 @@ export const Route = createFileRoute("/shop/$category/$sub")({
     if (!valid) throw notFound();
   },
   head: ({ params }) => ({
-    meta: [{ title: `${getSubLabel(params.category, params.sub, "en")} — AVNYC` }],
+    meta: [{ title: `${getSubLabel(params.category, params.sub, "en")} — Authentic Vintage Store` }],
   }),
   component: SubCategoryPage,
 });
@@ -42,7 +42,7 @@ function SubCategoryPage() {
         </nav>
 
         <header className="page__head">
-          <p className="page__eyebrow">AVNYC / {categoryLabel}</p>
+          <p className="page__eyebrow">{categoryLabel}</p>
           <h1 className="page__title">{title}</h1>
           <p className="page__sub">
             {items.length}{" "}

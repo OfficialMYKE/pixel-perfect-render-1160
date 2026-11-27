@@ -6,9 +6,14 @@ import VintageNavbar from "@/components/ui/vintage-navbar";
 import Footer from "@/components/ui/footer";
 import ProductCard from "@/components/ui/product-card";
 import { useLanguage } from "@/lib/i18n";
-import { getFeatured, products } from "@/lib/products";
+import { getFeatured } from "@/lib/products";
 import HelixRibbonHero from "@/components/ui/helix-ribbon-hero";
-import photoVarsity from "@/assets/products/varsity-jacket-ny.jpg";
+import modelBomber from "@/assets/models/model-bomber.jpg";
+import modelVarsity from "@/assets/models/model-varsity.jpg";
+import modelWorkwear from "@/assets/models/model-workwear.jpg";
+import modelGraphicTee from "@/assets/models/model-graphic-tee.jpg";
+import modelHoodie from "@/assets/models/model-hoodie.jpg";
+import modelWindbreaker from "@/assets/models/model-windbreaker.jpg";
 import streetwearOne from "@/assets/vintage-streetwear-01.jpg";
 import streetwearTwo from "@/assets/vintage-streetwear-02.jpg";
 import streetwearThree from "@/assets/vintage-streetwear-03.jpg";
@@ -33,7 +38,16 @@ const LOOKBOOK = [
   { src: streetwearFour, alt: "Archive graphic tees, workwear and faded denim" },
 ];
 
-const HELIX_PROJECTS = products.slice(0, 12).map((p) => ({ src: p.images[0] ?? "", title: p.name.en }));
+const HERO_MODELS = [
+  { src: modelVarsity, title: "Varsity — Subway" },
+  { src: modelWorkwear, title: "Workwear — Brooklyn" },
+  { src: modelGraphicTee, title: "Graphic tee — Taxi" },
+  { src: modelHoodie, title: "College hoodie — SoHo" },
+  { src: modelWindbreaker, title: "Windbreaker — Manhattan" },
+  { src: modelBomber, title: "Leather bomber — Dusk" },
+];
+// Repeat the editorial model shots to fill the helix ribbon.
+const HELIX_PROJECTS = [...HERO_MODELS, ...HERO_MODELS];
 
 const CATEGORY_TILES = [
   { key: "hombre", img: archiveJacket },
@@ -61,6 +75,19 @@ export default function MetroHero({ videoSrc = DEFAULT_VIDEO, className }: Metro
   const progressBarRef = useRef<HTMLDivElement>(null);
   const announcementRef = useRef<HTMLDivElement>(null);
   const heroRef = useRef<HTMLElement>(null);
+  const headerRef = useRef<HTMLElement>(null);
+
+  // Expose the always-visible header height so the hero fills only the space below it.
+  useEffect(() => {
+    const el = headerRef.current;
+    if (!el) return;
+    const set = () =>
+      document.documentElement.style.setProperty("--site-header-h", `${el.offsetHeight}px`);
+    set();
+    const ro = new ResizeObserver(set);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
   const [ready, setReady] = useState(false);
   const [poster, setPoster] = useState<string | null>(null);
   const transitioned = useRef(false);
@@ -216,14 +243,22 @@ export default function MetroHero({ videoSrc = DEFAULT_VIDEO, className }: Metro
         {es ? "Saltar al contenido" : "Skip to content"}
       </a>
 
+      <header ref={headerRef} className="site-header">
+        <div ref={announcementRef}>
+          <AnnouncementBar />
+        </div>
+        <VintageNavbar />
+      </header>
+
       <HelixRibbonHero
+        showNav={false}
+        height="calc(100svh - var(--site-header-h, 0px))"
         {...(className ? { className } : {})}
-        greeting={es ? "Vintage real" : "True vintage"}
-        name="New York"
-        portrait={photoVarsity}
-        portraitAlt={es ? "Chaqueta varsity vintage" : "Vintage varsity jacket"}
+        greeting="Authentic"
+        name="Vintage Store"
+        portrait={modelBomber}
+        portraitAlt={es ? "Modelo con chaqueta bomber de cuero vintage en Nueva York" : "Model in a vintage leather bomber jacket in New York"}
         projects={HELIX_PROJECTS}
-        brand="AVNYC"
         links={[
           { label: es ? "Tienda" : "Shop", href: "/shop" },
           { label: es ? "Nuevos" : "New", href: "/shop/nuevos" },
@@ -231,7 +266,7 @@ export default function MetroHero({ videoSrc = DEFAULT_VIDEO, className }: Metro
           { label: es ? "Nosotros" : "About", href: "/about" },
         ]}
         cta={{ label: es ? "Comprar ahora" : "Shop now", href: "/shop" }}
-        count={es ? `( ${products.length} piezas únicas )` : `( ${products.length} one-of-ones )`}
+        count={es ? "( Hoy está aquí. Mañana, en el armario de otro )" : "( Here today. In someone else's closet tomorrow )"}
         bio={es
           ? "Streetwear vintage auténtico, seleccionado a mano en Nueva York. Cada pieza es única, restaurada y lista para usar."
           : "Authentic vintage streetwear, hand-picked in New York. Every piece is one of one, restored and ready to wear."}
@@ -240,13 +275,6 @@ export default function MetroHero({ videoSrc = DEFAULT_VIDEO, className }: Metro
         foreground="var(--vintage-paper)"
         fontHref={null}
       />
-
-      <header>
-        <div ref={announcementRef}>
-          <AnnouncementBar />
-        </div>
-        <VintageNavbar />
-      </header>
 
       <main id="main-content">
         {/* Lookbook */}
@@ -308,7 +336,7 @@ export default function MetroHero({ videoSrc = DEFAULT_VIDEO, className }: Metro
         <section className="home-section" aria-labelledby="new-arrivals-title">
           <div className="home-section__head">
             <div>
-              <p className="home-section__eyebrow">AVNYC / {es ? "NUEVOS" : "NEW"}</p>
+              <p className="home-section__eyebrow">{es ? "NUEVOS" : "NEW"}</p>
               <h2 id="new-arrivals-title" className="home-section__title">
                 {es ? "Nuevos ingresos" : "New arrivals"}
               </h2>
@@ -389,7 +417,7 @@ export default function MetroHero({ videoSrc = DEFAULT_VIDEO, className }: Metro
         <section className="home-section home-section--tiles" aria-labelledby="categories-title">
           <div className="home-section__head">
             <div>
-              <p className="home-section__eyebrow">AVNYC / {es ? "CATEGORÍAS" : "CATEGORIES"}</p>
+              <p className="home-section__eyebrow">{es ? "CATEGORÍAS" : "CATEGORIES"}</p>
               <h2 id="categories-title" className="home-section__title">
                 {es ? "Explorar" : "Browse"}
               </h2>
@@ -418,7 +446,7 @@ export default function MetroHero({ videoSrc = DEFAULT_VIDEO, className }: Metro
             <img
               src={vintageStore}
               alt={
-                es ? "Showroom AVNYC en Nolita, Nueva York" : "AVNYC showroom in Nolita, New York"
+                es ? "Showroom Authentic Vintage Store en Nolita, Nueva York" : "Authentic Vintage Store showroom in Nolita, New York"
               }
               loading="lazy"
               width={1200}

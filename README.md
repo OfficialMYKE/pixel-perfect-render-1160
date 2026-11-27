@@ -1,12 +1,12 @@
-# Exact Screenshot
+# Pixel Perfect Render
 
-Implement exactly the screenshot and nothing else
+clona este repo https://github.com/OfficialMYKE/pixel-perfect-render-1160.git
 
 This project was built with [Lovable](https://lovable.dev).
 
 ## Build with Lovable
 
-Continue developing this project in the [Lovable editor](https://lovable.dev/projects/b58cb211-790b-4f20-aa28-5cef6c13a3ae).
+Continue developing this project in the [Lovable editor](https://lovable.dev/projects/550a4f66-f653-4036-96fc-02348fd0e7ba).
 
 - **Ship faster**: describe what you want to build and Lovable handles the code.
 - **Stay in sync**: every change made in Lovable is committed straight to this repository.

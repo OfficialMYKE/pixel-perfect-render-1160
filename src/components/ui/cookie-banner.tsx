@@ -79,7 +79,7 @@ export default function CookieBanner() {
     <div className="ck" role="region" aria-label={t.title}>
       <div className="ck__inner">
         <div className="ck__content">
-          <p className="ck__eyebrow">AVNYC / COOKIES</p>
+          <p className="ck__eyebrow">COOKIES</p>
           <h2 className="ck__title">{showPrefs ? t.preferencesTitle : t.title}</h2>
 
           {showPrefs ? (

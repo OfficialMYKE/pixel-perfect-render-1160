@@ -46,7 +46,7 @@ const CONTENT = {
       sections: [
         {
           heading: "Acceptance of Terms",
-          text: "By accessing or using the AVNYC website and services, you agree to be bound by these Terms of Service. If you do not agree, please do not use our services.",
+          text: "By accessing or using the Authentic Vintage Store website and services, you agree to be bound by these Terms of Service. If you do not agree, please do not use our services.",
         },
         {
           heading: "Products and Pricing",
@@ -66,11 +66,11 @@ const CONTENT = {
         },
         {
           heading: "Intellectual Property",
-          text: "All content on this website, including text, images, logos, and designs, is the property of AVNYC and protected by intellectual property laws. You may not reproduce or distribute without permission.",
+          text: "All content on this website, including text, images, logos, and designs, is the property of Authentic Vintage Store and protected by intellectual property laws. You may not reproduce or distribute without permission.",
         },
         {
           heading: "Limitation of Liability",
-          text: "AVNYC shall not be liable for any indirect, incidental, or consequential damages arising from your use of our services. Our total liability shall not exceed the amount paid for the product.",
+          text: "Authentic Vintage Store shall not be liable for any indirect, incidental, or consequential damages arising from your use of our services. Our total liability shall not exceed the amount paid for the product.",
         },
       ],
     },
@@ -146,7 +146,7 @@ const CONTENT = {
       sections: [
         {
           heading: "Aceptación de términos",
-          text: "Al acceder o usar el sitio web y servicios de AVNYC, aceptas estar sujeto a estos Términos de Servicio. Si no estás de acuerdo, por favor no uses nuestros servicios.",
+          text: "Al acceder o usar el sitio web y servicios de Authentic Vintage Store, aceptas estar sujeto a estos Términos de Servicio. Si no estás de acuerdo, por favor no uses nuestros servicios.",
         },
         {
           heading: "Productos y precios",
@@ -166,11 +166,11 @@ const CONTENT = {
         },
         {
           heading: "Propiedad intelectual",
-          text: "Todo el contenido de este sitio web, incluyendo texto, imágenes, logotipos y diseños, es propiedad de AVNYC y está protegido por leyes de propiedad intelectual. No puedes reproducir ni distribuir sin permiso.",
+          text: "Todo el contenido de este sitio web, incluyendo texto, imágenes, logotipos y diseños, es propiedad de Authentic Vintage Store y está protegido por leyes de propiedad intelectual. No puedes reproducir ni distribuir sin permiso.",
         },
         {
           heading: "Limitación de responsabilidad",
-          text: "AVNYC no será responsable por daños indirectos, incidentales o consecuentes que surjan de tu uso de nuestros servicios. Nuestra responsabilidad total no excederá el monto pagado por el producto.",
+          text: "Authentic Vintage Store no será responsable por daños indirectos, incidentales o consecuentes que surjan de tu uso de nuestros servicios. Nuestra responsabilidad total no excederá el monto pagado por el producto.",
         },
       ],
     },
@@ -248,7 +248,7 @@ export default function LegalPages() {
           __html: JSON.stringify({
             "@context": "https://schema.org",
             "@type": "WebSite",
-            name: "AVNYC",
+            name: "Authentic Vintage Store",
           }),
         }}
       />

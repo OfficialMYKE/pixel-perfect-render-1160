@@ -27,7 +27,7 @@ function NotFoundComponent() {
           className="text-sm font-semibold uppercase tracking-widest"
           style={{ color: "var(--vintage-red)" }}
         >
-          AVNYC
+          Authentic Vintage Store
         </p>
         <h1
           className="mt-2 text-7xl font-black uppercase"
@@ -70,7 +70,7 @@ function ErrorComponent({ error, reset }: ErrorComponentProps) {
           className="text-sm font-semibold uppercase tracking-widest"
           style={{ color: "var(--vintage-red)" }}
         >
-          AVNYC
+          Authentic Vintage Store
         </p>
         <h1 className="mt-4 text-xl font-semibold tracking-tight">This page didn't load</h1>
         <p className="mt-2 text-sm" style={{ color: "var(--vintage-fog)" }}>
@@ -105,14 +105,14 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "AVNYC — Authentic Vintage Store | New York Streetwear" },
+      { title: "Authentic Vintage Store — Authentic Vintage Store | New York Streetwear" },
       {
         name: "description",
         content:
           "One-of-one vintage streetwear curated in New York. Authentic pieces, restored and ready.",
       },
-      { name: "author", content: "AVNYC" },
-      { property: "og:title", content: "AVNYC — Authentic Vintage Store | New York Streetwear" },
+      { name: "author", content: "Authentic Vintage Store" },
+      { property: "og:title", content: "Authentic Vintage Store — Authentic Vintage Store | New York Streetwear" },
       {
         property: "og:description",
         content:

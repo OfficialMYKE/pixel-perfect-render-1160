@@ -15,10 +15,10 @@ export const Route = createFileRoute("/product/$slug")({
     const product = getProduct(params.slug);
     return {
       meta: [
-        { title: product ? `${product.name.en} — AVNYC` : "AVNYC" },
+        { title: product ? `${product.name.en} — Authentic Vintage Store` : "Authentic Vintage Store" },
         product
           ? { name: "description", content: product.description.en }
-          : { name: "description", content: "AVNYC vintage streetwear." },
+          : { name: "description", content: "Authentic Vintage Store vintage streetwear." },
       ],
     };
   },

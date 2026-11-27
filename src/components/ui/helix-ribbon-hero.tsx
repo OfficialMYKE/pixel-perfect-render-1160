@@ -37,6 +37,8 @@ export interface HelixRibbonHeroProps {
   /** Up to twelve ride the ribbon; the first six fill the closing grid. */
   projects?: HelixProject[]
   brand?: string
+  /** Render the built-in top nav. Off when the page supplies its own header. */
+  showNav?: boolean
   links?: { label: string; href: string }[]
   cta?: { label: string; href: string }
   /** Small label beside the headline. */
@@ -139,7 +141,7 @@ export function autoProgress(ms: number) {
 const CSS = [
   ".hrh-root{position:relative;width:100%;isolation:isolate}",
   ".hrh-root img{max-width:none;display:block}",
-  ".hrh-stage{position:sticky;top:0;overflow:hidden;color:var(--hrh-fg);background:var(--hrh-bg);--hrh-g:clamp(16px,2.2vw,32px);font-family:'Inter Tight',ui-sans-serif,system-ui,sans-serif}",
+  ".hrh-stage{position:sticky;top:var(--site-header-h,0px);overflow:hidden;color:var(--hrh-fg);background:var(--hrh-bg);--hrh-g:clamp(16px,2.2vw,32px);font-family:'Inter Tight',ui-sans-serif,system-ui,sans-serif}",
   ".hrh-view{position:absolute;inset:0;perspective-origin:50% 50%}",
   ".hrh-scene{position:absolute;left:50%;top:50%;width:0;height:0;transform-style:preserve-3d}",
   ".hrh-screw,.hrh-group{position:absolute;left:0;top:0;width:0;height:0;transform-style:preserve-3d}",
@@ -188,6 +190,7 @@ export default function HelixRibbonHero({
   portraitAlt = "Portrait of Kedhareswer",
   projects = DEFAULT_PROJECTS,
   brand = "Kedhareswer",
+  showNav = true,
   links = DEFAULT_LINKS,
   cta = { label: "Book a call", href: "mailto:kedhareswer.12110626@gmail.com" },
   count = "( 12 projects )",
@@ -627,7 +630,7 @@ export default function HelixRibbonHero({
           <span className="hrh-hint hrh-fade">{scrollHint}</span>
         </div>
 
-        <nav className="hrh-nav hrh-fade" aria-label="Main">
+        <nav className="hrh-nav hrh-fade" aria-label="Main" hidden={!showNav} style={showNav ? undefined : { display: "none" }}>
           <a href="#">{brand}</a>
           <div className="hrh-links">
             {links.map((l, i) => (

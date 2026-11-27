@@ -49,7 +49,7 @@ export default function AuthShell({ children, issue }: AuthShellProps) {
       </header>
 
       <section className="auth__frame">
-        <aside className="auth__editorial" aria-label="AVNYC Street Archive">
+        <aside className="auth__editorial" aria-label="Authentic Vintage Store Street Archive">
           <div className="auth__editorial-grid" aria-hidden="true">
             <img src={streetwearTwo} alt="" />
             <img src={streetwearOne} alt="" />
@@ -73,7 +73,7 @@ export default function AuthShell({ children, issue }: AuthShellProps) {
 
         <div className="auth__panel">
           <div className="auth__stamp">AUTHENTIC GOODS</div>
-          <Link to="/" className="auth__logo" aria-label="AVNYC home">AVNYC</Link>
+          <Link to="/" className="auth__logo" aria-label="Authentic Vintage Store home">Authentic Vintage Store</Link>
           {children}
           <div className="auth__edition" aria-hidden="true">
             <span />

@@ -5,10 +5,10 @@ import { useLanguage } from "@/lib/i18n";
 export const Route = createFileRoute("/help")({
   head: () => ({
     meta: [
-      { title: "Help — AVNYC" },
+      { title: "Help — Authentic Vintage Store" },
       {
         name: "description",
-        content: "FAQ, shipping, returns, size guide and contact — AVNYC customer help.",
+        content: "FAQ, shipping, returns, size guide and contact — Authentic Vintage Store customer help.",
       },
     ],
   }),
@@ -113,7 +113,7 @@ function HelpPage() {
     <SiteChrome>
       <div className="page page--narrow">
         <header className="page__head">
-          <p className="page__eyebrow">AVNYC / HELP</p>
+          <p className="page__eyebrow">HELP</p>
           <h1 className="page__title">{es ? "Ayuda" : "Help"}</h1>
           <p className="page__sub">
             {es

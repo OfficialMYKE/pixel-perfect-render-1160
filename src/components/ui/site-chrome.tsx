@@ -9,8 +9,10 @@ export default function SiteChrome({ children }: { children: ReactNode }) {
       <a href="#main-content" className="skip-link">
         Skip to content
       </a>
-      <AnnouncementBar />
-      <VintageNavbar />
+      <header className="site-header">
+        <AnnouncementBar />
+        <VintageNavbar />
+      </header>
       <main id="main-content">{children}</main>
       <Footer />
     </>

@@ -5,7 +5,7 @@ import { useLanguage } from "@/lib/i18n";
 
 export const Route = createFileRoute("/cart")({
   head: () => ({
-    meta: [{ title: "Cart — AVNYC" }, { name: "description", content: "Your AVNYC cart." }],
+    meta: [{ title: "Cart — Authentic Vintage Store" }, { name: "description", content: "Your Authentic Vintage Store cart." }],
   }),
   component: CartPage,
 });
@@ -18,7 +18,7 @@ function CartPage() {
     <SiteChrome>
       <div className="page page--narrow">
         <header className="page__head">
-          <p className="page__eyebrow">AVNYC / CART</p>
+          <p className="page__eyebrow">CART</p>
           <h1 className="page__title">{lang === "es" ? "Tu carrito" : "Your cart"}</h1>
           <p className="page__sub">
             {count}{" "}

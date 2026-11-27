@@ -6,14 +6,14 @@ import { getCategoryLabel } from "@/lib/catalog";
 import { useLanguage } from "@/lib/i18n";
 
 const DESC =
-  "Browse every vintage brand in the AVNYC archive, from Levi's and Carhartt to Schott NYC, grouped A–Z.";
+  "Browse every vintage brand in the Authentic Vintage Store archive, from Levi's and Carhartt to Schott NYC, grouped A–Z.";
 
 export const Route = createFileRoute("/brands")({
   head: () => ({
     meta: [
-      { title: "Vintage Brands A–Z — AVNYC" },
+      { title: "Vintage Brands A–Z — Authentic Vintage Store" },
       { name: "description", content: DESC },
-      { property: "og:title", content: "Vintage Brands A–Z — AVNYC" },
+      { property: "og:title", content: "Vintage Brands A–Z — Authentic Vintage Store" },
       { property: "og:description", content: DESC },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -31,7 +31,7 @@ function BrandsPage() {
     <SiteChrome>
       <div className="page">
         <header className="page__head shop-head">
-          <p className="page__eyebrow">AVNYC / {es ? "MARCAS" : "BRANDS"}</p>
+          <p className="page__eyebrow">{es ? "MARCAS" : "BRANDS"}</p>
           <h1 className="page__title">{es ? "Marcas de la A a la Z" : "Brands A to Z"}</h1>
           <p className="page__sub">
             {es

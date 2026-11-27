@@ -10,10 +10,10 @@ import { useLanguage } from "@/lib/i18n";
 export const Route = createFileRoute("/shop/")({
   head: () => ({
     meta: [
-      { title: "Shop All — AVNYC" },
+      { title: "Shop All — Authentic Vintage Store" },
       {
         name: "description",
-        content: "Browse the full AVNYC archive of one-of-one vintage streetwear.",
+        content: "Browse the full Authentic Vintage Store archive of one-of-one vintage streetwear.",
       },
     ],
   }),
@@ -39,7 +39,7 @@ function ShopPage() {
     <SiteChrome>
       <div className="page">
         <header className="page__head">
-          <p className="page__eyebrow">AVNYC / ARCHIVE</p>
+          <p className="page__eyebrow">ARCHIVE</p>
           <h1 className="page__title">{lang === "es" ? "Todo el archivo" : "The full archive"}</h1>
           <p className="page__sub">
             {lang === "es"

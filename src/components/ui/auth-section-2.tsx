@@ -42,8 +42,8 @@ const slides = [
   {
     src: vintage04,
     caption: {
-      en: "The AVNYC curation process combines expertise with passion. We study fashion history and maintain relationships with collectors worldwide.",
-      es: "El proceso de curaduría de AVNYC combina experiencia con pasión. Estudiamos historia de la moda y mantenemos relaciones con coleccionistas de todo el mundo.",
+      en: "The Authentic Vintage Store curation process combines expertise with passion. We study fashion history and maintain relationships with collectors worldwide.",
+      es: "El proceso de curaduría de Authentic Vintage Store combina experiencia con pasión. Estudiamos historia de la moda y mantenemos relaciones con coleccionistas de todo el mundo.",
     },
   },
 ];

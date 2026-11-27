@@ -63,7 +63,7 @@ export default function Footer() {
             {/* Brand */}
             <div className="footer__brand">
               <Link to="/" className="footer__logo">
-                AVNYC
+                Authentic Vintage Store
               </Link>
               <p className="footer__brand-desc">{t.footer.brand.desc}</p>
               <p className="footer__store-line">{t.footer.store.line}</p>
@@ -228,7 +228,7 @@ export default function Footer() {
           <div className="footer__bottom-inner">
             <div className="footer__legal">
               <span>
-                &copy; {new Date().getFullYear()} AVNYC. {t.footer.bottom.rights}
+                &copy; {new Date().getFullYear()} Authentic Vintage Store. {t.footer.bottom.rights}
               </span>
               <div className="footer__legal-links">
                 <button onClick={() => openLegal("privacy")} className="footer__legal-btn">

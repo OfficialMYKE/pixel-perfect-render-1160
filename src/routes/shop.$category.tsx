@@ -17,7 +17,7 @@ export const Route = createFileRoute("/shop/$category")({
     }
   },
   head: ({ params }) => ({
-    meta: [{ title: `${getCategoryLabel(params.category, "en")} — AVNYC` }],
+    meta: [{ title: `${getCategoryLabel(params.category, "en")} — Authentic Vintage Store` }],
   }),
   component: CategoryPage,
 });
@@ -39,7 +39,7 @@ function CategoryPage() {
         </nav>
 
         <header className="page__head">
-          <p className="page__eyebrow">AVNYC / {title}</p>
+          <p className="page__eyebrow">{title}</p>
           <h1 className="page__title">{title}</h1>
           <p className="page__sub">
             {items.length}{" "}

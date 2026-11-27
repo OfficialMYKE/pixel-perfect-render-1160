@@ -540,6 +540,12 @@ body {
   .announcement-bar__item { gap: 2px; }
 }
 
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
 /* ── Navbar ─────────────────────────────────────────── */
 
 .vn {
@@ -567,11 +573,11 @@ body {
   color: var(--vintage-paper);
   text-decoration: none;
   font:
-    900 24px/1 Impact,
+    900 19px/1 Impact,
     Haettenschweiler,
     "Arial Narrow",
     sans-serif;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
   white-space: nowrap;
   flex-shrink: 0;
@@ -3524,5 +3530,6 @@ button, .btn, [class*="-btn"], [class*="__btn"], [class*="__cta"], input, select
 .hrh-stage { font-family: Arial, Helvetica, sans-serif !important; }
 .hrh-line { font-family: "Arial Black", Arial, Helvetica, sans-serif !important; font-weight: 900 !important; letter-spacing: -0.03em !important; }
 .hrh-nav > a:last-child { background: var(--vintage-red); color: var(--vintage-paper); padding: 12px 20px; }
-.hrh-count, .hrh-hint { color: var(--vintage-red); }
+.hrh-count, .hrh-port { display: none !important; }
+.hrh-hint { color: var(--vintage-red); }
 .hrh-card-img { background: var(--vintage-ink) !important; }

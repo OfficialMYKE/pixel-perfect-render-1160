@@ -53,9 +53,6 @@ export default function AnnouncementBar() {
   return (
     <div className="announcement-bar">
       <div className="announcement-bar__left">
-        <Link to="/" className="announcement-bar__item announcement-bar__brand">
-          AVNYC
-        </Link>
       </div>
 
       <div className="announcement-bar__center">

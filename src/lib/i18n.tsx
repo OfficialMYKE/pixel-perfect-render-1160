@@ -68,7 +68,7 @@ const translations = {
       link: "READ THE PROCESS",
     },
     about: {
-      eyebrow: "AVNYC / ABOUT",
+      eyebrow: "ABOUT",
       title: "Our Story",
       sub: "One-of-one streetwear sourced from the streets of New York.",
       toc: "Sections",
@@ -313,7 +313,7 @@ const translations = {
       link: "VER EL PROCESO",
     },
     about: {
-      eyebrow: "AVNYC / NOSOTROS",
+      eyebrow: "NOSOTROS",
       title: "Nuestra historia",
       sub: "Streetwear único seleccionado de las calles de Nueva York.",
       toc: "Secciones",

@@ -11,10 +11,10 @@ import archiveStoreInterior from "@/assets/archive-store-interior.jpg";
 export const Route = createFileRoute("/about")({
   head: () => ({
     meta: [
-      { title: "About — AVNYC" },
+      { title: "About — Authentic Vintage Store" },
       {
         name: "description",
-        content: "The story behind AVNYC — curated vintage streetwear from New York.",
+        content: "The story behind Authentic Vintage Store — curated vintage streetwear from New York.",
       },
     ],
   }),
@@ -177,7 +177,7 @@ function AboutPage() {
         <div className="showroom__media">
           <img
             src={archiveStoreInterior}
-            alt={es ? "Interior del archivo AVNYC en Nolita" : "AVNYC archive interior in Nolita"}
+            alt={es ? "Interior del archivo Authentic Vintage Store en Nolita" : "Authentic Vintage Store archive interior in Nolita"}
             loading="lazy"
             width={1200}
             height={900}
